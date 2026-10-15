@@ -172,12 +172,73 @@
       t.start=performance.now();
       document.getElementById('test-patient').focus();
     }
+    // Results: distance from each scenario's reference risk, in percentage points, averaged per display version.
+    var VERSION_NAME={A:'Score only',B:'Full display'};
+    function mean(xs){var sum=0;xs.forEach(function(x){sum+=x;});return xs.length?sum/xs.length:0;}
+    function summary(v){
+      var rows=t.answers.filter(function(a){return a.version===v;});
+      return '<div><dt>'+VERSION_NAME[v]+'</dt><dd><b class="num">'+Math.round(mean(rows.map(function(a){return Math.abs(a.estimate-a.ref);})))+'</b> points off on average</dd><dd>Confidence '+mean(rows.map(function(a){return a.sure;})).toFixed(1)+' of 5</dd></div>';
+    }
     function finish(){
+      t.finishedAt=new Date().toISOString();
       caseEl.hidden=true;
       done.hidden=false;
-      done.innerHTML='<p class="label">Done</p><h3 class="test-patient">Thank you. All six cases are complete.</h3>';
+      done.innerHTML='<p class="label">Your results · '+t.participant+' · group '+t.group+'</p>'
+        +'<h3 class="test-patient">Thank you. Here is how your estimates compare</h3>'
+        +'<dl class="test-summary">'+summary('A')+summary('B')+'</dl>'
+        +'<p class="test-key"><span class="test-key-ref"></span>Reference risk in the scenario<span class="test-key-you"></span>Your estimate</p>'
+        +'<ol class="test-results">'+t.answers.map(function(a){
+          return '<li><div class="test-result-head"><b>'+a.title+'</b><span class="test-tag test-tag-'+a.version+'">'+VERSION_NAME[a.version]+'</span></div>'
+            +'<div class="test-strip" role="img" aria-label="Your estimate '+a.estimate+' in 100, reference '+a.ref+' in 100"><span class="test-ref" style="left:'+a.ref+'%"></span><span class="test-you" style="left:'+a.estimate+'%"></span></div>'
+            +'<p class="test-line">You '+a.estimate+' · reference '+a.ref+' · '+Math.abs(a.estimate-a.ref)+' points off · '+ACTIONS[a.action]+' · sure '+a.sure+' of 5 · '+a.seconds+' s</p></li>';
+        }).join('')+'</ol>'
+        +'<p class="lab-small">Points off is the distance between your estimate and the scenario’s reference risk, in percentage points. One person’s answers say little on their own; the study compares answers pooled across clinicians.</p>'
+        +'<div class="test-added"><p class="label">What the full display added</p><ul class="chips">'+[1,2,3,6,7,5].map(function(n){return dimChip(n);}).join('')+'</ul></div>'
+        +'<label class="test-field test-comment"><span>Anything that confused you, or that you would change? <em>optional</em></span><textarea id="test-comment" rows="3"></textarea></label>'
+        +'<div class="test-next-row"><button class="btn primary" type="button" id="test-download">Download answers (CSV)</button><button class="btn" type="button" id="test-copy">Copy answers</button><button class="btn" type="button" id="test-again">Start over for the next person</button></div>'
+        +'<p class="lab-small" id="test-saved" aria-live="polite"></p>';
       done.focus();
     }
+
+    // One CSV row per case, with the participant details and comment repeated so each row stands alone.
+    function csv(){
+      function cell(v){v=String(v===undefined||v===null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+      var comment=document.getElementById('test-comment').value.trim();
+      var lines=[['participant','role','years_in_practice','group','case_number','case_id','display','estimate_in_100','reference_in_100','points_off','action','sure_1_to_5','seconds','comment','finished_at'].join(',')];
+      t.answers.forEach(function(a,i){
+        lines.push([t.participant,t.role,t.years,t.group,i+1,a.caseId,VERSION_NAME[a.version],a.estimate,a.ref,Math.abs(a.estimate-a.ref),a.action,a.sure,a.seconds,comment,t.finishedAt].map(cell).join(','));
+      });
+      return lines.join('\n')+'\n';
+    }
+    function saved(msg){document.getElementById('test-saved').textContent=msg;}
+    done.addEventListener('click',function(e){
+      var id=e.target.id;
+      if(id==='test-download'){
+        var name='decision-lab-'+t.participant+'.csv';
+        var url=URL.createObjectURL(new Blob([csv()],{type:'text/csv'}));
+        var a=document.createElement('a');
+        a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+        setTimeout(function(){URL.revokeObjectURL(url);},1000);
+        saved('Saved '+name+'. Please send this file to the research team.');
+      }else if(id==='test-copy'){
+        var text=csv();
+        var fallback=function(){
+          saved('Copying is blocked here. Select the text below and copy it.');
+          var ta=document.createElement('textarea');
+          ta.className='test-copybox';ta.readOnly=true;ta.value=text;ta.rows=6;
+          done.appendChild(ta);ta.select();
+        };
+        try{navigator.clipboard.writeText(text).then(function(){saved('Answers copied. Paste them into an email or a file for the research team.');},fallback);}catch(err){fallback();}
+      }else if(id==='test-again'){
+        // Without a group in the link, alternate groups between participants to keep them balanced.
+        if(!asked){t.group=t.group===1?2:1;}
+        t.answers=[];t.i=0;
+        intro.reset();
+        done.hidden=true;done.innerHTML='';
+        intro.hidden=false;
+        document.getElementById('test-role').focus();
+      }
+    });
 
     intro.addEventListener('submit',function(e){
       e.preventDefault();

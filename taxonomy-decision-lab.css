@@ -291,3 +291,25 @@ i.ctx-tn{background:var(--rule-2)}
 .test-scale input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
 .test-next-row{display:flex;flex-wrap:wrap;gap:8px}
 .test-done:focus{outline:none}
+.test-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0 18px}
+.test-summary > div{padding:12px 14px;border:1px solid var(--rule);border-radius:9px;background:var(--raised)}
+.test-summary dt{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.test-summary dd{margin:4px 0 0;font-size:14.5px;color:var(--ink-2)}
+.test-summary dd b{font-size:1.8rem;font-weight:600;color:var(--ink)}
+@media (max-width:480px){.test-summary{grid-template-columns:1fr}}
+.test-key{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:0 0 8px;font-size:13px;color:var(--muted)}
+.test-key-ref,.test-key-you{display:inline-block;flex:none}
+.test-key-ref{width:2px;height:14px;background:var(--ink)}
+.test-key-you{width:11px;height:11px;margin-left:10px;border-radius:50%;background:var(--accent)}
+.test-results{list-style:none;margin:0 0 6px;padding:0;display:grid;gap:14px}
+.test-result-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;font-size:15px}
+.test-tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:1px 7px;border-radius:4px;border:1px solid var(--rule-2);color:var(--ink-2)}
+.test-tag-B{border-color:var(--accent);color:var(--accent)}
+.test-strip{position:relative;height:16px;margin:8px 0 4px;border-radius:8px;background:var(--rule)}
+.test-ref{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--ink)}
+.test-you{position:absolute;top:50%;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px var(--surface)}
+.test-line{margin:0;font-size:13.5px;color:var(--muted)}
+.test-added{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--rule)}
+.test-added .chips{margin:0}
+.test-comment{margin:18px 0 14px}
+.test-copybox{display:block;width:100%;margin-top:8px;font-family:var(--f-mono);font-size:12px;padding:8px;border:1px solid var(--rule-2);border-radius:7px;background:var(--code-bg);color:var(--ink)}
