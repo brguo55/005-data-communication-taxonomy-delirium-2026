@@ -1,5 +1,5 @@
-/* Shared by the four project pages: taxonomy.html (Taxonomy), taxonomy-delirium.html (Delirium case), taxonomy-interactive.html (Interactive), taxonomy-publication.html (Publication).
-   taxonomy-interactive.html also loads taxonomy-interactive.css for its own sections.
+/* Shared by the four project pages: taxonomy.html (Taxonomy), taxonomy-delirium.html (Delirium case), taxonomy-decision-lab.html (Decision lab), taxonomy-publication.html (Publication).
+   taxonomy-decision-lab.html also loads taxonomy-decision-lab.css for its own sections.
    Layout: one reading column (about 68ch) inside a 1120px frame. The dimension rail, case cards and figures use the full frame. A slim sticky nav with one tab per page.
    Subject: the path from a model's output to a clinical decision, keyed to the eight dimension fills used in the paper's Tables 3 and 4 and Figure 2. */
 :root{
@@ -321,7 +321,7 @@ figcaption b{color:var(--ink)}
 .codebox pre{margin:0;padding:38px 18px 16px;overflow-x:auto;font-family:var(--f-mono);font-size:13.5px;line-height:1.6;color:var(--ink);white-space:pre}
 .copy{position:absolute;top:8px;right:8px;padding:5px 11px;font-size:12.5px}
 
-/* continue-reading cards · end of taxonomy.html, taxonomy-delirium.html and taxonomy-interactive.html */
+/* continue-reading cards · end of taxonomy.html, taxonomy-delirium.html and taxonomy-decision-lab.html */
 .sec.next{padding-block:clamp(40px,6vw,64px)}
 .next-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
 @media (max-width:700px){.next-grid{grid-template-columns:1fr}}

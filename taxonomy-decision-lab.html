@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Interactive · Data-Driven Communication Taxonomy</title>
+<title>Decision lab · Data-Driven Communication Taxonomy</title>
 <meta name="description" content="Interactive demonstrations of how context, model robustness, and clinician attention shape what a delirium risk prediction needs to communicate, read through A Taxonomy of Issues in Healthcare Data-Driven Communication for Clinical Decision-Making.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500;600&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,500;0,600;1,400;1,500&display=swap">
 <link rel="stylesheet" href="taxonomy-shared.css">
-<link rel="stylesheet" href="taxonomy-interactive.css">
+<link rel="stylesheet" href="taxonomy-decision-lab.css">
 </head>
 <body>
-<!-- Page 3 of 4 · Interactive. Other pages: taxonomy.html, taxonomy-delirium.html, taxonomy-publication.html. Shared files: taxonomy-shared.css, taxonomy-shared.js. Files for this page only: taxonomy-interactive.css, taxonomy-interactive.js. -->
+<!-- Page 3 of 4 · Decision lab. Other pages: taxonomy.html, taxonomy-delirium.html, taxonomy-publication.html. Shared files: taxonomy-shared.css, taxonomy-shared.js. Files for this page only: taxonomy-decision-lab.css, taxonomy-decision-lab.js. -->
 
 <header class="topbar">
   <div class="frame topbar-in">
@@ -20,25 +20,25 @@
     <nav class="page-tabs" aria-label="Pages">
       <a class="page-tab" href="taxonomy.html">Taxonomy</a>
       <a class="page-tab" href="taxonomy-delirium.html">Delirium case</a>
-      <a class="page-tab" href="taxonomy-interactive.html" aria-current="page">Interactive</a>
+      <a class="page-tab" href="taxonomy-decision-lab.html" aria-current="page">Decision lab</a>
       <a class="page-tab" href="taxonomy-publication.html">Publication</a>
     </nav>
   </div>
 </header>
 
 <main id="top">
-  <section class="sec ix-hero" id="interactive" aria-labelledby="ix-title">
+  <section class="sec lab-hero" id="lab" aria-labelledby="lab-title">
     <div class="frame">
-      <p class="kicker">Interactive</p>
-      <h1 id="ix-title">Try the taxonomy on a delirium risk tool</h1>
+      <p class="kicker">Decision lab</p>
+      <h1 id="lab-title">Try the taxonomy on a delirium risk tool</h1>
       <p class="lede">The same model output can be read well or poorly depending on where it is used, how much is known about its reliability, and how much attention the person reading it can give. Each section below lets you change one of those conditions and see what the clinician-facing display would need to communicate.</p>
-      <ol class="ix-steps">
-        <li><a href="#pathway"><span class="ix-step-num">1</span><span class="ix-step-name">Build the pathway</span><span class="ix-step-q">Drag data, setting, patients, model, and users into place</span></a></li>
-        <li><a href="#context"><span class="ix-step-num">2</span><span class="ix-step-name">Risk and context</span><span class="ix-step-q">See how the base rate changes what an alert means</span></a></li>
-        <li><a href="#robust"><span class="ix-step-num">3</span><span class="ix-step-name">Model robustness</span><span class="ix-step-q">Sample size, performance, and calibration drift</span></a></li>
-        <li><a href="#attention"><span class="ix-step-num">4</span><span class="ix-step-name">What if</span><span class="ix-step-q">Drag attention down and see what support the decision needs</span></a></li>
+      <ol class="lab-steps">
+        <li><a href="#pathway"><span class="lab-step-num">1</span><span class="lab-step-name">Build the pathway</span><span class="lab-step-q">Drag data, setting, patients, model, and users into place</span></a></li>
+        <li><a href="#context"><span class="lab-step-num">2</span><span class="lab-step-name">Risk and context</span><span class="lab-step-q">See how the base rate changes what an alert means</span></a></li>
+        <li><a href="#robust"><span class="lab-step-num">3</span><span class="lab-step-name">Model robustness</span><span class="lab-step-q">Sample size, performance, and calibration drift</span></a></li>
+        <li><a href="#attention"><span class="lab-step-num">4</span><span class="lab-step-name">What if</span><span class="lab-step-q">Drag attention down and see what support the decision needs</span></a></li>
       </ol>
-      <p class="ix-note">Figures attributed to a study come from the delirium cases discussed in the paper. Everything else is illustrative and labeled that way. Nothing on this page is a validated risk score.</p>
+      <p class="lab-note">Figures attributed to a study come from the delirium cases discussed in the paper. Everything else is illustrative and labeled that way. Nothing on this page is a validated risk score.</p>
     </div>
   </section>
 
@@ -99,7 +99,7 @@
           </div>
         </div>
 
-        <svg class="ix-sr" aria-hidden="true" focusable="false"><symbol id="pw-arrow" viewBox="0 0 34 14"><path d="M1.5 7h28M23.5 1.5 29.5 7 23.5 12.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
+        <svg class="lab-sr" aria-hidden="true" focusable="false"><symbol id="pw-arrow" viewBox="0 0 34 14"><path d="M1.5 7h28M23.5 1.5 29.5 7 23.5 12.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
         <div class="pw-board" aria-label="Pathway board">
           <div class="pw-slot" data-slot="data"><p class="pw-slot-name">EHR used to derive the model</p><div class="pw-slot-body"></div></div>
           <div class="pw-slot" data-slot="setting"><p class="pw-slot-name">Hospital setting</p><div class="pw-slot-body"></div></div>
@@ -117,11 +117,11 @@
           <div class="pw-check" data-check="exchange"><p class="pw-check-kicker">Uncertainty communication</p><p class="pw-check-name">In the exchange with users</p><div class="pw-check-body"></div></div>
           <div class="pw-check" data-check="decision"><p class="pw-check-kicker">Uncertainty communication</p><p class="pw-check-name">At the decision</p><div class="pw-check-body"></div></div>
         </div>
-        <p class="ix-sr" id="pw-live" aria-live="polite"></p>
+        <p class="lab-sr" id="pw-live" aria-live="polite"></p>
       </div>
 
-      <div class="ix-card pw-read" id="pw-read"></div>
-      <p class="ix-small">Board layout adapted from the project's working diagram of the pathway from EHR data, hospital setting, and patient characteristics through an AI model to clinicians, with fairness and uncertainty communication marked as points of risk.</p>
+      <div class="lab-card pw-read" id="pw-read"></div>
+      <p class="lab-small">Board layout adapted from the project's working diagram of the pathway from EHR data, hospital setting, and patient characteristics through an AI model to clinicians, with fairness and uncertainty communication marked as points of risk.</p>
     </div>
   </section>
 
@@ -133,30 +133,30 @@
 
       <div class="ctx">
         <div class="ctx-controls">
-          <div class="ix-card">
+          <div class="lab-card">
             <p class="label">Model held fixed</p>
             <ul class="metrics"><li><span>Sensitivity</span> 0.76</li><li><span>Specificity</span> 0.84</li></ul>
-            <p class="ix-small">The operating point reported by Lee et al. (BMC Psychiatry, 2023). Only the base rate changes here. This is a teaching calculation, not a re-analysis of that study.</p>
+            <p class="lab-small">The operating point reported by Lee et al. (BMC Psychiatry, 2023). Only the base rate changes here. This is a teaching calculation, not a re-analysis of that study.</p>
           </div>
-          <div class="ix-card">
-            <div class="ix-slider-head"><label for="ctx-rate">Base rate of delirium</label><output class="num" for="ctx-rate">10%</output></div>
-            <div class="ix-range ctx-range">
+          <div class="lab-card">
+            <div class="lab-slider-head"><label for="ctx-rate">Base rate of delirium</label><output class="num" for="ctx-rate">10%</output></div>
+            <div class="lab-range ctx-range">
               <input type="range" id="ctx-rate" min="0" max="1000" step="1" value="721" aria-describedby="ctx-rate-note">
-              <span class="ix-mark" data-value="0.003" aria-hidden="true"><span>0.3%</span></span>
+              <span class="lab-mark" data-value="0.003" aria-hidden="true"><span>0.3%</span></span>
             </div>
-            <div class="ix-ticks" aria-hidden="true"><span>0.1%</span><span data-value="0.01">1%</span><span data-value="0.1">10%</span><span>60%</span></div>
+            <div class="lab-ticks" aria-hidden="true"><span>0.1%</span><span data-value="0.01">1%</span><span data-value="0.1">10%</span><span>60%</span></div>
             <p class="label ctx-presets-label">Try a setting</p>
-            <div class="ix-presets" id="ctx-presets">
+            <div class="lab-presets" id="ctx-presets">
               <button type="button" class="btn" data-setting="icu">ICU</button>
               <button type="button" class="btn" data-setting="ward">Inpatient ward</button>
               <button type="button" class="btn" data-setting="outpatient">Outpatient clinic</button>
               <button type="button" class="btn" data-rate="0.003">Lee et al. external cohort</button>
             </div>
-            <p class="ix-small" id="ctx-rate-note">Setting values (30%, 10%, 1%) are illustrative, chosen to span a range; they are not prevalence estimates. The 0.3% marker is the event rate Lee et al. reported for their external cohort.</p>
+            <p class="lab-small" id="ctx-rate-note">Setting values (30%, 10%, 1%) are illustrative, chosen to span a range; they are not prevalence estimates. The 0.3% marker is the event rate Lee et al. reported for their external cohort.</p>
           </div>
         </div>
 
-        <div class="ix-card ctx-out">
+        <div class="lab-card ctx-out">
           <div class="ctx-out-head">
             <p class="label">1,000 patients at this base rate</p>
             <ul class="ctx-legend">
@@ -177,7 +177,7 @@
         </div>
       </div>
 
-      <div class="ix-takeaway">
+      <div class="lab-takeaway">
         <ul class="chips" data-dims="1 6 5"></ul>
         <p>A display that shows only the model's output leaves the reader to supply the context. State the absolute risk with its denominator and baseline population, say how many flags are expected to be false alarms, and plan for alert burden where most flags will be false.</p>
       </div>
@@ -191,24 +191,24 @@
       <p class="lede">A single performance number hides how sure we are about it and whether it still holds after deployment. Both demonstrations start from what Jauk et al. reported: an AUROC of 0.854 on the test data and 0.855 during seven months of prospective use, while calibration deteriorated.</p>
 
       <div class="rob">
-        <article class="ix-card rob-card" aria-labelledby="rob-a-title">
+        <article class="lab-card rob-card" aria-labelledby="rob-a-title">
           <p class="label">A · Sample size</p>
           <h3 id="rob-a-title">How many patients stand behind 0.855?</h3>
-          <div class="ix-slider-head"><label for="rob-n">Patients who developed delirium in the evaluation</label><output class="num" for="rob-n">40</output></div>
-          <div class="ix-range"><input type="range" id="rob-n" min="0" max="1000" step="1" value="301" aria-describedby="rob-a-note"></div>
-          <div class="ix-ticks" aria-hidden="true"><span>10</span><span data-value="100">100</span><span>1,000</span></div>
+          <div class="lab-slider-head"><label for="rob-n">Patients who developed delirium in the evaluation</label><output class="num" for="rob-n">40</output></div>
+          <div class="lab-range"><input type="range" id="rob-n" min="0" max="1000" step="1" value="301" aria-describedby="rob-a-note"></div>
+          <div class="lab-ticks" aria-hidden="true"><span>10</span><span data-value="100">100</span><span>1,000</span></div>
           <p class="rob-sub" id="rob-n-sub"></p>
           <svg class="rob-svg" id="rob-ci" viewBox="0 0 320 64" role="img" aria-labelledby="rob-ci-text"></svg>
           <p class="rob-plain" id="rob-ci-text" aria-live="polite"></p>
-          <p class="ix-small" id="rob-a-note">95% interval from the Hanley and McNeil (1982) approximation, assuming the AUROC is 0.855 and 1 in 10 evaluated patients develops delirium. Illustrative: these are not the intervals Jauk et al. reported.</p>
+          <p class="lab-small" id="rob-a-note">95% interval from the Hanley and McNeil (1982) approximation, assuming the AUROC is 0.855 and 1 in 10 evaluated patients develops delirium. Illustrative: these are not the intervals Jauk et al. reported.</p>
         </article>
 
-        <article class="ix-card rob-card" aria-labelledby="rob-b-title">
+        <article class="lab-card rob-card" aria-labelledby="rob-b-title">
           <p class="label">B · After deployment</p>
           <h3 id="rob-b-title">Ranking can hold while calibration drifts</h3>
-          <div class="ix-slider-head"><label for="rob-drift">How far predicted risk overstates observed risk</label><output class="num" for="rob-drift">None</output></div>
-          <div class="ix-range"><input type="range" id="rob-drift" min="0" max="140" step="5" value="0" aria-describedby="rob-b-note"></div>
-          <div class="ix-ticks" aria-hidden="true"><span>None</span><span>Strong</span></div>
+          <div class="lab-slider-head"><label for="rob-drift">How far predicted risk overstates observed risk</label><output class="num" for="rob-drift">None</output></div>
+          <div class="lab-range"><input type="range" id="rob-drift" min="0" max="140" step="5" value="0" aria-describedby="rob-b-note"></div>
+          <div class="lab-ticks" aria-hidden="true"><span>None</span><span>Strong</span></div>
           <svg class="rob-svg" id="rob-cal" viewBox="0 0 320 236" role="img" aria-labelledby="rob-cal-text"></svg>
           <dl class="rob-read">
             <div><dt>Discrimination (AUROC)</dt><dd class="rob-same">Unchanged</dd></div>
@@ -217,11 +217,11 @@
             <div><dt><i class="rob-key rob-key-amber"></i>Yellow icon: predicted · observed</dt><dd class="num" id="rob-amber">–</dd></div>
           </dl>
           <p class="rob-plain" id="rob-cal-text" aria-live="polite"></p>
-          <p class="ix-small" id="rob-b-note">Illustrative risk distribution, not data from the study. Overstatement is modeled as a constant shift on the log-odds scale, which leaves the ranking of patients unchanged, and with it the AUROC and the percentile-based icons (red for the 95th to 100th percentile, yellow for the 85th to 94th).</p>
+          <p class="lab-small" id="rob-b-note">Illustrative risk distribution, not data from the study. Overstatement is modeled as a constant shift on the log-odds scale, which leaves the ranking of patients unchanged, and with it the AUROC and the percentile-based icons (red for the 95th to 100th percentile, yellow for the 85th to 94th).</p>
         </article>
       </div>
 
-      <div class="ix-takeaway">
+      <div class="lab-takeaway">
         <ul class="chips" data-dims="2 6"></ul>
         <p>Report performance with its uncertainty and the size of the evaluation behind it, and keep checking calibration after deployment. A display that encodes only rank cannot show drift, so reliability has to be communicated, not only measured.</p>
       </div>
@@ -236,17 +236,17 @@
 
       <div class="att">
         <div class="att-controls">
-          <div class="ix-card">
+          <div class="lab-card">
             <p class="label">Move the conditions</p>
-            <div class="ix-slider-head"><label for="att-rush">Attention available</label><output for="att-rush">Full</output></div>
-            <div class="ix-range att-range"><input type="range" id="att-rush" min="0" max="100" step="1" value="20"></div>
-            <div class="ix-ticks" aria-hidden="true"><span>Full attention</span><span>Rushed</span></div>
-            <p class="ix-small">Rushed means interruptions, alert fatigue, many patients, and little time per decision.</p>
+            <div class="lab-slider-head"><label for="att-rush">Attention available</label><output for="att-rush">Full</output></div>
+            <div class="lab-range att-range"><input type="range" id="att-rush" min="0" max="100" step="1" value="20"></div>
+            <div class="lab-ticks" aria-hidden="true"><span>Full attention</span><span>Rushed</span></div>
+            <p class="lab-small">Rushed means interruptions, alert fatigue, many patients, and little time per decision.</p>
           </div>
-          <div class="ix-card">
+          <div class="lab-card">
             <p class="label" id="att-toggles-label">What the display communicates</p>
             <ul class="att-toggles" id="att-toggles" aria-labelledby="att-toggles-label"></ul>
-            <div class="ix-presets">
+            <div class="lab-presets">
               <button type="button" class="btn" id="att-bare">Bare score</button>
               <button type="button" class="btn" id="att-full">Complete display</button>
             </div>
@@ -254,25 +254,25 @@
         </div>
 
         <div class="att-out">
-          <div class="ix-card">
-            <div class="ix-slider-head"><p class="label" id="att-meter-label">Risk that the output is misread or not acted on</p><output class="num" id="att-score">0</output></div>
+          <div class="lab-card">
+            <div class="lab-slider-head"><p class="label" id="att-meter-label">Risk that the output is misread or not acted on</p><output class="num" id="att-score">0</output></div>
             <div class="att-meter" id="att-meter" role="meter" aria-labelledby="att-meter-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="att-cover" id="att-cover"></span><span class="att-line" aria-hidden="true"><span>Support line</span></span></div>
-            <div class="ix-ticks" aria-hidden="true"><span>Low</span><span>High</span></div>
+            <div class="lab-ticks" aria-hidden="true"><span>Low</span><span>High</span></div>
             <div class="att-profile" id="att-profile">
               <p class="label">Plain meaning</p>
               <h3 id="att-profile-name"></h3>
               <p id="att-profile-text" aria-live="polite"></p>
             </div>
           </div>
-          <div class="ix-card">
+          <div class="lab-card">
             <p class="label">Find the dot</p>
             <svg class="att-map" id="att-map" viewBox="0 0 320 204" role="img" aria-label="Map of attention against display gaps. The shading darkens where the risk index is higher, and a dashed line marks where support becomes necessary."></svg>
-            <p class="ix-small">Right means less attention. Up means more gaps in the display, weighted by what matters at that level of attention. Drag the dot sideways to change attention.</p>
+            <p class="lab-small">Right means less attention. Up means more gaps in the display, weighted by what matters at that level of attention. Drag the dot sideways to change attention.</p>
           </div>
-          <div class="ix-card att-support" id="att-support" aria-live="polite"></div>
+          <div class="lab-card att-support" id="att-support" aria-live="polite"></div>
         </div>
       </div>
-      <p class="ix-small att-note">The index is a teaching device. Its weights are set by hand to show the logic of the paper, where the risk and intervention mappings are design hypotheses rather than validated remedies. It is not estimated from data and is not a clinical score.</p>
+      <p class="lab-small att-note">The index is a teaching device. Its weights are set by hand to show the logic of the paper, where the risk and intervention mappings are design hypotheses rather than validated remedies. It is not estimated from data and is not a clinical score.</p>
     </div>
   </section>
 
@@ -301,6 +301,6 @@
 </footer>
 
 <script src="taxonomy-shared.js"></script>
-<script src="taxonomy-interactive.js"></script>
+<script src="taxonomy-decision-lab.js"></script>
 </body>
 </html>

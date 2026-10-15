@@ -1,6 +1,6 @@
-/* Interactive page only · taxonomy-interactive.html. Loaded after taxonomy-shared.js.
+/* Decision lab page only · taxonomy-decision-lab.html. Loaded after taxonomy-shared.js.
    One block per section; each block returns early when its section is not on the page.
-   Blocks talk to each other through events on document (see "ix:setting" below). */
+   Blocks talk to each other through events on document (see "lab:setting" below). */
 (function(){
   'use strict';
 
@@ -13,10 +13,10 @@
   }
   // Numbered badge for tight spaces. As a link (dimTag) it carries the name as a tooltip and accessible label.
   function dimBadge(n){
-    return '<span class="ix-dim" '+dimStyle(n)+' aria-hidden="true">'+n+'</span>';
+    return '<span class="lab-dim" '+dimStyle(n)+' aria-hidden="true">'+n+'</span>';
   }
   function dimTag(n){
-    return '<li><a class="ix-dim" href="taxonomy.html#dim-'+n+'" '+dimStyle(n)+' title="'+DIMS[n-1]+'" aria-label="Dimension '+n+', '+DIMS[n-1]+'">'+n+'</a></li>';
+    return '<li><a class="lab-dim" href="taxonomy.html#dim-'+n+'" '+dimStyle(n)+' title="'+DIMS[n-1]+'" aria-label="Dimension '+n+', '+DIMS[n-1]+'">'+n+'</a></li>';
   }
   // Chip lists written in the page as <ul class="chips" data-dims="1 6 5">.
   [].forEach.call(document.querySelectorAll('ul[data-dims]'),function(ul){
@@ -147,7 +147,7 @@
       state[kind]=id;
       render();
       if(!quiet){say(LABELS[kind][id]+' placed in '+box(kind)+'.');}
-      if(kind==='setting'){document.dispatchEvent(new CustomEvent('ix:setting',{detail:{id:id,label:LABELS.setting[id]}}));}
+      if(kind==='setting'){document.dispatchEvent(new CustomEvent('lab:setting',{detail:{id:id,label:LABELS.setting[id]}}));}
     }
     function removePiece(kind){
       var id=state[kind];
@@ -288,7 +288,7 @@
     if(!input){return;}
     var SENS=0.76,SPEC=0.84,N=1000,ROWS=25;
     var scale=logRange(input,0.001,0.6);
-    placeTicks(input.closest('.ix-card'),scale.frac);
+    placeTicks(input.closest('.lab-card'),scale.frac);
     var grid=document.getElementById('ctx-grid');
     var flaggedEl=document.getElementById('ctx-flagged'),tpEl=document.getElementById('ctx-tp'),fnEl=document.getElementById('ctx-fn'),plainEl=document.getElementById('ctx-plain');
     var presets=[].slice.call(document.querySelectorAll('#ctx-presets .btn'));
@@ -338,7 +338,7 @@
     input.addEventListener('input',function(){update();clearFrom();});
     presets.forEach(function(b){b.addEventListener('click',function(){setRate(rateOf(b));clearFrom();});});
     // A setting placed in the pathway builder (section 1) moves the base rate to that setting's illustrative value.
-    document.addEventListener('ix:setting',function(e){
+    document.addEventListener('lab:setting',function(e){
       var rate=SETTINGS[e.detail.id].rate;
       setRate(rate);
       from.textContent='Set from your pathway: '+e.detail.label+', at an illustrative base rate of '+fmtPct(rate)+'.';
@@ -366,7 +366,7 @@
       return [Math.max(0.5,A-1.96*se),Math.min(1,A+1.96*se)];
     }
     var nScale=logRange(nIn,10,1000);
-    placeTicks(nIn.closest('.ix-card'),nScale.frac);
+    placeTicks(nIn.closest('.lab-card'),nScale.frac);
     var ci=document.getElementById('rob-ci'),subA=document.getElementById('rob-n-sub'),textA=document.getElementById('rob-ci-text');
     function cx(v){return 16+(v-0.5)/0.5*288;}
     // Axis, ticks and the 0.855 point never change; only the interval band moves.
