@@ -42,6 +42,74 @@
     </div>
   </section>
 
+  <section class="sec" id="test" aria-labelledby="test-title">
+    <div class="frame">
+      <p class="kicker">Clinician test · about 5 minutes</p>
+      <h2 id="test-title">Read the delirium risk of six patients</h2>
+      <p class="lede">Each case shows a patient and what a delirium risk tool displays for them. Estimate the chance of delirium, choose what you would do next, and say how sure you are. The displays differ from case to case; at the end you can see how close your estimates were.</p>
+
+      <div class="lab-card test" id="test-box">
+        <form class="test-intro" id="test-intro">
+          <p class="label">Before you start</p>
+          <div class="test-fields">
+            <label class="test-field"><span>Your role</span>
+              <select id="test-role" required>
+                <option value="">Choose…</option>
+                <option>Nurse</option>
+                <option>Physician</option>
+                <option>Other clinician</option>
+                <option>Not a clinician</option>
+              </select>
+            </label>
+            <label class="test-field"><span>Years in clinical practice</span><input type="number" id="test-years" min="0" max="60" inputmode="numeric"></label>
+            <label class="test-field"><span>Participant code <em>optional, from the research team</em></span><input type="text" id="test-code" maxlength="24" autocomplete="off" spellcheck="false"></label>
+          </div>
+          <p class="lab-small">Your answers stay in this browser and are not sent anywhere. Please do not enter your name.</p>
+          <button class="btn primary" type="submit">Start the six cases</button>
+        </form>
+
+        <div class="test-case" id="test-case" hidden>
+          <div class="test-progress"><span id="test-step"></span><span class="test-bar" aria-hidden="true"><span id="test-bar-fill"></span></span></div>
+          <h3 class="test-patient" id="test-patient" tabindex="-1"></h3>
+          <p class="test-vignette" id="test-vignette"></p>
+          <p class="label">What the risk tool shows</p>
+          <div class="test-display" id="test-display"></div>
+          <form class="test-form" id="test-form">
+            <fieldset>
+              <legend id="test-q1">1. What is the chance this patient develops delirium in the next 48 hours?</legend>
+              <div class="lab-slider-head"><span class="test-hint" id="test-hint">Tap or drag the line to answer</span><output class="num" for="test-est">–</output></div>
+              <div class="lab-range test-unset" id="test-range"><input type="range" id="test-est" min="0" max="100" step="1" value="50" aria-describedby="test-hint"></div>
+              <div class="lab-ticks" aria-hidden="true"><span>0 in 100</span><span data-value="50">50</span><span>100 in 100</span></div>
+            </fieldset>
+            <fieldset>
+              <legend>2. What would you do next?</legend>
+              <div class="test-options">
+                <label><input type="radio" name="test-act" value="usual"> Continue usual care</label>
+                <label><input type="radio" name="test-act" value="reassess"> Reassess at the next shift</label>
+                <label><input type="radio" name="test-act" value="prevent"> Start delirium prevention measures now</label>
+                <label><input type="radio" name="test-act" value="review"> Ask the team to review the patient now</label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>3. How sure are you of your estimate?</legend>
+              <div class="test-scale">
+                <label><input type="radio" name="test-sure" value="1"><span>1<small>Not at all</small></span></label>
+                <label><input type="radio" name="test-sure" value="2"><span>2</span></label>
+                <label><input type="radio" name="test-sure" value="3"><span>3</span></label>
+                <label><input type="radio" name="test-sure" value="4"><span>4</span></label>
+                <label><input type="radio" name="test-sure" value="5"><span>5<small>Very sure</small></span></label>
+              </div>
+            </fieldset>
+            <button class="btn primary" type="submit" id="test-next" disabled>Next case</button>
+          </form>
+        </div>
+
+        <div class="test-done" id="test-done" hidden tabindex="-1"></div>
+      </div>
+      <p class="lab-small">The patients, displays, and risks in these cases are illustrative. They were written for this test and are not real patients or clinical guidance.</p>
+    </div>
+  </section>
+
   <section class="sec" id="pathway" aria-labelledby="path-title">
     <div class="frame">
       <p class="kicker">1 · Build the pathway</p>

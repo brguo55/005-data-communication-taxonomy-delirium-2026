@@ -57,6 +57,154 @@
     return parent.appendChild(el);
   }
 
+  /* 0 · Clinician test (#test). Six illustrative cases in a fixed order. Each is shown either as a score-only display
+     (version A, like the displays in the paper's delirium cases) or as a display built from the taxonomy (version B).
+     The versions alternate, and the group decides which cases get which, so across groups every case is seen both ways.
+     ref is the risk in each scenario that a perfectly informed reader would arrive at; when is the time window asked
+     about (48 hours unless the case says otherwise). */
+  var CASES=[
+    {id:'ward-red',title:'Medical ward · 84-year-old woman',
+     vignette:'Admitted yesterday with pneumonia. Hard of hearing, new to the ward, oriented this morning.',
+     a:{kind:'list',icon:'red',unit:'Medical ward 4B'},
+     b:{risk:30,lo:24,hi:37,base:'About 10 in 100 patients on this ward',
+        reliability:'Checked last month: predictions on this ward had been running higher than observed, so this estimate has been recalibrated.',
+        next:'Start the ward’s delirium prevention measures and screen for delirium each shift.'},
+     ref:30},
+    {id:'clinic-flag',title:'Pre-surgical clinic · 67-year-old man',when:'in the first three days after surgery',
+     vignette:'Planned knee replacement next week. Lives independently, no memory problems, takes no sedatives.',
+     a:{kind:'flag',text:'High risk of postoperative delirium',sub:'Above threshold'},
+     b:{risk:4,lo:2,hi:7,base:'About 1 in 100 patients seen in this clinic',
+        reliability:'Flagged because the estimate is above the tool’s 2% screening threshold. At this estimate, about 24 of 25 patients like him do not develop delirium.',
+        next:'Share the estimate with the surgical team and plan delirium screening after surgery.'},
+     ref:4},
+    {id:'icu-score',title:'Intensive care unit · 71-year-old man',
+     vignette:'Second day on a ventilator after abdominal surgery. Sedated, waking when sedation is paused.',
+     a:{kind:'value',label:'Delirium risk score',value:'0.55'},
+     b:{risk:55,lo:47,hi:63,base:'About 30 in 100 patients in this unit',
+        reliability:'Checked last quarter: predictions in this unit matched observed rates.',
+        next:'Review sedation and screen for delirium each shift.'},
+     ref:55},
+    {id:'ward-none',title:'Surgical ward · 79-year-old woman',
+     vignette:'Admitted from a nursing home for hip fracture repair tomorrow. Lives with moderate dementia.',
+     a:{kind:'list',icon:'none',unit:'Surgical ward 2A'},
+     b:{risk:8,lo:3,hi:20,base:'About 10 in 100 patients on this ward',
+        reliability:'Checked last month: predictions on this ward matched observed rates overall.',
+        caution:'The model saw few patients admitted from nursing homes or living with dementia. For patients like her, its estimate is likely too low.',
+        next:'Use clinical judgment; consider starting prevention measures and screening each shift.'},
+     ref:25},
+    {id:'ortho-value',title:'Orthopedic ward · 76-year-old man',
+     vignette:'Day one after hip fracture surgery. Taking opioids for pain, slept poorly last night.',
+     a:{kind:'value',label:'Predicted probability of delirium',value:'0.20'},
+     b:{risk:20,lo:9,hi:38,base:'About 10 in 100 patients on this ward',
+        reliability:'The model was checked on few patients after hip surgery, so the range around this estimate is wide.',
+        next:'Start prevention measures and screen for delirium each shift.'},
+     ref:20},
+    {id:'ward-amber',title:'Medical ward · 81-year-old woman',
+     vignette:'Admitted with a urinary tract infection. Mild memory problems at home, needed help to the bathroom overnight.',
+     a:{kind:'list',icon:'amber',unit:'Medical ward 4B'},
+     b:{risk:18,lo:13,hi:24,base:'About 10 in 100 patients on this ward',
+        reliability:'Checked last month: predictions on this ward had been running higher than observed, so this estimate has been recalibrated.',
+        next:'Start the ward’s delirium prevention measures and screen for delirium each shift.'},
+     ref:18}
+  ];
+  var ACTIONS={usual:'Continue usual care',reassess:'Reassess at the next shift',prevent:'Start prevention now',review:'Ask the team to review now'};
+
+  (function(){
+    var box=document.getElementById('test-box');
+    if(!box){return;}
+    var intro=document.getElementById('test-intro'),caseEl=document.getElementById('test-case'),done=document.getElementById('test-done');
+    var form=document.getElementById('test-form'),est=document.getElementById('test-est'),range=document.getElementById('test-range');
+    var next=document.getElementById('test-next'),display=document.getElementById('test-display');
+    placeTicks(range.parentNode,function(v){return v/100;});
+
+    // ?group=1 or ?group=2 in the link assigns a group; otherwise one is picked at random.
+    var asked=/[?&]group=([12])/.exec(location.search);
+    var t={group:asked?+asked[1]:(Math.random()<0.5?1:2),answers:[],i:0,start:0,touched:false};
+
+    function when(c){return c.when||'in the next 48 hours';}
+    function versionOf(i){return (i%2===0)===(t.group===1)?'A':'B';}
+    function displayA(a){
+      if(a.kind==='list'){
+        var icon=a.icon==='none'?'':'<span class="icon '+a.icon+'"></span>';
+        return '<div class="ward test-ward"><div class="ward-bar"><span>Patient list · '+a.unit+'</span><span>Delirium risk</span></div>'
+          +'<table><tbody><tr><td>11</td><td><span class="redact" style="--w:58%"></span></td><td><span class="icon amber"></span></td></tr>'
+          +'<tr class="test-this"><td>12</td><td>This patient</td><td>'+icon+'</td></tr>'
+          +'<tr><td>14</td><td><span class="redact" style="--w:46%"></span></td><td></td></tr></tbody></table></div>'
+          +'<ul class="legend"><li><span class="icon red"></span>Very high risk group, 95th to 100th percentile</li><li><span class="icon amber"></span>High risk group, 85th to 94th percentile</li><li><span class="icon none"></span>No symbol for patients classified as low risk</li></ul>';
+      }
+      if(a.kind==='flag'){return '<div class="test-widget"><p class="label">Delirium risk tool</p><p class="test-flag">'+a.text+'</p><p class="test-widget-sub">'+a.sub+'</p></div>';}
+      return '<div class="test-widget"><p class="label">Delirium risk tool</p><p class="test-widget-value"><span>'+a.label+'</span><b class="num">'+a.value+'</b></p></div>';
+    }
+    function displayB(b,window){
+      var cells='';
+      for(var k=0;k<100;k++){cells+='<i'+(k<b.risk?' class="on"':'')+'></i>';}
+      return '<div class="test-full">'
+        +'<div class="test-main"><div><p class="test-big"><b>'+b.risk+'</b> in 100</p><p>similar patients develop delirium '+window+'</p></div><span class="test-array" role="img" aria-label="'+b.risk+' of 100 squares filled">'+cells+'</span></div>'
+        +'<div><b>Likely range:</b> '+b.lo+' to '+b.hi+' in 100</div>'
+        +'<div><b>For comparison:</b> '+b.base+' develop delirium</div>'
+        +'<div><b>Reliability:</b> '+b.reliability+'</div>'
+        +(b.caution?'<div class="test-caution"><b>Caution:</b> '+b.caution+'</div>':'')
+        +'<div><b>Suggested next step:</b> '+b.next+'</div></div>';
+    }
+    function checked(name){var el=form.querySelector('input[name="'+name+'"]:checked');return el?el.value:'';}
+    function ready(){next.disabled=!(t.touched&&checked('test-act')&&checked('test-sure'));}
+    function showEstimate(){
+      var v=+est.value;
+      syncRange(est,v+' in 100',v+' in 100, '+v+' percent');
+    }
+
+    function showCase(){
+      var c=CASES[t.i];
+      document.getElementById('test-step').textContent='Case '+(t.i+1)+' of '+CASES.length;
+      document.getElementById('test-bar-fill').style.width=(t.i/CASES.length*100)+'%';
+      document.getElementById('test-patient').textContent=c.title;
+      document.getElementById('test-vignette').textContent=c.vignette;
+      document.getElementById('test-q1').textContent='1. What is the chance this patient develops delirium '+when(c)+'?';
+      display.innerHTML=versionOf(t.i)==='A'?displayA(c.a):displayB(c.b,when(c));
+      form.reset();
+      est.value=50;
+      t.touched=false;
+      range.classList.add('test-unset');
+      est.style.setProperty('--fill','0%');
+      document.querySelector('output[for="test-est"]').textContent='–';
+      next.textContent=t.i===CASES.length-1?'Finish':'Next case';
+      ready();
+      t.start=performance.now();
+      document.getElementById('test-patient').focus();
+    }
+    function finish(){
+      caseEl.hidden=true;
+      done.hidden=false;
+      done.innerHTML='<p class="label">Done</p><h3 class="test-patient">Thank you. All six cases are complete.</h3>';
+      done.focus();
+    }
+
+    intro.addEventListener('submit',function(e){
+      e.preventDefault();
+      var code=document.getElementById('test-code').value.trim();
+      t.participant=code||'P-'+Math.random().toString(36).slice(2,6).toUpperCase();
+      t.role=document.getElementById('test-role').value;
+      t.years=document.getElementById('test-years').value;
+      intro.hidden=true;
+      caseEl.hidden=false;
+      showCase();
+    });
+    // The estimate counts as answered once the participant touches the slider, even if they keep the middle value.
+    function touch(){if(!t.touched){t.touched=true;range.classList.remove('test-unset');}showEstimate();ready();}
+    est.addEventListener('input',touch);
+    est.addEventListener('pointerdown',touch);
+    est.addEventListener('keydown',function(e){if(/^(Arrow|Page|Home|End)/.test(e.key)){touch();}});
+    form.addEventListener('change',ready);
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(next.disabled){return;}
+      var c=CASES[t.i];
+      t.answers.push({caseId:c.id,title:c.title,version:versionOf(t.i),estimate:+est.value,ref:c.ref,action:checked('test-act'),sure:+checked('test-sure'),seconds:Math.round((performance.now()-t.start)/100)/10});
+      t.i++;
+      if(t.i<CASES.length){showCase();}else{finish();}
+    });
+  })();
+
   // Hospital settings, shared by the pathway builder (section 1) and the base-rate explorer (section 2).
   // The rates are illustrative, chosen to span a range; they are not prevalence estimates.
   var SETTINGS={
