@@ -123,6 +123,7 @@
       });
       var stake=Object.keys(count).map(Number).sort(function(a,b){return count[b]-count[a]||a-b;});
       read.innerHTML='<p class="label">Your pathway</p><p class="pw-sentence">'+sentence()+'</p>'
+        +(state.setting?'<p class="pw-next"><a href="#context">See what a flag means '+PIECES.setting[state.setting].phrase+' \u2193</a></p>':'')
         +'<ol class="pw-findings">'+findings+'</ol>'
         +(stake.length?'<div class="pw-stake"><p class="label">Dimensions at stake, most often first</p><ul class="chips">'+stake.map(dimChip).join('')+'</ul></div>':'');
     }
@@ -280,8 +281,19 @@
     }
     function setRate(rate){input.value=toValue(rate);update();}
 
-    input.addEventListener('input',update);
-    presets.forEach(function(b){b.addEventListener('click',function(){setRate(+b.getAttribute('data-rate'));});});
+    var from=document.getElementById('ctx-from');
+    function clearFrom(){from.hidden=true;from.textContent='';}
+
+    input.addEventListener('input',function(){update();clearFrom();});
+    presets.forEach(function(b){b.addEventListener('click',function(){setRate(+b.getAttribute('data-rate'));clearFrom();});});
+    // A setting placed in the pathway builder (section 1) moves the base rate to that setting's illustrative value.
+    document.addEventListener('ix:setting',function(e){
+      var b=document.querySelector('#ctx-presets [data-setting="'+e.detail.id+'"]');
+      if(!b){return;}
+      setRate(+b.getAttribute('data-rate'));
+      from.textContent='Set from your pathway: '+e.detail.label+', at an illustrative base rate of '+fmtPct(+b.getAttribute('data-rate'))+'.';
+      from.hidden=false;
+    });
     setRate(0.1);
   })();
 })();

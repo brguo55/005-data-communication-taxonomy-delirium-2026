@@ -91,6 +91,7 @@
 .pw-read{margin-top:14px}
 .pw-sentence{margin:0;max-width:62ch;font-family:var(--f-display);font-size:1.2rem;line-height:1.45;color:var(--ink)}
 .pw-sentence .ghost{font-size:.8em;vertical-align:.08em}
+.pw-next{margin:8px 0 0;font-size:14.5px;font-weight:700}
 .pw-findings{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 22px}
 @media (max-width:700px){.pw-findings{grid-template-columns:1fr}}
 .pw-finding{min-width:0;padding-top:10px;border-top:2px solid var(--d3)}
