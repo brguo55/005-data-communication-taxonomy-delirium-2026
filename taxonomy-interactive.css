@@ -108,7 +108,7 @@
    Scripts set --fill (0% to 100%) on each range input to color the part of the track left of the thumb. */
 .ix-slider-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:2px}
 .ix-slider-head label{font-weight:700;font-size:15px;color:var(--ink)}
-.ix-slider-head output{font-size:1.55rem;font-weight:600;line-height:1.2;color:var(--ink)}
+.ix-slider-head output{flex:none;font-size:1.55rem;font-weight:600;line-height:1.2;white-space:nowrap;color:var(--ink)}
 .ix-range{--thumb:22px;position:relative;padding-top:22px}
 .ix-range input[type="range"]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:28px;margin:0;background:transparent;cursor:pointer}
 .ix-range input[type="range"]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:var(--track,linear-gradient(90deg,var(--accent) 0 var(--fill,50%),var(--rule-2) var(--fill,50%) 100%))}
@@ -159,3 +159,32 @@ i.ctx-tn{background:var(--rule-2)}
 @media (max-width:420px){.ctx-stats{grid-template-columns:1fr}.ctx-stats > div{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.ctx-stats dd{font-size:1.3rem}}
 .ctx-plain{margin:16px 0 0;font-family:var(--f-display);font-size:1.16rem;line-height:1.45;color:var(--ink)}
 .ctx-from{margin:10px 0 0;font-size:13.5px;color:var(--accent)}
+
+/* 3 · model robustness (#robust) · both charts are SVGs drawn by taxonomy-interactive.js */
+.rob{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:30px;align-items:start}
+@media (max-width:900px){.rob{grid-template-columns:1fr}}
+.rob-card > .label{margin-bottom:4px}
+.rob-card h3{margin:0 0 16px;font-family:var(--f-display);font-weight:600;font-size:1.3rem;line-height:1.25}
+.rob-card .ix-slider-head label{font-size:14px}
+.rob-sub{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.rob-svg{display:block;width:100%;height:auto;margin-top:14px;overflow:visible}
+.rob-svg .t{font-family:var(--f-mono);font-size:10px;fill:var(--muted)}
+.rob-svg .t-strong{font-family:var(--f-mono);font-size:11px;font-weight:600;fill:var(--ink)}
+.rob-svg .axis{stroke:var(--rule-2);stroke-width:1}
+.rob-svg .grid{stroke:var(--rule);stroke-width:1}
+.rob-svg .band{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+.rob-svg .dot{fill:var(--ink)}
+.rob-svg .diag{stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 4}
+.rob-svg .curve{fill:none;stroke:var(--accent);stroke-width:2.6;stroke-linecap:round}
+.rob-svg .bar{fill:var(--rule-2);opacity:.75}
+.rob-svg .pt-red{fill:var(--sig-red);stroke:var(--surface);stroke-width:2}
+.rob-svg .pt-amber{fill:var(--sig-amber);stroke:var(--surface);stroke-width:2}
+.rob-read{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;margin:12px 0 0}
+.rob-read > div{min-width:0;padding-top:6px;border-top:1px solid var(--rule)}
+.rob-read dt{display:flex;align-items:center;gap:6px;font-size:12.5px;line-height:1.35;color:var(--muted)}
+.rob-read dd{margin:2px 0 0;font-weight:700;font-size:15px;color:var(--ink)}
+.rob-read dd.rob-same{color:var(--d5)}
+.rob-key{width:9px;height:9px;border-radius:50%;flex:none}
+.rob-key-red{background:var(--sig-red)}
+.rob-key-amber{background:var(--sig-amber)}
+.rob-plain{margin:14px 0 0;font-family:var(--f-display);font-size:1.08rem;line-height:1.45;color:var(--ink)}

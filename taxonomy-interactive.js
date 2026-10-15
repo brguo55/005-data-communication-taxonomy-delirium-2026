@@ -123,7 +123,7 @@
       });
       var stake=Object.keys(count).map(Number).sort(function(a,b){return count[b]-count[a]||a-b;});
       read.innerHTML='<p class="label">Your pathway</p><p class="pw-sentence">'+sentence()+'</p>'
-        +(state.setting?'<p class="pw-next"><a href="#context">See what a flag means '+PIECES.setting[state.setting].phrase+' \u2193</a></p>':'')
+        +(state.setting?'<p class="pw-next"><a href="#context">See what a flag means '+PIECES.setting[state.setting].phrase+' ↓</a></p>':'')
         +'<ol class="pw-findings">'+findings+'</ol>'
         +(stake.length?'<div class="pw-stake"><p class="label">Dimensions at stake, most often first</p><ul class="chips">'+stake.map(dimChip).join('')+'</ul></div>':'');
     }
@@ -295,5 +295,95 @@
       from.hidden=false;
     });
     setRate(0.1);
+  })();
+
+  /* 3 · Model robustness (#robust)
+     A: 95% interval around AUROC 0.855 (Jauk et al.) from the Hanley and McNeil (1982) standard error, for an evaluation
+        with n1 patients who develop delirium and 9 × n1 who do not. The slider is logarithmic from 10 to 1,000.
+     B: an illustrative population whose true risk is logit-normal. Predicted log-odds = true log-odds + drift, so ranks,
+        AUROC and percentile icons never change while predicted risk pulls away from observed risk. */
+  (function(){
+    var nIn=document.getElementById('rob-n'),dIn=document.getElementById('rob-drift');
+    if(!nIn||!dIn){return;}
+    function f2(x){return x.toFixed(2);}
+    function pct(x){return Math.round(x*100)+'%';}
+    function expit(x){return 1/(1+Math.exp(-x));}
+
+    // A · sample size
+    var A=0.855,Q1=A/(2-A),Q2=2*A*A/(1+A);
+    function interval(n1){
+      var n2=9*n1,se=Math.sqrt((A*(1-A)+(n1-1)*(Q1-A*A)+(n2-1)*(Q2-A*A))/(n1*n2));
+      return [Math.max(0.5,A-1.96*se),Math.min(1,A+1.96*se)];
+    }
+    function toN(v){return Math.round(10*Math.pow(100,v/1000));}
+    var ci=document.getElementById('rob-ci');
+    function cx(v){return 16+(v-0.5)/0.5*288;}
+    function drawA(){
+      var n1=toN(+nIn.value),iv=interval(n1);
+      nIn.style.setProperty('--fill',(nIn.value/10)+'%');
+      nIn.setAttribute('aria-valuetext',n1+' patients with delirium');
+      document.getElementById('rob-n-out').textContent=n1.toLocaleString('en-US');
+      document.getElementById('rob-n-sub').textContent='and '+(9*n1).toLocaleString('en-US')+' who did not, '+(10*n1).toLocaleString('en-US')+' evaluated in all';
+      var svg='<line class="axis" x1="'+cx(0.5)+'" x2="'+cx(1)+'" y1="38" y2="38"/>';
+      [0.5,0.6,0.7,0.8,0.9,1].forEach(function(v){svg+='<line class="axis" x1="'+cx(v)+'" x2="'+cx(v)+'" y1="38" y2="42"/><text class="t" x="'+cx(v)+'" y="55" text-anchor="middle">'+v.toFixed(1)+'</text>';});
+      svg+='<rect class="band" x="'+cx(iv[0])+'" y="25" width="'+Math.max(2,cx(iv[1])-cx(iv[0]))+'" height="10" rx="5"/>';
+      svg+='<circle class="dot" cx="'+cx(A)+'" cy="30" r="5"/><text class="t-strong" x="'+cx(A)+'" y="16" text-anchor="middle">0.855</text>';
+      ci.innerHTML=svg;
+      var other=n1<300?Math.min(1000,n1*10):Math.round(n1/10),ov=interval(other);
+      var compare=other>n1?'With ten times as many, it would narrow to '+f2(ov[0])+' to '+f2(ov[1])+'.':'With a tenth as many, it would widen to '+f2(ov[0])+' to '+f2(ov[1])+'.';
+      document.getElementById('rob-ci-text').textContent='With '+n1.toLocaleString('en-US')+' patients who developed delirium, the 95% interval runs from '+f2(iv[0])+' to '+f2(iv[1])+'. '+compare+' The headline 0.855 looks the same either way; only the interval shows how much evidence stands behind it.';
+    }
+
+    // B · calibration drift. Integrate over the standard normal on a fine grid instead of sampling, so the numbers are stable.
+    var MU=-2.6,SD=1.2,Z95=1.6449,Z85=1.0364,STEP=0.01,grid=[];
+    for(var z=-6;z<=6;z+=STEP){grid.push([z,Math.exp(-z*z/2)/Math.sqrt(2*Math.PI)*STEP]);}
+    function groupMeans(lo,hi,d){
+      var w=0,obs=0,pred=0;
+      grid.forEach(function(g){if(g[0]>=lo&&g[0]<hi){var l=MU+SD*g[0];w+=g[1];obs+=g[1]*expit(l);pred+=g[1]*expit(l+d);}});
+      return {obs:obs/w,pred:pred/w};
+    }
+    var cal=document.getElementById('rob-cal');
+    var X0=46,X1=306,Y0=200,Y1=12,TILT=-Math.atan2(Y0-Y1,X1-X0)*180/Math.PI;
+    function px(p){return X0+p*(X1-X0);}
+    function py(p){return Y0-p*(Y0-Y1);}
+    function drawB(){
+      var d=dIn.value/100,odds=Math.exp(d);
+      dIn.style.setProperty('--fill',(dIn.value/1.4)+'%');
+      var label=d===0?'None':'×'+odds.toFixed(1)+' odds';
+      document.getElementById('rob-drift-out').textContent=label;
+      dIn.setAttribute('aria-valuetext',d===0?'No overstatement':'Predicted odds '+odds.toFixed(1)+' times the observed odds');
+      var svg='';
+      [0,0.25,0.5,0.75,1].forEach(function(v){
+        svg+='<line class="grid" x1="'+px(0)+'" x2="'+px(1)+'" y1="'+py(v)+'" y2="'+py(v)+'"/>';
+        svg+='<text class="t" x="'+(X0-6)+'" y="'+(py(v)+3)+'" text-anchor="end">'+pct(v)+'</text>';
+        svg+='<text class="t" x="'+px(v)+'" y="'+(Y0+14)+'" text-anchor="middle">'+pct(v)+'</text>';
+      });
+      // Where the predicted risks fall: 20 bins, bar height scaled to the fullest bin.
+      var bins=[],k,maxB=0;
+      for(k=0;k<20;k++){bins.push(0);}
+      grid.forEach(function(g){var b=Math.min(19,Math.floor(expit(MU+SD*g[0]+d)*20));bins[b]+=g[1];});
+      bins.forEach(function(b){if(b>maxB){maxB=b;}});
+      bins.forEach(function(b,i){var h=b/maxB*46;if(h>0.3){svg+='<rect class="bar" x="'+(px(i/20)+1)+'" y="'+(Y0-h)+'" width="'+(px(1/20)-px(0)-2)+'" height="'+h+'"/>';}});
+      svg+='<line class="diag" x1="'+px(0)+'" y1="'+py(0)+'" x2="'+px(1)+'" y2="'+py(1)+'"/>';
+      var path='';
+      for(k=1;k<=199;k++){var p=k/200,o=expit(Math.log(p/(1-p))-d);path+=(k===1?'M':'L')+px(p).toFixed(1)+' '+py(o).toFixed(1);}
+      svg+='<path class="curve" d="'+path+'"/>';
+      var red=groupMeans(Z95,99,d),amb=groupMeans(Z85,Z95,d);
+      svg+='<circle class="pt-amber" cx="'+px(amb.pred)+'" cy="'+py(amb.obs)+'" r="6"/><circle class="pt-red" cx="'+px(red.pred)+'" cy="'+py(red.obs)+'" r="6"/>';
+      svg+='<text class="t" x="'+px(1)+'" y="'+(Y0+30)+'" text-anchor="end">Predicted risk →</text>';
+      svg+='<text class="t" x="9" y="'+py(0.5)+'" text-anchor="middle" transform="rotate(-90 9 '+py(0.5)+')">Observed rate →</text>';
+      svg+='<text class="t" x="'+px(0.6)+'" y="'+(py(0.6)-7)+'" transform="rotate('+TILT.toFixed(1)+' '+px(0.6)+' '+(py(0.6)-7)+')">perfect calibration</text>';
+      cal.innerHTML=svg;
+      document.getElementById('rob-red').textContent=pct(red.pred)+' · '+pct(red.obs);
+      document.getElementById('rob-amber').textContent=pct(amb.pred)+' · '+pct(amb.obs);
+      document.getElementById('rob-cal-text').textContent=d===0
+        ?'Predicted and observed risk agree. The ward list shows a red icon for the top 5% of patients and a yellow icon for the next 10%.'
+        :'Patients with a red icon are now predicted to have a '+pct(red.pred)+' risk, but '+pct(red.obs)+' go on to develop delirium. The patient list looks exactly as before, because icons are assigned by rank. Jauk et al. measured this kind of drift in the manuscript; the display could not show it.';
+    }
+
+    nIn.addEventListener('input',drawA);
+    dIn.addEventListener('input',drawB);
+    drawA();
+    drawB();
   })();
 })();

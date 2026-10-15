@@ -183,6 +183,50 @@
     </div>
   </section>
 
+  <section class="sec" id="robust" aria-labelledby="rob-title">
+    <div class="frame">
+      <p class="kicker">3 · Model robustness</p>
+      <h2 id="rob-title">Sample size, performance, and what a display leaves out</h2>
+      <p class="lede">A single performance number hides how sure we are about it and whether it still holds after deployment. Both demonstrations start from what Jauk et al. reported: an AUROC of 0.854 on the test data and 0.855 during seven months of prospective use, while calibration deteriorated.</p>
+
+      <div class="rob">
+        <article class="ix-card rob-card" aria-labelledby="rob-a-title">
+          <p class="label">A · Sample size</p>
+          <h3 id="rob-a-title">How many patients stand behind 0.855?</h3>
+          <div class="ix-slider-head"><label for="rob-n">Patients who developed delirium in the evaluation</label><output class="num" id="rob-n-out" for="rob-n">40</output></div>
+          <div class="ix-range"><input type="range" id="rob-n" min="0" max="1000" step="1" value="301" aria-describedby="rob-a-note"></div>
+          <div class="ix-ticks" aria-hidden="true"><span style="--at:0">10</span><span style="--at:.5">100</span><span style="--at:1">1,000</span></div>
+          <p class="rob-sub" id="rob-n-sub"></p>
+          <svg class="rob-svg" id="rob-ci" viewBox="0 0 320 64" role="img" aria-labelledby="rob-ci-text"></svg>
+          <p class="rob-plain" id="rob-ci-text" aria-live="polite"></p>
+          <p class="ix-small" id="rob-a-note">95% interval from the Hanley and McNeil (1982) approximation, assuming the AUROC is 0.855 and 1 in 10 evaluated patients develops delirium. Illustrative: these are not the intervals Jauk et al. reported.</p>
+        </article>
+
+        <article class="ix-card rob-card" aria-labelledby="rob-b-title">
+          <p class="label">B · After deployment</p>
+          <h3 id="rob-b-title">Ranking can hold while calibration drifts</h3>
+          <div class="ix-slider-head"><label for="rob-drift">How far predicted risk overstates observed risk</label><output class="num" id="rob-drift-out" for="rob-drift">None</output></div>
+          <div class="ix-range"><input type="range" id="rob-drift" min="0" max="140" step="5" value="0" aria-describedby="rob-b-note"></div>
+          <div class="ix-ticks" aria-hidden="true"><span style="--at:0">None</span><span style="--at:1">Strong</span></div>
+          <svg class="rob-svg" id="rob-cal" viewBox="0 0 320 236" role="img" aria-labelledby="rob-cal-text"></svg>
+          <dl class="rob-read">
+            <div><dt>Discrimination (AUROC)</dt><dd class="rob-same">Unchanged</dd></div>
+            <div><dt>Who gets a red or yellow icon</dt><dd class="rob-same">Unchanged</dd></div>
+            <div><dt><i class="rob-key rob-key-red"></i>Red icon: predicted · observed</dt><dd class="num" id="rob-red">–</dd></div>
+            <div><dt><i class="rob-key rob-key-amber"></i>Yellow icon: predicted · observed</dt><dd class="num" id="rob-amber">–</dd></div>
+          </dl>
+          <p class="rob-plain" id="rob-cal-text" aria-live="polite"></p>
+          <p class="ix-small" id="rob-b-note">Illustrative risk distribution, not data from the study. Overstatement is modeled as a constant shift on the log-odds scale, which leaves the ranking of patients unchanged, and with it the AUROC and the percentile-based icons (red for the 95th to 100th percentile, yellow for the 85th to 94th).</p>
+        </article>
+      </div>
+
+      <div class="ix-takeaway">
+        <ul class="chips"><li><a class="chip" href="taxonomy.html#dim-2" style="--c:var(--d2);--cf:var(--d2f)"><i aria-hidden="true"></i>2 · Uncertainty communication</a></li><li><a class="chip" href="taxonomy.html#dim-6" style="--c:var(--d6);--cf:var(--d6f)"><i aria-hidden="true"></i>6 · Explainability and model communication</a></li></ul>
+        <p>Report performance with its uncertainty and the size of the evaluation behind it, and keep checking calibration after deployment. A display that encodes only rank cannot show drift, so reliability has to be communicated, not only measured.</p>
+      </div>
+    </div>
+  </section>
+
   <nav class="sec next" aria-labelledby="next-title">
     <div class="frame">
       <p class="kicker" id="next-title">Continue reading</p>
