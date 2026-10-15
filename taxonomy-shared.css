@@ -12,6 +12,7 @@
   --f-body:"Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --f-mono:"Atkinson Hyperlegible Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --frame:1120px; --measure:68ch;
+  --header-h:56px; /* room the sticky nav takes at the top; anchors and sticky panels sit below it */
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -46,7 +47,7 @@ p,li,dd{text-wrap:pretty}
 .num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 .kicker{font-family:var(--f-mono);font-size:12.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
 .label{font-family:var(--f-mono);font-size:11.5px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
-.sec{padding-block:clamp(52px,8vw,92px);border-top:1px solid var(--rule);scroll-margin-top:56px}
+.sec{padding-block:clamp(52px,8vw,92px);border-top:1px solid var(--rule);scroll-margin-top:var(--header-h)}
 main > .sec:first-child{border-top:0}
 .sec h1,.sec h2{font-family:var(--f-display);font-weight:600;font-size:clamp(1.7rem,1.15rem + 1.7vw,2.35rem);line-height:1.15;letter-spacing:-.005em;margin:0 0 16px;max-width:26ch}
 .lede{font-size:1.06rem;color:var(--ink-2);max-width:var(--measure);margin:0}
@@ -67,7 +68,7 @@ code{font-family:var(--f-mono);font-size:.86em;background:var(--code-bg);color:v
 .page-tab:hover{background:var(--accent-soft);color:var(--ink)}
 .page-tab[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--rule-2),0 1px 3px rgba(18,32,42,.12)}
 @media (max-width:760px){.brand{display:none}.page-tabs{flex:1;margin-left:0}.page-tab{flex:1;padding-inline:6px}}
-@media (max-width:540px){.topbar-in{padding-block:6px}.page-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-radius:14px}.page-tab{border-radius:10px}.sec,.panel,.fig2{scroll-margin-top:84px}}
+@media (max-width:540px){.topbar-in{padding-block:6px}.page-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-radius:14px}.page-tab{border-radius:10px}:root{--header-h:84px}}
 @media (max-width:380px){.page-tab{font-size:11px;letter-spacing:.04em}}
 
 /* hero · taxonomy.html */
@@ -168,7 +169,7 @@ h1{font-family:var(--f-display);font-weight:600;font-size:clamp(2.05rem,1.15rem 
 .count-note{font-size:13.5px;color:var(--muted);margin:10px 0 0;max-width:var(--measure)}
 
 /* panel · taxonomy.html (.full and table.tx are also used on taxonomy-publication.html) */
-.panel{scroll-margin-top:68px;margin-top:16px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);overflow:hidden}
+.panel{scroll-margin-top:calc(var(--header-h) + 12px);margin-top:16px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);overflow:hidden}
 .panel-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 18px;align-items:start;padding:18px 22px;background:var(--cf);border-bottom:1px solid var(--rule)}
 .panel-num{font-family:var(--f-display);font-weight:600;font-size:2.7rem;line-height:.95;color:var(--c)}
 .panel-kicker{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);margin:2px 0 4px}
@@ -300,7 +301,7 @@ figure{margin:0;min-width:0}
 .sheet.wide img{min-width:660px}
 figcaption{font-size:14px;color:var(--muted);margin-top:10px;max-width:var(--measure)}
 figcaption b{color:var(--ink)}
-.fig2{margin-top:32px;scroll-margin-top:68px}
+.fig2{margin-top:32px;scroll-margin-top:calc(var(--header-h) + 12px)}
 .side h3{font-family:var(--f-display);font-weight:600;font-size:1.22rem;margin:0 0 12px}
 .side .full{margin-top:0}
 .side .full + .full{margin-top:10px}
