@@ -38,19 +38,28 @@
     [].forEach.call(root.querySelectorAll('[data-value]'),function(el){el.style.setProperty('--at',frac(+el.getAttribute('data-value')).toFixed(4));});
   }
 
+  // Hospital settings, shared by the pathway builder (section 1) and the base-rate explorer (section 2).
+  // The rates are illustrative, chosen to span a range; they are not prevalence estimates.
+  var SETTINGS={
+    icu:{phrase:'in an intensive care unit',rate:0.3},
+    ward:{phrase:'on an inpatient ward',rate:0.1},
+    outpatient:{phrase:'in an outpatient or pre-surgical clinic',rate:0.01}
+  };
+
   /* 1 · Pathway builder (#pathway). Pieces are dragged with pointer events, so mouse, pen and touch all work;
      pressing a piece (click, Enter or Space) places it too. Each kind of piece has exactly one box on the board. */
   (function(){
     var pw=document.getElementById('pw');
     if(!pw){return;}
-    var PIECES={
-      data:{single:{label:'Single-site EHR',phrase:'derived from one hospital’s EHR'},multi:{label:'Multi-site EHR',phrase:'derived from EHR data from several sites'}},
-      setting:{icu:{label:'ICU',phrase:'in an intensive care unit'},ward:{label:'Inpatient ward',phrase:'on an inpatient ward'},outpatient:{label:'Outpatient clinic',phrase:'in an outpatient or pre-surgical clinic'}},
-      patients:{match:{label:'Like the development cohort',phrase:'patients who resemble the development cohort'},differ:{label:'Unlike the development cohort',phrase:'patients who differ from the development cohort'}},
-      model:{risk:{label:'Risk prediction model',phrase:'A risk prediction model'},llm:{label:'Large language model',phrase:'A large language model'},cds:{label:'Decision support alert',phrase:'A decision support alert'},expert:{label:'Rule-based expert system',phrase:'A rule-based expert system'}},
-      users:{nurses:{label:'Nurses',phrase:'nurses'},physicians:{label:'Physicians',phrase:'physicians'},patients:{label:'Patients and families',phrase:'patients and families'}}
+    // How each piece reads in the summary sentence. Piece labels are read from the tray buttons below.
+    var PHRASES={
+      data:{single:'derived from one hospital’s EHR',multi:'derived from EHR data from several sites'},
+      setting:{},
+      patients:{match:'patients who resemble the development cohort',differ:'patients who differ from the development cohort'},
+      model:{risk:'A risk prediction model',llm:'A large language model',cds:'A decision support alert',expert:'A rule-based expert system'},
+      users:{nurses:'nurses',physicians:'physicians',patients:'patients and families'}
     };
-    var BOX={data:'the data box',setting:'the setting box',patients:'the patients box',model:'the model box',users:'the users box'};
+    Object.keys(SETTINGS).forEach(function(id){PHRASES.setting[id]=SETTINGS[id].phrase;});
     var EXAMPLE={data:'single',setting:'ward',patients:'match',model:'risk',users:'nurses'};
 
     // What each checkpoint on the board asks, given the pieces placed so far. Returns null until its pieces are in place.
@@ -100,6 +109,12 @@
 
     var state={data:null,setting:null,patients:null,model:null,users:null};
     var chips=[].slice.call(pw.querySelectorAll('.pw-chip'));
+    var LABELS={};
+    chips.forEach(function(c){
+      var kind=c.getAttribute('data-kind');
+      (LABELS[kind]=LABELS[kind]||{})[c.getAttribute('data-id')]=c.textContent.trim();
+    });
+    function box(kind){return 'the '+kind+' box';}
     var slots={};
     [].forEach.call(pw.querySelectorAll('.pw-slot'),function(el){slots[el.getAttribute('data-slot')]=el;});
     var checkEls={};
@@ -112,19 +127,19 @@
     function place(kind,id,quiet){
       state[kind]=id;
       render();
-      if(!quiet){say(PIECES[kind][id].label+' placed in '+BOX[kind]+'.');}
-      if(kind==='setting'){document.dispatchEvent(new CustomEvent('ix:setting',{detail:{id:id,label:PIECES.setting[id].label}}));}
+      if(!quiet){say(LABELS[kind][id]+' placed in '+box(kind)+'.');}
+      if(kind==='setting'){document.dispatchEvent(new CustomEvent('ix:setting',{detail:{id:id,label:LABELS.setting[id]}}));}
     }
     function removePiece(kind){
       var id=state[kind];
       if(!id){return;}
       state[kind]=null;
       render();
-      say(PIECES[kind][id].label+' removed from '+BOX[kind]+'.');
+      say(LABELS[kind][id]+' removed from '+box(kind)+'.');
     }
 
     function sentence(){
-      function part(kind,fallback){return state[kind]?PIECES[kind][state[kind]].phrase:'<span class="ghost">'+fallback+'</span>';}
+      function part(kind,fallback){return state[kind]?PHRASES[kind][state[kind]]:'<span class="ghost">'+fallback+'</span>';}
       return part('model','A model')+' '+part('data','derived from some data')+', used '+part('setting','in some setting')+' by '+part('users','some users')+', for '+part('patients','some patients')+'.';
     }
 
@@ -134,7 +149,7 @@
         var id=state[kind],body=slots[kind].querySelector('.pw-slot-body');
         slots[kind].classList.toggle('pw-filled',!!id);
         body.innerHTML=id
-          ?'<span class="pw-placed"><span>'+PIECES[kind][id].label+'</span><button type="button" class="pw-x" data-remove="'+kind+'" aria-label="Remove '+PIECES[kind][id].label+'">×</button></span>'
+          ?'<span class="pw-placed"><span>'+LABELS[kind][id]+'</span><button type="button" class="pw-x" data-remove="'+kind+'" aria-label="Remove '+LABELS[kind][id]+'">×</button></span>'
           :'<span class="pw-empty">Drop here</span>';
       });
       var count={},findings='';
@@ -147,7 +162,7 @@
       });
       var stake=Object.keys(count).map(Number).sort(function(a,b){return count[b]-count[a]||a-b;});
       read.innerHTML='<p class="label">Your pathway</p><p class="pw-sentence">'+sentence()+'</p>'
-        +(state.setting?'<p class="pw-next"><a href="#context">See what a flag means '+PIECES.setting[state.setting].phrase+' ↓</a></p>':'')
+        +(state.setting?'<p class="pw-next"><a href="#context">See what a flag means '+SETTINGS[state.setting].phrase+' ↓</a></p>':'')
         +'<ol class="pw-findings">'+findings+'</ol>'
         +(stake.length?'<div class="pw-stake"><p class="label">Dimensions at stake, most often first</p><ul class="chips">'+stake.map(dimChip).join('')+'</ul></div>':'');
     }
@@ -170,7 +185,7 @@
     });
     document.getElementById('pw-example').addEventListener('click',function(){
       Object.keys(EXAMPLE).forEach(function(k){place(k,EXAMPLE[k],true);});
-      say('Example loaded: a risk prediction model from single-site EHR data, used on an inpatient ward by nurses.');
+      say('Example loaded. '+sentence());
     });
     document.getElementById('pw-clear').addEventListener('click',function(){
       Object.keys(state).forEach(function(k){state[k]=null;});
@@ -202,7 +217,7 @@
       if(s.getAttribute('data-slot')===d.kind){place(d.kind,d.id);}
       else{
         s.classList.remove('pw-wrong');void s.offsetWidth;s.classList.add('pw-wrong');
-        say('That box takes a different kind of piece. '+PIECES[d.kind][d.id].label+' goes in '+BOX[d.kind]+'.');
+        say('That box takes a different kind of piece. '+LABELS[d.kind][d.id]+' goes in '+box(d.kind)+'.');
       }
     }
     // While dragging near the top or bottom of the window, scroll so far-away boxes can be reached on small screens.
@@ -263,7 +278,9 @@
     var scale=logRange(input,0.001,0.6);
     placeTicks(input.closest('.ix-card'),scale.frac);
     var grid=document.getElementById('ctx-grid');
-    var presets=[].slice.call(document.querySelectorAll('#ctx-presets [data-rate]'));
+    var presets=[].slice.call(document.querySelectorAll('#ctx-presets .btn'));
+    // Setting presets take their rate from SETTINGS; any other preset carries its own data-rate.
+    function rateOf(b){var id=b.getAttribute('data-setting');return id?SETTINGS[id].rate:+b.getAttribute('data-rate');}
     var cells=[];
     for(var i=0;i<N;i++){
       var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
@@ -297,7 +314,7 @@
       var chance=ppv<0.5?'roughly a 1 in '+Math.round(1/ppv)+' chance ('+fmtPct(ppv)+')':'roughly a '+fmtPct(ppv)+' chance';
       var verdict=ppv<0.1?'Almost every flag is a false alarm.':ppv<0.5?'Most flags are still false alarms.':'Most flags are correct, yet about 1 in '+Math.round(1/(1-ppv))+' is a false alarm.';
       document.getElementById('ctx-plain').textContent='At a base rate of '+fmtPct(p)+', the tool flags about '+(c.tp+c.fp)+' of 1,000 patients, and about '+c.tp+' of them go on to develop delirium. A flag means '+chance+' that this patient develops delirium. '+verdict;
-      presets.forEach(function(b){b.setAttribute('aria-pressed',scale.step(+b.getAttribute('data-rate'))===+input.value?'true':'false');});
+      presets.forEach(function(b){b.setAttribute('aria-pressed',scale.step(rateOf(b))===+input.value?'true':'false');});
     }
     function setRate(rate){input.value=scale.step(rate);update();}
 
@@ -305,16 +322,15 @@
     function clearFrom(){from.hidden=true;from.textContent='';}
 
     input.addEventListener('input',function(){update();clearFrom();});
-    presets.forEach(function(b){b.addEventListener('click',function(){setRate(+b.getAttribute('data-rate'));clearFrom();});});
+    presets.forEach(function(b){b.addEventListener('click',function(){setRate(rateOf(b));clearFrom();});});
     // A setting placed in the pathway builder (section 1) moves the base rate to that setting's illustrative value.
     document.addEventListener('ix:setting',function(e){
-      var b=document.querySelector('#ctx-presets [data-setting="'+e.detail.id+'"]');
-      if(!b){return;}
-      setRate(+b.getAttribute('data-rate'));
-      from.textContent='Set from your pathway: '+e.detail.label+', at an illustrative base rate of '+fmtPct(+b.getAttribute('data-rate'))+'.';
+      var rate=SETTINGS[e.detail.id].rate;
+      setRate(rate);
+      from.textContent='Set from your pathway: '+e.detail.label+', at an illustrative base rate of '+fmtPct(rate)+'.';
       from.hidden=false;
     });
-    setRate(0.1);
+    setRate(SETTINGS.ward.rate);
   })();
 
   /* 3 · Model robustness (#robust)
