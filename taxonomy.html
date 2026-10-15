@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data-Driven Communication Taxonomy</title>
+<meta name="description" content="Project page for A Taxonomy of Issues in Healthcare Data-Driven Communication for Clinical Decision-Making.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500;600&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,500;0,600;1,400;1,500&display=swap">
+<link rel="stylesheet" href="taxonomy-shared.css">
+</head>
+<body>
+<!-- Page 1 of 3 · Taxonomy. Other pages: taxonomy-delirium.html, taxonomy-publication.html. Shared files: taxonomy-shared.css, taxonomy-shared.js. -->
+
+<header class="topbar">
+  <div class="frame topbar-in">
+    <a class="brand" href="taxonomy.html">Data-Driven Communication Taxonomy</a>
+    <nav class="page-tabs" aria-label="Pages">
+      <a class="page-tab" href="taxonomy.html" aria-current="page">Taxonomy</a>
+      <a class="page-tab" href="taxonomy-delirium.html">Delirium case</a>
+      <a class="page-tab" href="taxonomy-publication.html">Publication</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="frame">
+      <p class="eyebrow"><span class="ey-status">Manuscript · 2026</span><span>Guo, Zhou, Fu &amp; Fu</span></p>
+      <h1>A Taxonomy of Issues in Healthcare Data-Driven Communication for Clinical Decision-Making</h1>
+      <p class="hero-lede">Risk scores, prediction models, electronic health record summaries, dashboards, and algorithmic decision support systems now accompany clinicians at or near the point of care. A model can perform well statistically and still fail at the point of use if its output is difficult to interpret, invites inappropriate trust, or does not connect clearly to a decision.</p>
+      <p class="hero-lede">We developed a preliminary taxonomy of issues in healthcare data-driven communication through a structured synthesis of 48 sources. Each of its eight dimensions is linked to the clinical decision-making risk it poses and to a corresponding opportunity for intervention.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#taxonomy">Explore the eight dimensions ↓</a>
+        <a class="btn" href="taxonomy-publication.html">Read the abstract →</a>
+      </div>
+
+      <article class="example" aria-labelledby="ex-title">
+        <div class="example-head">
+          <p class="kicker">Example from the paper</p>
+          <h2 id="ex-title">A delirium risk icon on a ward patient list</h2>
+          <p>Jauk et al., JAMIA 2020 · random forest model implemented in an Austrian hospital network and evaluated prospectively over seven months</p>
+        </div>
+        <div class="example-grid">
+          <div class="example-col">
+            <p class="label">What ward staff saw</p>
+            <div class="ward" role="img" aria-label="Schematic patient list. One patient has a red icon, two have yellow icons, the rest have no symbol.">
+              <div class="ward-bar"><span>Patient list</span><span>Schematic</span></div>
+              <table>
+                <thead><tr><th>Bed</th><th>Patient</th><th>Delirium risk</th></tr></thead>
+                <tbody>
+                  <tr><td>01</td><td><span class="redact" style="--w:64%"></span></td><td></td></tr>
+                  <tr><td>02</td><td><span class="redact" style="--w:48%"></span></td><td><span class="icon red"></span></td></tr>
+                  <tr><td>03</td><td><span class="redact" style="--w:72%"></span></td><td></td></tr>
+                  <tr><td>04</td><td><span class="redact" style="--w:56%"></span></td><td><span class="icon amber"></span></td></tr>
+                  <tr><td>05</td><td><span class="redact" style="--w:68%"></span></td><td></td></tr>
+                  <tr><td>06</td><td><span class="redact" style="--w:44%"></span></td><td><span class="icon amber"></span></td></tr>
+                  <tr><td>07</td><td><span class="redact" style="--w:60%"></span></td><td></td></tr>
+                </tbody>
+              </table>
+              <div class="ward-missing"><span>Not on this display</span><span class="ghost">calibration drift</span><span class="ghost">recommended action</span></div>
+            </div>
+            <ul class="legend">
+              <li><span class="icon red"></span>Very high risk group, 95th to 100th percentile</li>
+              <li><span class="icon amber"></span>High risk group, 85th to 94th percentile</li>
+              <li><span class="icon none"></span>No symbol for patients classified as low risk</li>
+            </ul>
+            <p class="schem-note">Schematic drawn from the paper's description. Not a reproduction of the original interface.</p>
+          </div>
+          <div class="example-col">
+            <p class="label">What the manuscript reported</p>
+            <dl class="report">
+              <div><dt>Discrimination</dt><dd>Essentially unchanged. AUROC <span class="num">0.855</span> during prospective use versus <span class="num">0.854</span> on the F05 test dataset.</dd></div>
+              <div><dt>Calibration</dt><dd>Deteriorated. Predicted risks were systematically higher than observed event rates.<br><span class="flag">Not conveyed on the display</span></dd></div>
+              <div><dt>Recommended action</dt><dd>The system did not prescribe a management recommendation for patients identified as high risk.<br><span class="flag">None on the display</span></dd></div>
+            </dl>
+            <blockquote class="pull">“The reliability limitation was therefore measured and reported in the manuscript but was not conveyed through the clinician-facing display.”<footer>Illustrative application, delirium prediction models</footer></blockquote>
+            <p class="example-foot"><a href="taxonomy-delirium.html">See all three delirium cases →</a></p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec" id="gap" aria-labelledby="gap-title">
+    <div class="frame">
+      <p class="kicker">The gap</p>
+      <h2 id="gap-title">Detailed standards exist for the manuscript, not for the point of use</h2>
+      <p class="lede">Reporting standards for prediction model research specify in detail what authors should report about model development and evaluation. They are designed primarily for communication from researchers to readers of the scientific literature.</p>
+      <div class="lanes">
+        <div class="lane">
+          <p class="route">Researchers → readers of the scientific literature</p>
+          <h3>Reporting how a model was developed and evaluated</h3>
+          <ul class="std">
+            <li><b>TRIPOD+AI</b><span>Data sources, predictors, performance assessment, calibration, and external validation</span></li>
+            <li><b>CONSORT-AI</b><span>Trials of artificial intelligence interventions</span></li>
+            <li><b>DECIDE-AI</b><span>Early-stage clinical evaluation</span></li>
+          </ul>
+          <span class="status">Mature, detailed guidance</span>
+        </div>
+        <div class="lane open">
+          <p class="route">Deployed tool → clinicians and patients</p>
+          <h3>Communicating an output at the point of use</h3>
+          <p>Reporting standards can be satisfied even when a deployed interface presents a clinician with an output whose timeframe, uncertainty, reliability, or action implications are difficult to interpret.</p>
+          <span class="status">Less consistently specified · the gap addressed here</span>
+        </div>
+      </div>
+      <div class="lits-wrap">
+        <h3>Relevant evidence is spread across research communities</h3>
+        <div class="lits">
+          <div><b>Risk communication and health numeracy</b><span>Probability formats and understanding</span></div>
+          <div><b>Uncertainty communication</b><span>How confidence and evidence quality are conveyed</span></div>
+          <div><b>Information visualization</b><span>How graphical encodings shape interpretation</span></div>
+          <div><b>Explainable artificial intelligence</b><span>Model transparency and feature attribution</span></div>
+          <div><b>Clinical decision support</b><span>Workflow, alert burden, and adoption</span></div>
+          <div><b>Shared decision-making</b><span>Patient preferences and trade-offs</span></div>
+        </div>
+        <p class="cap">These literatures address different stages of the same pathway from model output to clinical interpretation and action, yet they are rarely organized within a common framework.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="taxonomy" aria-labelledby="tax-title">
+    <div class="frame">
+      <p class="kicker">The taxonomy</p>
+      <h2 id="tax-title">Eight dimensions between a tool's output and a clinical decision</h2>
+      <p class="lede">The synthesis produced eight dimensions describing distinct but potentially overlapping ways in which data-driven communication can break down between a tool's output and a clinical decision. Each dimension is organized around its own analytic question and is mapped to a clinical decision-making risk and an opportunity for intervention.</p>
+
+      <div class="rail-ends" aria-hidden="true"><span>Tool output</span><span class="line"></span><span>Clinical decision</span></div>
+      <div class="rail" role="tablist" aria-label="Taxonomy dimensions">
+        <button class="node" role="tab" type="button" id="tab-1" aria-controls="panel-1" aria-selected="true" tabindex="0" style="--c:var(--d1);--cf:var(--d1f)" data-dim="1">
+          <span class="node-top"><span class="swatch" aria-hidden="true"></span><span class="node-num">1</span></span>
+          <span class="node-name">Risk information</span>
+          <span class="node-q">What estimate is being communicated?</span>
+          <span class="node-bar" aria-hidden="true"><span style="width:13.3%"></span></span>
+          <span class="node-n"><b>2</b> of 47 sources</span>
+        </button>
+        <button class="node" role="tab" type="button" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1" style="--c:var(--d2);--cf:var(--d2f)" data-dim="2" data-overlap="">
+          <span class="node-top"><span class="swatch" aria-hidden="true"></span><span class="node-num">2</span></span>
+          <span class="node-name">Uncertainty communication</span>
+          <span class="node-q">What is known about its uncertainty?</span>
+          <span class="node-bar" aria-hidden="true"><span style="width:73.3%"></span></span>
+          <span class="node-n"><b>11</b> of 47 sources</span>
+        </button>
+        <button class="node" role="tab" type="button" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1" style="--c:var(--d3);--cf:var(--d3f)" data-dim="3" data-overlap="">
+          <span class="node-top"><span class="swatch" aria-hidden="true"></span><span class="node-num">3</span></span>
+          <span class="node-name">Presentation and format</span>
+          <span class="node-q">How is it encoded?</span>
+          <span class="node-bar" aria-hidden="true"><span style="width:100.0%"></span></span>
+          <span class="node-n"><b>15</b> of 47 sources</span>
+        </button>
+        <button class="node" role="tab" type="button" id="tab-4" aria-controls="panel-4" aria-selected="false" tabindex="-1" style="--c:var(--d4);--cf:var(--d4f)" data-dim="4">
+          <span class="node-top"><span class="swatch" aria-hidden="true"></span><span class="node-num">4</span></span>
+          <span class="node-name">Patient and clinician interpretation</span>
+          <span class="node-q">How may a clinician or patient interpret it?</span>
+          <span class="node-bar" aria-hidden="true"><span style="width:20.0%"></span></span>
+          <span class="node-n"><b>3</b> of 47 sources</span>
+        </button>
+        <button class="node" role="tab" type="button" id="tab-5" aria-controls="panel-5" aria-selected="false" tabindex="-1" style="--c:var(--d5);--cf:var(--d5f)" data-dim="5">
+          <span class="node-top"><span class="swatch" aria-hidden="true"></span><span class="node-num">5</span></span>
+          <span class="node-name">Decision support</span>
+          <span class="node-q">How does it connect to an action?</span>
+          <span class="node-bar" aria-hidden="true"><span style="width:33.3%"></span></span>
+          <span class="node-n"><b>5</b> of 47 sources</span>
+        </button>
+        <button class="node" role="tab" type="button" id="tab-6" aria-controls="panel-6" aria-selected="false" tabindex="-1" style="--c:var(--d6);--cf:var(--d6f)" data-dim="6" data-overlap="">
+          <span class="node-top"><span class="swatch" aria-hidden="true"></span><span class="node-num">6</span></span>
+          <span class="node-name">Explainability and model communication</span>
+          <span class="node-q">What does it communicate about model behavior and reliability?</span>
+          <span class="node-bar" aria-hidden="true"><span style="width:33.3%"></span></span>
+          <span class="node-n"><b>5</b> of 47 sources</span>
+        </button>
+        <button class="node" role="tab" type="button" id="tab-7" aria-controls="panel-7" aria-selected="false" tabindex="-1" style="--c:var(--d7);--cf:var(--d7f)" data-dim="7">
+          <span class="node-top"><span class="swatch" aria-hidden="true"></span><span class="node-num">7</span></span>
+          <span class="node-name">Equity and subgroup reliability</span>
+          <span class="node-q">Does its applicability differ across populations?</span>
+          <span class="node-bar" aria-hidden="true"><span style="width:6.7%"></span></span>
+          <span class="node-n"><b>1</b> of 47 sources</span>
+        </button>
+        <button class="node" role="tab" type="button" id="tab-8" aria-controls="panel-8" aria-selected="false" tabindex="-1" style="--c:var(--d8);--cf:var(--d8f)" data-dim="8">
+          <span class="node-top"><span class="swatch" aria-hidden="true"></span><span class="node-num">8</span></span>
+          <span class="node-name">Shared decision-making</span>
+          <span class="node-q">Does the resulting decision incorporate the patient&#x27;s values?</span>
+          <span class="node-bar" aria-hidden="true"><span style="width:33.3%"></span></span>
+          <span class="node-n"><b>5</b> of 47 sources</span>
+        </button>
+      </div>
+      <p class="count-note">Bars show how many of the 47 coded sources were assigned to each dimension as their primary dimension (<a href="taxonomy-publication.html#fig2">Figure 2</a>). These counts characterize the assembled evidence base and should not be interpreted as prevalence estimates for the wider literature.</p>
+
+      <section class="panel" id="panel-1" role="tabpanel" aria-labelledby="tab-1" tabindex="0" style="--c:var(--d1);--cf:var(--d1f)">
+        <header class="panel-head">
+          <div class="panel-num" aria-hidden="true">1</div>
+          <div>
+            <p class="panel-kicker">Dimension 1 of 8</p>
+            <h3>Risk information</h3>
+            <p class="panel-q">What estimate is being communicated?</p>
+          </div>
+          <div class="panel-count"><span class="num">2</span><span>of 47 coded sources as primary dimension</span></div>
+        </header>
+        <div class="panel-body">
+          <div>
+            <p class="label">Focus</p>
+            <p class="focus">The semantic content of the risk estimate itself, before considering how that estimate is displayed.</p>
+            <p class="label">Issue types and subtypes</p>
+            <ul class="types"><li><h4>Risk Estimate Ambiguity</h4><ul><li>Unclear probability estimates</li><li>Confusion between absolute and relative risk</li><li>Unspecified risk timeframe</li></ul></li><li><h4>Risk Stratification Problems</h4><ul><li>Overly broad risk categories</li><li>Unclear threshold justification</li><li>Inconsistent definitions of low-, medium-, or high-risk groups</li></ul></li><li><h4>Clinical Meaning of Risk</h4><ul><li>Unclear explanation of what the risk estimate means for patients, clinicians, or clinical action</li></ul></li></ul>
+          </div>
+          <div>
+            <div class="map-box"><p class="label">Clinical decision-making risk</p><p>Patients or clinicians may misunderstand the magnitude, timeframe, or clinical meaning of a risk estimate.</p></div>
+            <div class="map-arrow" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M7 1v12M2 8.5 7 13.5 12 8.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <div class="map-box iv"><p class="label">Potential intervention opportunity</p><p>Use standardized risk labels; report absolute risk alongside relative risk; specify timeframe, denominator, baseline population, and risk group definition.</p></div>
+            <p class="note">These mappings are intended as design hypotheses rather than validated remedies.</p>
+            <details class="paper-text"><summary>Full description from the paper</summary><p>The first dimension concerns the semantic content of the risk estimate itself, before considering how that estimate is displayed. Risk estimate ambiguity arises when a probability is reported without information needed to interpret it, such as whether the estimate is absolute or relative, the relevant denominator, or the time horizon. Risk stratification problems arise when categories are overly broad, when thresholds separating low-, medium-, and high-risk groups are not justified, or when category definitions are applied inconsistently. Underlying both is the clinical meaning of risk: an estimate can be technically correct yet still leave clinicians or patients uncertain about what event is being predicted, over what period, and what the estimate implies for a decision.</p></details>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-2" role="tabpanel" aria-labelledby="tab-2" tabindex="0" style="--c:var(--d2);--cf:var(--d2f)" hidden>
+        <header class="panel-head">
+          <div class="panel-num" aria-hidden="true">2</div>
+          <div>
+            <p class="panel-kicker">Dimension 2 of 8</p>
+            <h3>Uncertainty communication</h3>
+            <p class="panel-q">What is known about its uncertainty?</p>
+          </div>
+          <div class="panel-count"><span class="num">11</span><span>of 47 coded sources as primary dimension</span></div>
+        </header>
+        <div class="panel-body">
+          <div>
+            <p class="label">Focus</p>
+            <p class="focus">The epistemic status of an estimate: how much uncertainty surrounds it and how that uncertainty should be interpreted.</p>
+            <p class="label">Issue types and subtypes</p>
+            <ul class="types"><li><h4>Uncertainty Omission</h4><ul><li>Missing confidence intervals</li><li>Missing prediction intervals</li><li>No discussion of model uncertainty or uncertainty sources</li></ul></li><li><h4>Uncertainty Interpretation</h4><ul><li>Unclear distinction between confidence, variability, prediction error, and model limitations</li></ul></li><li><h4>Overstated Certainty</h4><ul><li>Risk estimates presented as more precise or definitive than the underlying evidence supports</li></ul></li></ul>
+          </div>
+          <div>
+            <div class="map-box"><p class="label">Clinical decision-making risk</p><p>Decision-makers may overtrust or undertrust predictions when confidence, variability, or model limitations are not clearly communicated.</p></div>
+            <div class="map-arrow" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M7 1v12M2 8.5 7 13.5 12 8.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <div class="map-box iv"><p class="label">Potential intervention opportunity</p><p>Display confidence intervals, prediction intervals, uncertainty ranges, or qualitative uncertainty cues; explain major sources of uncertainty in plain language.</p></div>
+            <p class="note">These mappings are intended as design hypotheses rather than validated remedies.</p>
+            <details class="paper-text"><summary>Full description from the paper</summary><p>The second dimension concerns the epistemic status of an estimate: how much uncertainty surrounds it and how that uncertainty should be interpreted. Uncertainty omission occurs when confidence or prediction intervals are absent or when relevant sources of model uncertainty are not communicated. Uncertainty interpretation problems arise when distinctions among sampling uncertainty, outcome variability, prediction error, and model limitations are blurred. At the opposite extreme, overstated certainty presents an estimate as more precise or definitive than the available evidence supports. The studies grouped here collectively emphasize that displaying a number without communicating its limits can invite users to infer a degree of certainty that the underlying evidence does not warrant.</p></details>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-3" role="tabpanel" aria-labelledby="tab-3" tabindex="0" style="--c:var(--d3);--cf:var(--d3f)" hidden>
+        <header class="panel-head">
+          <div class="panel-num" aria-hidden="true">3</div>
+          <div>
+            <p class="panel-kicker">Dimension 3 of 8</p>
+            <h3>Presentation and format</h3>
+            <p class="panel-q">How is it encoded?</p>
+          </div>
+          <div class="panel-count"><span class="num">15</span><span>of 47 coded sources as primary dimension</span></div>
+        </header>
+        <div class="panel-body">
+          <div>
+            <p class="label">Focus</p>
+            <p class="focus">How information is encoded and presented, distinct from the substantive content being communicated.</p>
+            <p class="label">Issue types and subtypes</p>
+            <ul class="types"><li><h4>Numeric Presentation</h4><ul><li>Percentages that are difficult to interpret</li><li>Inconsistent use of fractions, natural frequencies, or absolute risks</li><li>Excessive numerical precision</li></ul></li><li><h4>Visual Presentation</h4><ul><li>Misleading color scales</li><li>Unclear icon arrays</li><li>Poorly labeled charts, risk ladders, or visual decision aids</li></ul></li><li><h4>Textual Explanation</h4><ul><li>Vague wording</li><li>Limited plain-language explanation</li><li>Unclear explanation of what the displayed information means</li></ul></li></ul>
+          </div>
+          <div>
+            <div class="map-box"><p class="label">Clinical decision-making risk</p><p>Numeric, textual, or visual formats may make risk information difficult to interpret, especially for users with different levels of numeracy or health literacy.</p></div>
+            <div class="map-arrow" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M7 1v12M2 8.5 7 13.5 12 8.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <div class="map-box iv"><p class="label">Potential intervention opportunity</p><p>Use patient-centered visual aids, icon arrays, natural frequencies, plain-language explanations, and accessible visualization design principles.</p></div>
+            <p class="note">These mappings are intended as design hypotheses rather than validated remedies.</p>
+            <details class="paper-text"><summary>Full description from the paper</summary><p>The third dimension concerns how information is encoded and presented, distinct from the substantive content being communicated. Numeric presentation issues include percentages that are difficult to interpret, inconsistent use of fractions, natural frequencies, and absolute risks, and unnecessary numerical precision. Visual presentation issues include misleading color scales, unclear icon arrays, and poorly labeled charts or risk ladders. Textual explanation issues include vague wording and the absence of a plain-language account of what a display means. The breadth of work in this dimension reflects an established evidence base showing that presentation format can alter comprehension and, intentionally or unintentionally, influence decisions.</p></details>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-4" role="tabpanel" aria-labelledby="tab-4" tabindex="0" style="--c:var(--d4);--cf:var(--d4f)" hidden>
+        <header class="panel-head">
+          <div class="panel-num" aria-hidden="true">4</div>
+          <div>
+            <p class="panel-kicker">Dimension 4 of 8</p>
+            <h3>Patient and clinician interpretation</h3>
+            <p class="panel-q">How may a clinician or patient interpret it?</p>
+          </div>
+          <div class="panel-count"><span class="num">3</span><span>of 47 coded sources as primary dimension</span></div>
+        </header>
+        <div class="panel-body">
+          <div>
+            <p class="label">Focus</p>
+            <p class="focus">Shifts from the communication artifact to the person interpreting it.</p>
+            <p class="label">Issue types and subtypes</p>
+            <ul class="types"><li><h4>Numeracy Barriers</h4><ul><li>Difficulty interpreting probabilities</li><li>Confusion between population-level and individual-level risk</li><li>Limited understanding of statistical information</li></ul></li><li><h4>Cognitive Burden</h4><ul><li>Too much information</li><li>Complex displays</li><li>Limited time for interpretation during clinical consultation</li></ul></li><li><h4>Trust and Perceived Credibility</h4><ul><li>Overtrust in model outputs</li><li>Distrust due to unclear data sources</li><li>Misinterpretation of automated recommendations</li></ul></li></ul>
+          </div>
+          <div>
+            <div class="map-box"><p class="label">Clinical decision-making risk</p><p>Users may misinterpret probabilities, confuse population-level evidence with individual-level risk, or place inappropriate trust in automated outputs.</p></div>
+            <div class="map-arrow" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M7 1v12M2 8.5 7 13.5 12 8.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <div class="map-box iv"><p class="label">Potential intervention opportunity</p><p>Provide interpretation guidance, calibration explanations, decision examples, and prompts that encourage critical review rather than passive acceptance.</p></div>
+            <p class="note">These mappings are intended as design hypotheses rather than validated remedies.</p>
+            <details class="paper-text"><summary>Full description from the paper</summary><p>The fourth dimension shifts from the communication artifact to the person interpreting it. Numeracy barriers include difficulty interpreting probabilities and confusion between population-level and individual-level risk. Cognitive burden arises when information volume, display complexity, or time pressure exceeds what a user can process during a clinical encounter. Trust and perceived credibility capture both directions of miscalibrated reliance: overtrusting an automated output because it appears authoritative and underusing a potentially helpful output when its source, rationale, or limitations are unclear. This dimension therefore concerns not simply whether information is available, but how users are likely to understand and respond to it.</p></details>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-5" role="tabpanel" aria-labelledby="tab-5" tabindex="0" style="--c:var(--d5);--cf:var(--d5f)" hidden>
+        <header class="panel-head">
+          <div class="panel-num" aria-hidden="true">5</div>
+          <div>
+            <p class="panel-kicker">Dimension 5 of 8</p>
+            <h3>Decision support</h3>
+            <p class="panel-q">How does it connect to an action?</p>
+          </div>
+          <div class="panel-count"><span class="num">5</span><span>of 47 coded sources as primary dimension</span></div>
+        </header>
+        <div class="panel-body">
+          <div>
+            <p class="label">Focus</p>
+            <p class="focus">The transition from information to action.</p>
+            <p class="label">Issue types and subtypes</p>
+            <ul class="types"><li><h4>Actionability Problems</h4><ul><li>No clear next step</li><li>Weak connection to treatment options</li><li>Limited guidance for clinical decision-making</li></ul></li><li><h4>Workflow Integration Issues</h4><ul><li>Poor timing of information delivery</li><li>Alert fatigue</li><li>Lack of fit with clinical encounter workflow</li></ul></li><li><h4>Recommendation Communication</h4><ul><li>Automated recommendations are not clearly linked to clinical choices, treatment options, or decision thresholds</li></ul></li></ul>
+          </div>
+          <div>
+            <div class="map-box"><p class="label">Clinical decision-making risk</p><p>Data-driven information may fail to support action if it is not connected to clinical choices, treatment options, or workflow timing.</p></div>
+            <div class="map-arrow" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M7 1v12M2 8.5 7 13.5 12 8.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <div class="map-box iv"><p class="label">Potential intervention opportunity</p><p>Link risk information to actionable next steps; integrate recommendations into clinical workflow; reduce alert fatigue through prioritization and contextual triggering.</p></div>
+            <p class="note">These mappings are intended as design hypotheses rather than validated remedies.</p>
+            <details class="paper-text"><summary>Full description from the paper</summary><p>The fifth dimension concerns the transition from information to action. Actionability problems arise when an output provides no clear connection to a next step or to the treatment options available in the clinical context. Workflow integration problems include poorly timed delivery, alert fatigue, and failure to fit the sequence and time constraints of the encounter. Recommendation communication problems arise when an automated recommendation is not clearly linked to the clinical choices, treatment options, or decision thresholds it is intended to inform. The defining question for this dimension is whether the communicated output can be incorporated into an actual clinical decision without creating additional ambiguity or workflow burden.</p></details>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-6" role="tabpanel" aria-labelledby="tab-6" tabindex="0" style="--c:var(--d6);--cf:var(--d6f)" hidden>
+        <header class="panel-head">
+          <div class="panel-num" aria-hidden="true">6</div>
+          <div>
+            <p class="panel-kicker">Dimension 6 of 8</p>
+            <h3>Explainability and model communication</h3>
+            <p class="panel-q">What does it communicate about model behavior and reliability?</p>
+          </div>
+          <div class="panel-count"><span class="num">5</span><span>of 47 coded sources as primary dimension</span></div>
+        </header>
+        <div class="panel-body">
+          <div>
+            <p class="label">Focus</p>
+            <p class="focus">Communication about the model itself (its behavior, performance, and appropriate conditions of use).</p>
+            <p class="label">Issue types and subtypes</p>
+            <ul class="types"><li><h4>Explanation Misinterpretation</h4><ul><li>Feature importance mistaken as causality</li><li>Simplified explanations that hide uncertainty</li><li>Unclear distinction between association and causal explanation</li></ul></li><li><h4>Model Performance Communication</h4><ul><li>Calibration not explained</li><li>Accuracy metrics difficult to translate into clinical meaning</li><li>Unclear communication of false positives and false negatives</li></ul></li><li><h4>Conditions for Appropriate Use</h4><ul><li>Unclear communication of when model outputs should be used, reviewed cautiously, or overridden by clinical judgment</li></ul></li></ul>
+          </div>
+          <div>
+            <div class="map-box"><p class="label">Clinical decision-making risk</p><p>Explanations may be mistaken for causal evidence, and model performance may be difficult to translate into clinical reliability.</p></div>
+            <div class="map-arrow" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M7 1v12M2 8.5 7 13.5 12 8.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <div class="map-box iv"><p class="label">Potential intervention opportunity</p><p>Use reliability-aware explanations; distinguish association from causation; communicate calibration, subgroup performance, false positives, false negatives, and appropriate use conditions.</p></div>
+            <p class="note">These mappings are intended as design hypotheses rather than validated remedies.</p>
+            <details class="paper-text"><summary>Full description from the paper</summary><p>The sixth dimension concerns communication about the model itself (its behavior, performance, and appropriate conditions of use). Explanation misinterpretation occurs when feature importance is read as causation or when a simplified explanation obscures uncertainty and model limitations. Model performance communication problems arise when calibration is not explained, when performance metrics are not translated into clinically meaningful consequences, or when false positive and false negative behavior is left unclear. Conditions for appropriate use capture the absence of guidance about when an output should be relied on, interpreted cautiously, or overridden by clinical judgment. This dimension is deliberately broader than explainability: knowing why a model produced an output is not equivalent to knowing whether that output is reliable in the present setting.</p></details>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-7" role="tabpanel" aria-labelledby="tab-7" tabindex="0" style="--c:var(--d7);--cf:var(--d7f)" hidden>
+        <header class="panel-head">
+          <div class="panel-num" aria-hidden="true">7</div>
+          <div>
+            <p class="panel-kicker">Dimension 7 of 8</p>
+            <h3>Equity and subgroup reliability</h3>
+            <p class="panel-q">Does its applicability differ across populations?</p>
+          </div>
+          <div class="panel-count"><span class="num">1</span><span>of 47 coded source as primary dimension</span></div>
+        </header>
+        <div class="panel-body">
+          <div>
+            <p class="label">Focus</p>
+            <p class="focus">Whether model reliability is communicated for the populations the tool is intended to serve.</p>
+            <p class="label">Issue types and subtypes</p>
+            <ul class="types"><li><h4>Subgroup Performance Differences</h4><ul><li>Model performance may vary across patient subgroups, but subgroup-specific reliability is not clearly communicated</li></ul></li><li><h4>Data Representativeness</h4><ul><li>Missing data, biased samples, or underrepresentation of certain populations may limit the reliability of model outputs</li></ul></li><li><h4>Equity-Sensitive Interpretation</h4><ul><li>Users may not be informed when predictions should be interpreted cautiously for underrepresented or clinically distinct groups</li></ul></li></ul>
+          </div>
+          <div>
+            <div class="map-box"><p class="label">Clinical decision-making risk</p><p>Model outputs may be less reliable for specific populations if subgroup performance, missing data, or representativeness limitations are not communicated.</p></div>
+            <div class="map-arrow" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M7 1v12M2 8.5 7 13.5 12 8.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <div class="map-box iv"><p class="label">Potential intervention opportunity</p><p>Report subgroup validation where available; flag data limitations; communicate when model outputs should be interpreted cautiously for underrepresented groups.</p></div>
+            <p class="note">These mappings are intended as design hypotheses rather than validated remedies.</p>
+            <details class="paper-text"><summary>Full description from the paper</summary><p>The seventh dimension concerns whether model reliability is communicated for the populations the tool is intended to serve. Subgroup performance differences arise when a model performs differently across patient groups but that variation is not surfaced to users. Data representativeness issues arise when missing data, biased samples, or underrepresentation of particular populations limit applicability without being made visible. Equity-sensitive interpretation concerns whether users are alerted when a prediction warrants additional caution for an underrepresented or clinically distinct group. Only one coded study primarily informed this dimension, so the category should be treated as an important analytic signpost rather than a mature evidence base within the present corpus.</p></details>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-8" role="tabpanel" aria-labelledby="tab-8" tabindex="0" style="--c:var(--d8);--cf:var(--d8f)" hidden>
+        <header class="panel-head">
+          <div class="panel-num" aria-hidden="true">8</div>
+          <div>
+            <p class="panel-kicker">Dimension 8 of 8</p>
+            <h3>Shared decision-making</h3>
+            <p class="panel-q">Does the resulting decision incorporate the patient&#x27;s values?</p>
+          </div>
+          <div class="panel-count"><span class="num">5</span><span>of 47 coded sources as primary dimension</span></div>
+        </header>
+        <div class="panel-body">
+          <div>
+            <p class="label">Focus</p>
+            <p class="focus">Whether communication supports a decision that reflects the patient&#x27;s values and preferences.</p>
+            <p class="label">Issue types and subtypes</p>
+            <ul class="types"><li><h4>Patient Preference Integration</h4><ul><li>Patient preferences, goals, and values are not incorporated into the presentation or interpretation of risk information</li></ul></li><li><h4>Trade-off Communication</h4><ul><li>Benefits, harms, uncertainty, and treatment trade-offs are not clearly communicated to support shared decision-making</li></ul></li><li><h4>Clinician-Patient Discussion Support</h4><ul><li>Decision aids lack prompts or structures that support meaningful discussion between clinicians and patients</li></ul></li></ul>
+          </div>
+          <div>
+            <div class="map-box"><p class="label">Clinical decision-making risk</p><p>Risk or uncertainty information may be presented in ways that do not support patient preferences, values, or trade-off discussions.</p></div>
+            <div class="map-arrow" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M7 1v12M2 8.5 7 13.5 12 8.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <div class="map-box iv"><p class="label">Potential intervention opportunity</p><p>Design decision aids that incorporate patient goals, preference-sensitive trade-offs, and clinician-patient discussion prompts.</p></div>
+            <p class="note">These mappings are intended as design hypotheses rather than validated remedies.</p>
+            <details class="paper-text"><summary>Full description from the paper</summary><p>The eighth dimension concerns whether communication supports a decision that reflects the patient&#x27;s values and preferences. Patient preference integration problems arise when goals and values are absent from how information is presented or interpreted. Trade-off communication problems arise when benefits, harms, uncertainty, and treatment trade-offs are not made sufficiently clear for a preference-sensitive choice. Clinician-patient discussion support concerns whether tools and decision aids provide prompts or structure that help clinicians and patients deliberate together. The focus is therefore not merely on understanding an output, but on whether communication enables that output to contribute appropriately to a shared decision.</p></details>
+          </div>
+        </div>
+      </section>
+
+      <div class="overlap-note">
+        <p><b>Dimensions are analytic lenses, not mutually exclusive bins.</b> An inadequately calibrated risk score displayed with a misleading color scale and no indication of uncertainty may simultaneously involve presentation and format, uncertainty communication, and explainability and model communication.</p>
+        <button class="btn" id="overlapBtn" type="button" aria-pressed="false">Highlight on the rail</button>
+      </div>
+
+      <details class="full">
+        <summary>All eight dimensions in one table (Tables 3 and 4)</summary>
+        <div class="scroll">
+<table class="tx"><thead><tr><th scope="col">Dimension</th><th scope="col">Issue types and subtypes (non-exhaustive)</th><th scope="col">Clinical decision-making risk</th><th scope="col">Potential intervention opportunity</th></tr></thead><tbody><tr style="--c:var(--d1);--cf:var(--d1f)"><td class="dim"><span>1</span>Risk information</td><td><span class="tn">Risk Estimate Ambiguity</span><span class="ts">Unclear probability estimates; confusion between absolute and relative risk; unspecified risk timeframe.</span><span class="tn">Risk Stratification Problems</span><span class="ts">Overly broad risk categories; unclear threshold justification; inconsistent definitions of low-, medium-, or high-risk groups.</span><span class="tn">Clinical Meaning of Risk</span><span class="ts">Unclear explanation of what the risk estimate means for patients, clinicians, or clinical action.</span></td><td>Patients or clinicians may misunderstand the magnitude, timeframe, or clinical meaning of a risk estimate.</td><td>Use standardized risk labels; report absolute risk alongside relative risk; specify timeframe, denominator, baseline population, and risk group definition.</td></tr><tr style="--c:var(--d2);--cf:var(--d2f)"><td class="dim"><span>2</span>Uncertainty communication</td><td><span class="tn">Uncertainty Omission</span><span class="ts">Missing confidence intervals; missing prediction intervals; no discussion of model uncertainty or uncertainty sources.</span><span class="tn">Uncertainty Interpretation</span><span class="ts">Unclear distinction between confidence, variability, prediction error, and model limitations.</span><span class="tn">Overstated Certainty</span><span class="ts">Risk estimates presented as more precise or definitive than the underlying evidence supports.</span></td><td>Decision-makers may overtrust or undertrust predictions when confidence, variability, or model limitations are not clearly communicated.</td><td>Display confidence intervals, prediction intervals, uncertainty ranges, or qualitative uncertainty cues; explain major sources of uncertainty in plain language.</td></tr><tr style="--c:var(--d3);--cf:var(--d3f)"><td class="dim"><span>3</span>Presentation and format</td><td><span class="tn">Numeric Presentation</span><span class="ts">Percentages that are difficult to interpret; inconsistent use of fractions, natural frequencies, or absolute risks; excessive numerical precision.</span><span class="tn">Visual Presentation</span><span class="ts">Misleading color scales; unclear icon arrays; poorly labeled charts, risk ladders, or visual decision aids.</span><span class="tn">Textual Explanation</span><span class="ts">Vague wording; limited plain-language explanation; unclear explanation of what the displayed information means.</span></td><td>Numeric, textual, or visual formats may make risk information difficult to interpret, especially for users with different levels of numeracy or health literacy.</td><td>Use patient-centered visual aids, icon arrays, natural frequencies, plain-language explanations, and accessible visualization design principles.</td></tr><tr style="--c:var(--d4);--cf:var(--d4f)"><td class="dim"><span>4</span>Patient and clinician interpretation</td><td><span class="tn">Numeracy Barriers</span><span class="ts">Difficulty interpreting probabilities; confusion between population-level and individual-level risk; limited understanding of statistical information.</span><span class="tn">Cognitive Burden</span><span class="ts">Too much information; complex displays; limited time for interpretation during clinical consultation.</span><span class="tn">Trust and Perceived Credibility</span><span class="ts">Overtrust in model outputs; distrust due to unclear data sources; misinterpretation of automated recommendations.</span></td><td>Users may misinterpret probabilities, confuse population-level evidence with individual-level risk, or place inappropriate trust in automated outputs.</td><td>Provide interpretation guidance, calibration explanations, decision examples, and prompts that encourage critical review rather than passive acceptance.</td></tr><tr style="--c:var(--d5);--cf:var(--d5f)"><td class="dim"><span>5</span>Decision support</td><td><span class="tn">Actionability Problems</span><span class="ts">No clear next step; weak connection to treatment options; limited guidance for clinical decision-making.</span><span class="tn">Workflow Integration Issues</span><span class="ts">Poor timing of information delivery; alert fatigue; lack of fit with clinical encounter workflow.</span><span class="tn">Recommendation Communication</span><span class="ts">Automated recommendations are not clearly linked to clinical choices, treatment options, or decision thresholds.</span></td><td>Data-driven information may fail to support action if it is not connected to clinical choices, treatment options, or workflow timing.</td><td>Link risk information to actionable next steps; integrate recommendations into clinical workflow; reduce alert fatigue through prioritization and contextual triggering.</td></tr><tr style="--c:var(--d6);--cf:var(--d6f)"><td class="dim"><span>6</span>Explainability and model communication</td><td><span class="tn">Explanation Misinterpretation</span><span class="ts">Feature importance mistaken as causality; simplified explanations that hide uncertainty; unclear distinction between association and causal explanation.</span><span class="tn">Model Performance Communication</span><span class="ts">Calibration not explained; accuracy metrics difficult to translate into clinical meaning; unclear communication of false positives and false negatives.</span><span class="tn">Conditions for Appropriate Use</span><span class="ts">Unclear communication of when model outputs should be used, reviewed cautiously, or overridden by clinical judgment.</span></td><td>Explanations may be mistaken for causal evidence, and model performance may be difficult to translate into clinical reliability.</td><td>Use reliability-aware explanations; distinguish association from causation; communicate calibration, subgroup performance, false positives, false negatives, and appropriate use conditions.</td></tr><tr style="--c:var(--d7);--cf:var(--d7f)"><td class="dim"><span>7</span>Equity and subgroup reliability</td><td><span class="tn">Subgroup Performance Differences</span><span class="ts">Model performance may vary across patient subgroups, but subgroup-specific reliability is not clearly communicated.</span><span class="tn">Data Representativeness</span><span class="ts">Missing data, biased samples, or underrepresentation of certain populations may limit the reliability of model outputs.</span><span class="tn">Equity-Sensitive Interpretation</span><span class="ts">Users may not be informed when predictions should be interpreted cautiously for underrepresented or clinically distinct groups.</span></td><td>Model outputs may be less reliable for specific populations if subgroup performance, missing data, or representativeness limitations are not communicated.</td><td>Report subgroup validation where available; flag data limitations; communicate when model outputs should be interpreted cautiously for underrepresented groups.</td></tr><tr style="--c:var(--d8);--cf:var(--d8f)"><td class="dim"><span>8</span>Shared decision-making</td><td><span class="tn">Patient Preference Integration</span><span class="ts">Patient preferences, goals, and values are not incorporated into the presentation or interpretation of risk information.</span><span class="tn">Trade-off Communication</span><span class="ts">Benefits, harms, uncertainty, and treatment trade-offs are not clearly communicated to support shared decision-making.</span><span class="tn">Clinician-Patient Discussion Support</span><span class="ts">Decision aids lack prompts or structures that support meaningful discussion between clinicians and patients.</span></td><td>Risk or uncertainty information may be presented in ways that do not support patient preferences, values, or trade-off discussions.</td><td>Design decision aids that incorporate patient goals, preference-sensitive trade-offs, and clinician-patient discussion prompts.</td></tr></tbody></table>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="sec" id="patterns" aria-labelledby="pat-title">
+    <div class="frame">
+      <p class="kicker">Across dimensions</p>
+      <h2 id="pat-title">Three cross-cutting patterns</h2>
+      <div class="patterns">
+        <div class="pattern">
+          <ul class="chips"><li><a class="chip" href="#taxonomy" data-goto="2" style="--c:var(--d2);--cf:var(--d2f)"><i aria-hidden="true"></i>2 · Uncertainty communication</a></li></ul>
+          <h3>Uncertainty is a design problem</h3>
+          <p>Uncertainty communication is a design problem rather than a disclosure problem alone. An interval or quality of evidence label is useful only to the extent that users can interpret its meaning and incorporate it into a decision.</p>
+        </div>
+        <div class="pattern">
+          <ul class="chips"><li><a class="chip" href="#taxonomy" data-goto="6" style="--c:var(--d6);--cf:var(--d6f)"><i aria-hidden="true"></i>6 · Explainability and model communication</a></li></ul>
+          <h3>Explanation and reliability are distinct targets</h3>
+          <p>Model explanation and model reliability are related but distinct communication targets. Feature attribution displays and summary accuracy metrics may improve transparency while providing little information about calibration, transportability, or subgroup performance.</p>
+        </div>
+        <div class="pattern">
+          <ul class="chips"><li><a class="chip" href="#taxonomy" data-goto="1" style="--c:var(--d1);--cf:var(--d1f)"><i aria-hidden="true"></i>1 · Risk information</a></li><li><a class="chip" href="#taxonomy" data-goto="6" style="--c:var(--d6);--cf:var(--d6f)"><i aria-hidden="true"></i>6 · Explainability and model communication</a></li><li><a class="chip" href="#taxonomy" data-goto="8" style="--c:var(--d8);--cf:var(--d8f)"><i aria-hidden="true"></i>8 · Shared decision-making</a></li></ul>
+          <h3>Several dimensions meet at the decision threshold</h3>
+          <p>Choosing the threshold that converts a probability into an action entails judgments about the relative consequences of false positives and false negatives, linking statistical performance to clinical context and patient values. The same underlying choice can appear as a risk information problem, a model communication problem, or a shared decision-making problem, depending on where along the pathway it becomes visible.</p>
+        </div>
+      </div>
+
+      <div class="tic">
+        <div>
+          <p class="label">Builds on</p>
+          <h3>TIC, a taxonomy of issues in data communication</h3>
+          <p>Several of the present authors previously developed TIC from journalism and public data narratives. It organizes breakdowns across six categories.</p>
+          <ul class="tags"><li>Data</li><li>Analysis</li><li>Visual encoding</li><li>Text</li><li>Reasoning</li><li>Interpretation</li></ul>
+          <a class="src-link" href="https://doi.org/10.48550/arXiv.2607.10523" target="_blank" rel="noopener">Fu et al., 2026 · arXiv:2607.10523 ↗</a>
+        </div>
+        <div>
+          <p class="label">Added for clinical decision-making</p>
+          <h3>Concerns the clinical setting introduces</h3>
+          <p>The present taxonomy organizes recurring issues across the pathway from output to interpretation and action, and links each dimension to a clinical risk and a potential intervention point.</p>
+          <ul class="tags add"><li>Model calibration and reliability</li><li>Subgroup performance</li><li>Workflow integration</li><li>Decision thresholds</li><li>Patient values in preference-sensitive decisions</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="sec next" aria-labelledby="next-title">
+    <div class="frame">
+      <p class="kicker" id="next-title">Continue reading</p>
+      <div class="next-grid">
+        <a class="next-card" href="taxonomy-delirium.html">
+          <span><span class="label">Illustrative application</span><span class="next-name">Three delirium prediction models, read through the taxonomy</span></span>
+          <span class="next-arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="next-card" href="taxonomy-publication.html">
+          <span><span class="label">Publication</span><span class="next-name">Abstract, methods, and how to cite this work</span></span>
+          <span class="next-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="frame">
+    <span>Barney Guo, Jiawei Zhou, Yu Fu, Sunyang Fu · Dell Medical School, The University of Texas at Austin · University of Central Florida</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script src="taxonomy-shared.js"></script>
+</body>
+</html>

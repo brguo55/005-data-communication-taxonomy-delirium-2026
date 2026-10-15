@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Publication · Data-Driven Communication Taxonomy</title>
+<meta name="description" content="Abstract, methods, and citation for A Taxonomy of Issues in Healthcare Data-Driven Communication for Clinical Decision-Making.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500;600&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,500;0,600;1,400;1,500&display=swap">
+<link rel="stylesheet" href="taxonomy-shared.css">
+</head>
+<body>
+<!-- Page 3 of 3 · Publication. Other pages: taxonomy.html, taxonomy-delirium.html. Shared files: taxonomy-shared.css, taxonomy-shared.js. -->
+
+<header class="topbar">
+  <div class="frame topbar-in">
+    <a class="brand" href="taxonomy.html">Data-Driven Communication Taxonomy</a>
+    <nav class="page-tabs" aria-label="Pages">
+      <a class="page-tab" href="taxonomy.html">Taxonomy</a>
+      <a class="page-tab" href="taxonomy-delirium.html">Delirium case</a>
+      <a class="page-tab" href="taxonomy-publication.html" aria-current="page">Publication</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="sec" id="paper" aria-labelledby="pub-title">
+    <div class="frame">
+      <p class="kicker">Publication</p>
+      <h1 class="pub-title" id="pub-title">A Taxonomy of Issues in Healthcare Data-Driven Communication for Clinical Decision-Making</h1>
+      <p class="authors">Barney Guo<sup>1</sup>, Jiawei Zhou<sup>1</sup>, Yu Fu<sup>2</sup>, Sunyang Fu<sup>1</sup></p>
+      <ul class="affils">
+        <li><sup>1</sup>Dell Medical School, The University of Texas at Austin, Austin, TX, USA</li>
+        <li><sup>2</sup>University of Central Florida, Orlando, FL, USA</li>
+      </ul>
+      <p class="meta">Manuscript in preparation · 2026</p>
+      <div class="actions"><a class="btn" href="#cite">Cite the paper ↓</a></div>
+      <div class="abstract">
+        <p class="label">Abstract</p>
+        <p>Healthcare decision-making increasingly relies on data-driven tools, including risk prediction models, clinical decision support systems, dashboards, and algorithmic recommendations. The clinical value of these tools depends not only on model performance but also on whether their outputs are communicated in ways that clinicians and patients can interpret, appropriately trust, and use. Reporting standards such as TRIPOD+AI specify what model developers should report to readers of the scientific literature, but they do not provide an equivalent framework for what a deployed model should communicate at the point of use. We developed a preliminary taxonomy of issues in healthcare data-driven communication through a structured synthesis of 48 sources identified by PubMed search and citation searching. The taxonomy comprises eight dimensions: risk information; uncertainty communication; presentation and format; patient and clinician interpretation; decision support; explainability and model communication; equity and subgroup reliability; and shared decision-making. Each dimension is linked to the clinical decision-making risk it poses and to a corresponding opportunity for intervention. Coverage in the coded corpus was uneven, with equity and subgroup reliability informed by a single study. An illustrative application to three published delirium prediction studies shows how the taxonomy can distinguish communication practices in concrete prediction model settings. These findings identify clinician- and patient-facing communication as an important and comparatively underspecified component of prediction model deployment.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="methods" aria-labelledby="meth-title">
+    <div class="frame">
+      <p class="kicker">Methods</p>
+      <h2 id="meth-title">How the taxonomy was built</h2>
+      <p class="lede">We developed the taxonomy through a structured synthesis of the literature using a directed content analysis approach. An initial organizing structure, informed by prior work, was applied and iteratively revised as additional themes emerged. The objective was conceptual coverage of ways in which data-driven communication can break down in clinical decision-making, rather than exhaustive retrieval or estimation of the prevalence of individual issue types.</p>
+
+      <div class="mcards">
+        <div class="mcard">
+          <h3>PubMed search across three concept blocks</h3>
+          <ul class="query">
+            <li>Communication of risk, probability, and uncertainty</li>
+            <li class="op" aria-hidden="true">AND</li>
+            <li>Healthcare and clinical settings, including the electronic health record</li>
+            <li class="op" aria-hidden="true">AND</li>
+            <li>Artificial intelligence, prediction models, and clinical decision support</li>
+          </ul>
+          <p>Terms were combined within blocks and intersected across them. Animal-only studies were removed with the filter <code>animals[mh] NOT humans[mh]</code>.</p>
+        </div>
+        <div class="mcard">
+          <h3>Purposive selection and citation searching</h3>
+          <ol class="funnel">
+            <li><span class="num">128</span><span>Records screened by title and abstract</span></li>
+            <li><span class="num">124</span><span>Judged topically relevant (4 excluded)</span></li>
+            <li><span class="num">10</span><span>Seed papers advanced to focused full-text review (114 not advanced)</span></li>
+            <li><span class="num">5</span><span>Seeds used for backward and forward citation searching</span></li>
+            <li><span class="num">+38</span><span>Additional sources retained after abstract review</span></li>
+            <li class="final"><span class="num">48</span><span>Sources in the final corpus: 47 coded articles and 1 book retained for context</span></li>
+          </ol>
+          <p>One coded paper also served as a conceptual anchor for the initial category structure.</p>
+        </div>
+        <div class="mcard">
+          <h3>Common extraction and iterative synthesis</h3>
+          <p>Each coded source was characterized with a common extraction framework covering clinical and decision context, intended audience, the information communicated, communication format, uncertainty and reliability, human interpretation and decision implications, and an emerging taxonomy theme.</p>
+          <p>Categories were merged, split, relabeled, and promoted to higher-level dimensions as the coded evidence suggested clearer boundaries. All screening, extraction, and initial thematic coding were performed by a single author (B.G.), and the category structure was reviewed and revised in discussion with the co-authors.</p>
+        </div>
+      </div>
+
+      <div class="figrow">
+        <figure>
+          <div class="sheet"><img src="taxonomy-figure1-prisma-flow.svg" width="428" height="558" alt="Flow diagram. 128 records identified from PubMed and screened by title and abstract; 4 excluded; 124 retained; 114 reviewed but not selected as seed papers; 10 seed papers selected for focused review; 5 used for citation searching, which identified 38 additional sources; 48 sources included, 47 peer-reviewed papers coded and 1 book retained but not counted."></div>
+          <figcaption><b>Figure 1.</b> Adapted PRISMA-style flow diagram of source identification, screening, focused review, citation searching from 5 seed papers (yielding 38 additional sources after abstract-review screening for relevance), and inclusion (n = 48; 47 peer-reviewed papers coded plus 1 book source retained but not coded).</figcaption>
+        </figure>
+        <div class="side">
+          <div class="side-block">
+            <h3>Search and extraction details</h3>
+            <details class="full">
+              <summary>Table 1. PubMed search strategy and current literature corpus</summary>
+              <div class="scroll">
+<table class="tx"><thead><tr><th scope="col">Component</th><th scope="col">Search or selection focus</th><th scope="col">Purpose in this review</th></tr></thead><tbody><tr><td>Primary database search</td><td>PubMed search combining terms related to risk communication, probability communication, uncertainty communication, healthcare, clinical settings, electronic health records, artificial intelligence, machine learning, prediction models, and clinical decision support.</td><td>To identify literature at the intersection of healthcare data-driven communication, risk and uncertainty communication, and clinical decision-making.</td></tr><tr><td>Communication concepts</td><td>Risk communication; patient risk communication; communicating probabilities; probability communication; communicating numbers; communication of risk; uncertainty communication; communication of uncertainty.</td><td>To capture studies focused on how quantitative, probabilistic, or uncertain information is communicated to patients, clinicians, or other decision-makers.</td></tr><tr><td>Healthcare and clinical context</td><td>Healthcare; health care; medical; clinical; clinicians; electronic health records; electronic medical records; electronic patient records; EHR; EMR; EPR.</td><td>To restrict the review scope to healthcare, clinical, and health information system contexts.</td></tr><tr><td>Risk, probability, and uncertainty concepts</td><td>Risk; probability; uncertainty; ambiguity; numeracy; quantitative information; measurement error; confidence intervals.</td><td>To capture core concepts related to uncertainty representation, probabilistic reasoning, and interpretation of quantitative health information.</td></tr><tr><td>AI, prediction, and decision support concepts</td><td>Artificial intelligence; AI; machine learning; deep learning; clinical prediction models; prediction models; algorithms; clinical decision support; decision support systems; risk prediction; predictive models.</td><td>To identify studies involving data-driven tools, predictive models, algorithmic outputs, and clinical decision support systems.</td></tr><tr><td>Exclusion criterion</td><td>Animal-only studies were excluded using the PubMed filter <code>animals[mh] NOT humans[mh]</code>.</td><td>To focus the review on human healthcare and clinical decision-making contexts.</td></tr><tr><td>Current working corpus</td><td>The current extraction table contains 48 entries: 10 seed papers selected for focused full-text review, 5 of which were used for backward and forward citation searching (snowballing) that identified 38 additional sources after abstract-review screening for relevance. Of the 48 total sources, 47 peer-reviewed papers were included in taxonomy coding and 1 book source was retained for context but not coded; one of the 47 coded papers additionally served as a conceptual anchor for the taxonomy&#x27;s initial category structure.</td><td>To support preliminary taxonomy development, literature synthesis, and identification of recurring issues in healthcare data-driven communication.</td></tr></tbody></table>
+              </div>
+            </details>
+            <details class="full">
+              <summary>Table 2. Data extraction framework for taxonomy development</summary>
+              <div class="scroll">
+<table class="tx"><thead><tr><th scope="col">Extraction domain</th><th scope="col">Extracted information</th><th scope="col">Role in taxonomy development</th></tr></thead><tbody><tr><td>Bibliographic and study information</td><td>Title; first author; year; journal; article type; priority level.</td><td>Documents the source, publication context, and relevance of each article in the working corpus.</td></tr><tr><td>Clinical and decision context</td><td>Clinical context; decision context; target audience, including patients, clinicians, caregivers, researchers, or system designers.</td><td>Identifies where data-driven communication occurs and whose decisions or interpretations may be affected.</td></tr><tr><td>Communicated information</td><td>What is being communicated, including risk estimates, probabilities, uncertainty, prediction results, model outputs, treatment outcomes, or recommendations.</td><td>Clarifies the object of communication and helps distinguish risk communication, uncertainty communication, model communication, and decision support communication.</td></tr><tr><td>Communication format and approach</td><td>Format or approach, including decision aids, web-based tools, dashboards, visualizations, risk calculators, alerts, printed reports, or conceptual frameworks.</td><td>Captures how information is presented and supports comparison across textual, numeric, visual, and interactive communication formats.</td></tr><tr><td>Uncertainty and reliability</td><td>Whether uncertainty is addressed; type of uncertainty; model or tool type; performance or reliability information.</td><td>Supports identification of recurring problems related to missing uncertainty, unclear confidence, calibration, model reliability, and appropriate use conditions.</td></tr><tr><td>Human interpretation and decision implication</td><td>Whether human interpretation is considered; action or decision implication; key finding.</td><td>Links communication issues to clinical decision-making, shared decision-making, workflow fit, trust, overtrust, undertrust, and actionability.</td></tr><tr><td>Emerging taxonomy theme</td><td>Potential theme derived from each article.</td><td>Provides the analytic bridge from individual papers to higher-level taxonomy dimensions and subtypes.</td></tr></tbody></table>
+              </div>
+            </details>
+          </div>
+          <div class="side-block">
+            <h3>Limitations</h3>
+            <ul class="limits">
+              <li><b>A directed, scoping synthesis</b> rather than an exhaustive systematic review. The database search was limited to PubMed, which likely underrepresents studies indexed primarily in computing, visualization, and human factors venues.</li>
+              <li><b>Purposive selection.</b> Only 10 of the 124 records judged topically relevant were advanced as seed papers. Uneven coverage across dimensions is not evidence that some problems are more common or important than others.</li>
+              <li><b>A single coder.</b> Individual records were not independently coded, and no inter-rater agreement statistics were computed.</li>
+              <li><b>A descriptive framework.</b> The risk and intervention mappings in Table 4 have not been empirically validated.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <figure class="fig2" id="fig2">
+        <div class="sheet wide"><img src="taxonomy-figure2-classification.svg" width="771" height="336" alt="Diagram of the 47 coded papers by primary dimension. Risk information 2, uncertainty communication 11, presentation and format 15, patient and clinician interpretation 3, decision support 5, explainability and model communication 5, equity and subgroup reliability 1, shared decision-making 5. A note states that No. 14 was a book source and was not counted."></div>
+        <figcaption><b>Figure 2.</b> Primary taxonomy classification of included studies.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec" id="cite" aria-labelledby="cite-title">
+    <div class="frame">
+      <p class="kicker">Citation</p>
+      <h2 id="cite-title">Cite this work</h2>
+      <div class="cite-stack">
+        <div class="codebox">
+          <p class="label">Reference</p>
+          <p class="formatted" id="cite-ref">Guo B, Zhou J, Fu Y, Fu S. A taxonomy of issues in healthcare data-driven communication for clinical decision-making. Manuscript in preparation; 2026.</p>
+          <button class="btn copy" type="button" data-copy="cite-ref">Copy</button>
+        </div>
+        <div class="codebox">
+          <p class="label">BibTeX</p>
+<pre id="cite-bib">@unpublished{guo2026taxonomy,
+  title  = {A Taxonomy of Issues in Healthcare Data-Driven
+            Communication for Clinical Decision-Making},
+  author = {Guo, Barney and Zhou, Jiawei and Fu, Yu and Fu, Sunyang},
+  note   = {Manuscript in preparation},
+  year   = {2026}
+}</pre>
+          <button class="btn copy" type="button" data-copy="cite-bib">Copy</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="frame">
+    <span>Barney Guo, Jiawei Zhou, Yu Fu, Sunyang Fu · Dell Medical School, The University of Texas at Austin · University of Central Florida</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script src="taxonomy-shared.js"></script>
+</body>
+</html>

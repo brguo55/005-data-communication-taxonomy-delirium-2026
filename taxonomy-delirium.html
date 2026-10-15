@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delirium case · Data-Driven Communication Taxonomy</title>
+<meta name="description" content="Three published delirium prediction models read through A Taxonomy of Issues in Healthcare Data-Driven Communication for Clinical Decision-Making.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500;600&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,500;0,600;1,400;1,500&display=swap">
+<link rel="stylesheet" href="taxonomy-shared.css">
+</head>
+<body>
+<!-- Page 2 of 3 · Delirium case. Other pages: taxonomy.html, taxonomy-publication.html. Shared files: taxonomy-shared.css, taxonomy-shared.js. -->
+
+<header class="topbar">
+  <div class="frame topbar-in">
+    <a class="brand" href="taxonomy.html">Data-Driven Communication Taxonomy</a>
+    <nav class="page-tabs" aria-label="Pages">
+      <a class="page-tab" href="taxonomy.html">Taxonomy</a>
+      <a class="page-tab" href="taxonomy-delirium.html" aria-current="page">Delirium case</a>
+      <a class="page-tab" href="taxonomy-publication.html">Publication</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="sec" id="delirium" aria-labelledby="del-title">
+    <div class="frame">
+      <p class="kicker">Illustrative application</p>
+      <h1 id="del-title">Three delirium prediction models, read through the taxonomy</h1>
+      <p class="lede">To examine whether the dimensions can be recognized in concrete prediction model reports, we applied the taxonomy informally to three delirium prediction studies listed in the supplementary material of a recent scoping review of machine learning for delirium prediction using electronic health records. The exercise was intended to demonstrate interpretability of the taxonomy, not to estimate the frequency of communication problems in delirium prediction.</p>
+      <div class="cases">
+        <article class="case">
+          <div class="case-head">
+            <h3>Jauk et al.</h3>
+            <p class="src">JAMIA · 2020</p>
+            <p>Random forest model implemented in an Austrian hospital network and evaluated prospectively over seven months.</p>
+          </div>
+          <div class="layer screen">
+            <p class="label layer-label"><svg width="22" height="12" viewBox="0 0 22 12" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="var(--sig-red)"/><circle cx="16" cy="6" r="5" fill="var(--sig-amber)"/></svg>On the clinician-facing display</p>
+            <ul class="pts">
+              <li>A color-coded icon in the patient list</li>
+              <li>Red for the very high risk group (95th to 100th percentile), yellow for the high risk group (85th to 94th percentile)</li>
+              <li>No symbol for patients classified as low risk</li>
+            </ul>
+          </div>
+          <div class="layer">
+            <p class="label">Reported in the manuscript</p>
+            <ul class="metrics"><li><span>AUROC prospective</span> 0.855</li><li><span>AUROC test</span> 0.854</li></ul>
+            <ul class="pts">
+              <li>Calibration deteriorated; predicted risks were systematically higher than observed event rates</li>
+              <li>No management recommendation for patients identified as high risk</li>
+            </ul>
+          </div>
+          <div class="reading"><p>The reliability limitation was measured and reported in the manuscript but was not conveyed through the clinician-facing display. The study also illustrates the distinction between risk identification and decision support.</p></div>
+          <p class="case-link"><a href="https://doi.org/10.1093/jamia/ocaa113" target="_blank" rel="noopener">doi:10.1093/jamia/ocaa113 ↗</a></p>
+        </article>
+
+        <article class="case">
+          <div class="case-head">
+            <h3>Lee et al.</h3>
+            <p class="src">BMC Psychiatry · 2023</p>
+            <p>Gradient boosting model for delirium after noncardiac surgery, released as a web application.</p>
+          </div>
+          <div class="layer screen">
+            <p class="label layer-label"><svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><rect x="1" y="1" width="20" height="12" rx="3" fill="none" stroke="var(--muted)" stroke-width="1.5"/><text x="11" y="10.5" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="var(--ink)">%</text></svg>On the clinician-facing display</p>
+            <ul class="pts">
+              <li>A predicted probability, returned from five input variables</li>
+            </ul>
+          </div>
+          <div class="layer">
+            <p class="label">Reported in the manuscript</p>
+            <ul class="metrics"><li><span>Threshold</span> 0.020</li><li><span>Sensitivity</span> 0.76</li><li><span>Specificity</span> 0.84</li><li><span>External event rate</span> 0.3%</li><li><span>AUPRC</span> 0.062</li><li><span>F1</span> 0.064</li></ul>
+            <ul class="pts">
+              <li>The low base rate and precision-recall performance are reported in the paper but are not apparent from the probability the tool returns</li>
+            </ul>
+          </div>
+          <div class="reading"><p>A clinician receives an individualized estimate without information about the low base rate, precision-recall performance, or how those characteristics should shape interpretation. Making a model accessible is not equivalent to making the reliability of its output interpretable.</p></div>
+          <p class="case-link"><a href="https://doi.org/10.1186/s12888-023-04768-y" target="_blank" rel="noopener">doi:10.1186/s12888-023-04768-y ↗</a></p>
+        </article>
+
+        <article class="case">
+          <div class="case-head">
+            <h3>Benovic et al.</h3>
+            <p class="src">Age and Ageing · 2024</p>
+            <p>Delirium prediction component for a geriatric co-management system (SURGE-Ahead), with clinician-facing communication requirements as explicit design goals.</p>
+          </div>
+          <div class="layer screen">
+            <p class="label layer-label"><svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><rect x="1" y="2" width="12" height="2.6" rx="1.3" fill="var(--muted)"/><rect x="1" y="6" width="8" height="2.6" rx="1.3" fill="var(--muted)"/><rect x="1" y="10" width="5" height="2.6" rx="1.3" fill="var(--muted)"/><text x="18" y="11" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="var(--ink)">%</text></svg>On the clinician-facing display</p>
+            <ul class="pts">
+              <li>A calibrated probability estimate, accompanied by the features contributing most to the prediction</li>
+              <li>Expressed as a probability rather than a categorical directive, preserving space for clinical interpretation</li>
+            </ul>
+          </div>
+          <div class="layer">
+            <p class="label">Reported in the manuscript</p>
+            <ul class="pts">
+              <li>Internal-external cross-validation across centers</li>
+              <li>Potential algorithmic bias assessed by sex and native language with the Aequitas framework; ethnicity data noted as unavailable</li>
+              <li>Published linear decision function, coefficients, normalization values, and the mean/median values used for missing inputs</li>
+            </ul>
+          </div>
+          <div class="reading"><p>The study does not address every dimension of the taxonomy, but it illustrates that several communication dimensions can be addressed within the development and reporting of a clinical prediction model.</p></div>
+          <p class="case-link"><a href="https://doi.org/10.1093/ageing/afae101" target="_blank" rel="noopener">doi:10.1093/ageing/afae101 ↗</a></p>
+        </article>
+      </div>
+      <p class="caveat">These three cases are illustrative rather than systematic. They were not sampled for comparative evaluation, no formal coding instrument or inter-rater procedure was applied, and no claim is made about the frequency of any communication pattern in the broader delirium literature. They show that the dimensions can be applied to published prediction model reports and that they differentiate among communication approaches rather than labeling all studies identically.</p>
+    </div>
+  </section>
+
+  <nav class="sec next" aria-labelledby="next-title">
+    <div class="frame">
+      <p class="kicker" id="next-title">Continue reading</p>
+      <div class="next-grid">
+        <a class="next-card" href="taxonomy.html#taxonomy">
+          <span><span class="label">The taxonomy</span><span class="next-name">Eight dimensions between a tool's output and a clinical decision</span></span>
+          <span class="next-arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="next-card" href="taxonomy-publication.html">
+          <span><span class="label">Publication</span><span class="next-name">Abstract, methods, and how to cite this work</span></span>
+          <span class="next-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="frame">
+    <span>Barney Guo, Jiawei Zhou, Yu Fu, Sunyang Fu · Dell Medical School, The University of Texas at Austin · University of Central Florida</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script src="taxonomy-shared.js"></script>
+</body>
+</html>
