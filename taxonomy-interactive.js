@@ -228,4 +228,60 @@
 
     render();
   })();
+
+  /* 2 · Risk and context (#context). Natural frequencies for 1,000 patients at a chosen base rate, with the model held at
+     sensitivity 0.76 and specificity 0.84. The slider is logarithmic from 0.1% to 60%, so low base rates get room. */
+  (function(){
+    var input=document.getElementById('ctx-rate');
+    if(!input){return;}
+    var SENS=0.76,SPEC=0.84,LO=0.001,HI=0.6,N=1000,ROWS=25,SPAN=Math.log(HI/LO);
+    var out=document.getElementById('ctx-rate-out');
+    var grid=document.getElementById('ctx-grid');
+    var presets=[].slice.call(document.querySelectorAll('#ctx-presets [data-rate]'));
+    var cells=[];
+    for(var i=0;i<N;i++){
+      var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+      // Column by column, so each outcome forms a band that reads from left to right.
+      r.setAttribute('x',Math.floor(i/ROWS)*10+1);r.setAttribute('y',(i%ROWS)*10+1);
+      r.setAttribute('width',8);r.setAttribute('height',8);r.setAttribute('rx',1.6);
+      grid.appendChild(r);cells.push(r);
+    }
+    document.getElementById('ctx-mark').style.setProperty('--at',(Math.log(0.003/LO)/SPAN).toFixed(4));
+
+    function toRate(v){return LO*Math.exp(SPAN*v/1000);}
+    function toValue(rate){return Math.round(1000*Math.log(rate/LO)/SPAN);}
+    function fmtPct(p){p*=100;return (p<10?p.toFixed(1):String(Math.round(p)))+'%';}
+    // Split 1,000 patients into the four outcomes, rounding so the parts still add up to 1,000 (largest remainder).
+    function split(p){
+      var raw=[SENS*N*p,(1-SPEC)*N*(1-p),(1-SENS)*N*p,SPEC*N*(1-p)];
+      var n=raw.map(Math.floor),left=N-n[0]-n[1]-n[2]-n[3];
+      raw.map(function(v,k){return [v-n[k],k];}).sort(function(a,b){return b[0]-a[0];}).slice(0,left).forEach(function(e){n[e[1]]++;});
+      return {tp:n[0],fp:n[1],fn:n[2],tn:n[3]};
+    }
+
+    function update(){
+      var p=toRate(+input.value),c=split(p);
+      var ppv=SENS*p/(SENS*p+(1-SPEC)*(1-p));
+      out.textContent=fmtPct(p);
+      input.style.setProperty('--fill',(input.value/10)+'%');
+      input.setAttribute('aria-valuetext',fmtPct(p));
+      // Flagged patients first (true alerts, then false alarms), then missed cases, then everyone else.
+      var k=0;
+      [['ctx-tp',c.tp],['ctx-fp',c.fp],['ctx-fn',c.fn],['ctx-tn',c.tn]].forEach(function(g){
+        for(var j=0;j<g[1];j++){cells[k++].setAttribute('class',g[0]);}
+      });
+      document.getElementById('ctx-flagged').textContent=c.tp+c.fp;
+      document.getElementById('ctx-tp').textContent=c.tp;
+      document.getElementById('ctx-fn').textContent=c.fn;
+      var chance=ppv<0.5?'roughly a 1 in '+Math.round(1/ppv)+' chance ('+fmtPct(ppv)+')':'roughly a '+fmtPct(ppv)+' chance';
+      var verdict=ppv<0.1?'Almost every flag is a false alarm.':ppv<0.5?'Most flags are still false alarms.':'Most flags are correct, yet about 1 in '+Math.round(1/(1-ppv))+' is a false alarm.';
+      document.getElementById('ctx-plain').textContent='At a base rate of '+fmtPct(p)+', the tool flags about '+(c.tp+c.fp)+' of 1,000 patients, and about '+c.tp+' of them go on to develop delirium. A flag means '+chance+' that this patient develops delirium. '+verdict;
+      presets.forEach(function(b){b.setAttribute('aria-pressed',toValue(+b.getAttribute('data-rate'))===+input.value?'true':'false');});
+    }
+    function setRate(rate){input.value=toValue(rate);update();}
+
+    input.addEventListener('input',update);
+    presets.forEach(function(b){b.addEventListener('click',function(){setRate(+b.getAttribute('data-rate'));});});
+    setRate(0.1);
+  })();
 })();

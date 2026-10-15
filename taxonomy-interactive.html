@@ -124,6 +124,65 @@
     </div>
   </section>
 
+  <section class="sec" id="context" aria-labelledby="ctx-title">
+    <div class="frame">
+      <p class="kicker">2 · Risk and context</p>
+      <h2 id="ctx-title">The same alert means different things in different settings</h2>
+      <p class="lede">Sensitivity and specificity describe a model. What a flag means for the patient in front of a clinician also depends on how common delirium is where the tool is used. Drag the base rate and follow 1,000 patients.</p>
+
+      <div class="ctx">
+        <div class="ctx-controls">
+          <div class="ix-card">
+            <p class="label">Model held fixed</p>
+            <ul class="metrics"><li><span>Sensitivity</span> 0.76</li><li><span>Specificity</span> 0.84</li></ul>
+            <p class="ix-small">The operating point reported by Lee et al. (BMC Psychiatry, 2023). Only the base rate changes here. This is a teaching calculation, not a re-analysis of that study.</p>
+          </div>
+          <div class="ix-card">
+            <div class="ix-slider-head"><label for="ctx-rate">Base rate of delirium</label><output class="num" id="ctx-rate-out" for="ctx-rate">10%</output></div>
+            <div class="ix-range ctx-range">
+              <input type="range" id="ctx-rate" min="0" max="1000" step="1" value="721" aria-describedby="ctx-rate-note">
+              <span class="ix-mark" id="ctx-mark" aria-hidden="true"><span>0.3%</span></span>
+            </div>
+            <div class="ix-ticks" aria-hidden="true"><span style="--at:0">0.1%</span><span style="--at:.36">1%</span><span style="--at:.72">10%</span><span style="--at:1">60%</span></div>
+            <p class="label ctx-presets-label">Try a setting</p>
+            <div class="ix-presets" id="ctx-presets">
+              <button type="button" class="btn" data-rate="0.3" data-setting="icu">ICU</button>
+              <button type="button" class="btn" data-rate="0.1" data-setting="ward">Inpatient ward</button>
+              <button type="button" class="btn" data-rate="0.01" data-setting="outpatient">Outpatient clinic</button>
+              <button type="button" class="btn" data-rate="0.003">Lee et al. external cohort</button>
+            </div>
+            <p class="ix-small" id="ctx-rate-note">Setting values (30%, 10%, 1%) are illustrative, chosen to span a range; they are not prevalence estimates. The 0.3% marker is the event rate Lee et al. reported for their external cohort.</p>
+          </div>
+        </div>
+
+        <div class="ix-card ctx-out">
+          <div class="ctx-out-head">
+            <p class="label">1,000 patients at this base rate</p>
+            <ul class="ctx-legend">
+              <li><i class="ctx-k ctx-tp"></i>Flagged, develops delirium</li>
+              <li><i class="ctx-k ctx-fp"></i>Flagged, does not (false alarm)</li>
+              <li><i class="ctx-k ctx-fn"></i>Not flagged, develops delirium</li>
+              <li><i class="ctx-k ctx-tn"></i>Not flagged, does not</li>
+            </ul>
+          </div>
+          <svg class="ctx-grid" id="ctx-grid" viewBox="0 0 400 250" role="img" aria-labelledby="ctx-plain"></svg>
+          <dl class="ctx-stats">
+            <div><dt>Flagged by the tool</dt><dd class="num" id="ctx-flagged">0</dd></div>
+            <div><dt>Of those, develop delirium</dt><dd class="num" id="ctx-tp">0</dd></div>
+            <div><dt>Develop delirium without a flag</dt><dd class="num" id="ctx-fn">0</dd></div>
+          </dl>
+          <p class="ctx-plain" id="ctx-plain" aria-live="polite"></p>
+          <p class="ctx-from" id="ctx-from" hidden></p>
+        </div>
+      </div>
+
+      <div class="ix-takeaway">
+        <ul class="chips"><li><a class="chip" href="taxonomy.html#dim-1" style="--c:var(--d1);--cf:var(--d1f)"><i aria-hidden="true"></i>1 · Risk information</a></li><li><a class="chip" href="taxonomy.html#dim-6" style="--c:var(--d6);--cf:var(--d6f)"><i aria-hidden="true"></i>6 · Explainability and model communication</a></li><li><a class="chip" href="taxonomy.html#dim-5" style="--c:var(--d5);--cf:var(--d5f)"><i aria-hidden="true"></i>5 · Decision support</a></li></ul>
+        <p>A display that shows only the model's output leaves the reader to supply the context. State the absolute risk with its denominator and baseline population, say how many flags are expected to be false alarms, and plan for alert burden where most flags will be false.</p>
+      </div>
+    </div>
+  </section>
+
   <nav class="sec next" aria-labelledby="next-title">
     <div class="frame">
       <p class="kicker" id="next-title">Continue reading</p>
