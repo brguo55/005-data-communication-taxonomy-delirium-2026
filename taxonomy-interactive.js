@@ -176,14 +176,6 @@
         +(stake.length?'<div class="pw-stake"><p class="label">Dimensions at stake, most often first</p><ul class="chips">'+stake.map(dimChip).join('')+'</ul></div>':'');
     }
 
-    // Pressing a piece places it. A click that ends a drag is ignored, because the drop already placed it.
-    var suppressClick=false;
-    chips.forEach(function(c){
-      c.addEventListener('click',function(){
-        if(suppressClick){suppressClick=false;return;}
-        place(c.getAttribute('data-kind'),c.getAttribute('data-id'));
-      });
-    });
     pw.addEventListener('click',function(e){
       var x=e.target.closest('[data-remove]');
       if(!x){return;}
@@ -202,12 +194,13 @@
       say('Board cleared.');
     });
 
-    // Dragging
-    var drag=null;
+    // Dragging. drag.target is the one box that accepts the piece being dragged.
+    var drag=null,suppressClick=false;
     function slotAt(x,y){
       var el=document.elementFromPoint(x,y);
       return el?el.closest('.pw-slot'):null;
     }
+    function hover(){drag.target.classList.toggle('pw-over',slotAt(drag.x,drag.y)===drag.target);}
     function endDrag(drop){
       if(!drag){return;}
       var d=drag;
@@ -215,63 +208,63 @@
       if(!d.on){return;}
       cancelAnimationFrame(d.raf);
       d.ghost.remove();
-      pw.classList.remove('pw-dragging');
       document.documentElement.classList.remove('pw-dragging');
-      Object.keys(slots).forEach(function(k){slots[k].classList.remove('pw-target','pw-over');});
+      d.target.classList.remove('pw-target','pw-over');
+      // The click that follows this pointerup must not place the piece a second time.
       suppressClick=true;
       setTimeout(function(){suppressClick=false;},0);
       if(!drop){return;}
       var s=slotAt(d.x,d.y);
-      if(!s){return;}
-      if(s.getAttribute('data-slot')===d.kind){place(d.kind,d.id);}
-      else{
+      if(s===d.target){place(d.kind,d.id);}
+      else if(s){
         s.classList.remove('pw-wrong');void s.offsetWidth;s.classList.add('pw-wrong');
         say('That box takes a different kind of piece. '+LABELS[d.kind][d.id]+' goes in '+box(d.kind)+'.');
       }
     }
     // While dragging near the top or bottom of the window, scroll so far-away boxes can be reached on small screens.
     function edgeScroll(){
-      if(!drag||!drag.on){return;}
       var m=70,h=window.innerHeight,v=0;
       if(drag.y<m){v=-Math.ceil((m-drag.y)/5);}else if(drag.y>h-m){v=Math.ceil((drag.y-(h-m))/5);}
       if(v){window.scrollBy(0,v);hover();}
       drag.raf=requestAnimationFrame(edgeScroll);
     }
-    function hover(){
-      var s=slotAt(drag.x,drag.y);
-      Object.keys(slots).forEach(function(k){slots[k].classList.toggle('pw-over',slots[k]===s&&k===drag.kind);});
+    function startDrag(c,e){
+      var r=c.getBoundingClientRect();
+      drag.on=true;
+      try{c.setPointerCapture(e.pointerId);}catch(err){}
+      drag.dx=drag.sx-r.left;drag.dy=drag.sy-r.top;
+      drag.ghost=c.cloneNode(true);
+      drag.ghost.classList.add('pw-ghost');
+      drag.ghost.setAttribute('aria-hidden','true');
+      drag.ghost.style.width=r.width+'px';
+      document.body.appendChild(drag.ghost);
+      document.documentElement.classList.add('pw-dragging');
+      drag.target.classList.add('pw-target');
+      drag.raf=requestAnimationFrame(edgeScroll);
     }
     chips.forEach(function(c){
+      // Pressing a piece (click, Enter or Space) places it.
+      c.addEventListener('click',function(){
+        if(!suppressClick){place(c.getAttribute('data-kind'),c.getAttribute('data-id'));}
+      });
       c.addEventListener('pointerdown',function(e){
         if(e.button!==0){return;}
-        drag={chip:c,kind:c.getAttribute('data-kind'),id:c.getAttribute('data-id'),sx:e.clientX,sy:e.clientY,x:e.clientX,y:e.clientY,on:false,pid:e.pointerId};
+        var kind=c.getAttribute('data-kind');
+        drag={chip:c,kind:kind,id:c.getAttribute('data-id'),target:slots[kind],sx:e.clientX,sy:e.clientY,x:e.clientX,y:e.clientY,on:false,pid:e.pointerId};
       });
       c.addEventListener('pointermove',function(e){
         if(!drag||drag.chip!==c||e.pointerId!==drag.pid){return;}
         drag.x=e.clientX;drag.y=e.clientY;
         if(!drag.on){
           if(Math.abs(drag.x-drag.sx)+Math.abs(drag.y-drag.sy)<7){return;}
-          drag.on=true;
-          try{c.setPointerCapture(e.pointerId);}catch(err){}
-          var r=c.getBoundingClientRect();
-          drag.dx=drag.sx-r.left;drag.dy=drag.sy-r.top;
-          drag.ghost=c.cloneNode(true);
-          drag.ghost.removeAttribute('id');
-          drag.ghost.classList.add('pw-ghost');
-          drag.ghost.setAttribute('aria-hidden','true');
-          drag.ghost.style.width=r.width+'px';
-          document.body.appendChild(drag.ghost);
-          pw.classList.add('pw-dragging');
-          document.documentElement.classList.add('pw-dragging');
-          slots[drag.kind].classList.add('pw-target');
-          drag.raf=requestAnimationFrame(edgeScroll);
+          startDrag(c,e);
         }
-        drag.ghost.style.transform='translate('+(drag.x-drag.dx)+'px,'+(drag.y-drag.dy)+'px)';
+        // Hit-test before moving the ghost, so the move does not force a second layout.
         hover();
+        drag.ghost.style.transform='translate('+(drag.x-drag.dx)+'px,'+(drag.y-drag.dy)+'px)';
       });
       c.addEventListener('pointerup',function(e){if(drag&&drag.chip===c){drag.x=e.clientX;drag.y=e.clientY;endDrag(true);}});
       c.addEventListener('pointercancel',function(){endDrag(false);});
-      c.addEventListener('lostpointercapture',function(){if(drag&&drag.on&&drag.chip===c){endDrag(true);}});
     });
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&drag){endDrag(false);}});
 

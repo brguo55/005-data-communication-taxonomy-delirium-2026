@@ -39,7 +39,7 @@ a.ix-dim:hover{color:var(--ink);box-shadow:0 0 0 1px var(--c)}
 .pw-chip:hover{border-color:var(--accent)}
 .pw-chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .pw-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
-.pw-ghost{position:fixed;left:0;top:0;z-index:50;margin:0;pointer-events:none;border-color:var(--accent);box-shadow:0 12px 28px rgba(18,32,42,.25);opacity:.96}
+.pw-ghost{position:fixed;left:0;top:0;z-index:50;margin:0;pointer-events:none;will-change:transform;border-color:var(--accent);box-shadow:0 12px 28px rgba(18,32,42,.25);opacity:.96}
 .pw-dragging,.pw-dragging *{cursor:grabbing!important}
 
 .pw-board{display:grid;grid-template-columns:minmax(0,1.1fr) 44px minmax(0,1fr) minmax(0,.62fr) minmax(0,1fr);grid-template-areas:"data join . exch exch" "set join model link users" "pat join out . dec" "fair . . . .";gap:12px;padding:18px;border:1px solid var(--rule);border-radius:12px;background:var(--surface)}
