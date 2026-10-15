@@ -20,7 +20,7 @@
 .ix-card{border:1px solid var(--rule);border-radius:12px;background:var(--surface);padding:18px 20px 20px;min-width:0}
 .ix-small{font-size:13px;line-height:1.5;color:var(--muted);margin:10px 0 0;max-width:var(--measure)}
 
-/* 1 · pathway builder (#pathway) */
+/* 1 · pathway builder (#pathway) · pieces and the attention map use touch-action:pan-y, so a vertical swipe still scrolls the page on phones and a sideways start drags */
 .pw{margin-top:30px;display:grid;gap:14px}
 .pw-tray{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 16px;padding:16px 18px 18px;border:1px solid var(--rule);border-radius:12px;background:var(--raised)}
 @media (max-width:980px){.pw-tray{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -31,7 +31,7 @@
 .pw-group{min-width:0}
 .pw-group-name{margin:0 0 6px;font-weight:700;font-size:13.5px;color:var(--ink)}
 .pw-chips{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
-.pw-chip{appearance:none;font:inherit;font-size:13.5px;font-weight:600;line-height:1.25;text-align:left;max-width:100%;padding:7px 11px 7px 9px;border:1px solid var(--rule-2);border-radius:8px;background:var(--surface);color:var(--ink);cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;transition:border-color .15s,background .15s,box-shadow .15s}
+.pw-chip{appearance:none;font:inherit;font-size:13.5px;font-weight:600;line-height:1.25;text-align:left;max-width:100%;padding:7px 11px 7px 9px;border:1px solid var(--rule-2);border-radius:8px;background:var(--surface);color:var(--ink);cursor:grab;touch-action:pan-y;-webkit-user-select:none;user-select:none;transition:border-color .15s,background .15s,box-shadow .15s}
 .pw-chip::before{content:"";display:inline-block;width:6px;height:11px;margin-right:7px;vertical-align:-1px;background:radial-gradient(circle,var(--muted) 1.1px,transparent 1.4px) 0 0/3px 3.6px;opacity:.85}
 .pw-chip:hover{border-color:var(--accent)}
 .pw-chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
@@ -215,7 +215,7 @@ i.ctx-tn{background:var(--rule-2)}
 .att-profile[data-tone="warn"] h3{color:var(--d3)}
 .att-profile[data-tone="bad"] h3{color:var(--sig-red)}
 .att-profile p:not(.label){margin:0;font-size:15px;color:var(--ink-2)}
-.att-map{display:block;width:100%;height:auto;touch-action:none;cursor:ew-resize;-webkit-user-select:none;user-select:none}
+.att-map{display:block;width:100%;height:auto;touch-action:pan-y;cursor:ew-resize;-webkit-user-select:none;user-select:none}
 .att-map .heat{shape-rendering:crispEdges}
 .att-map .cell{fill:var(--sig-red)}
 .att-map .mid{stroke:var(--rule-2);stroke-width:1;stroke-dasharray:2 3}
