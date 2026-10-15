@@ -42,6 +42,88 @@
     </div>
   </section>
 
+  <section class="sec" id="pathway" aria-labelledby="path-title">
+    <div class="frame">
+      <p class="kicker">1 · Build the pathway</p>
+      <h2 id="path-title">Drag the pieces of a deployment into place</h2>
+      <p class="lede">A prediction reaches a decision through a chain: the records the model was derived from, the setting it runs in, the patients it describes, the model itself, and the people who read its output. Uncertainty can be lost at each link, and fairness questions enter with the patient population.</p>
+
+      <div class="pw" id="pw">
+        <div class="pw-tray" role="group" aria-labelledby="pw-tray-title">
+          <div class="pw-tray-head">
+            <p class="label" id="pw-tray-title">Pieces</p>
+            <p class="pw-hint">Drag a piece onto its box on the board, or press it to place it there.</p>
+          </div>
+          <div class="pw-group">
+            <p class="pw-group-name">Data</p>
+            <div class="pw-chips">
+              <button type="button" class="pw-chip" data-kind="data" data-id="single" aria-pressed="false">Single-site EHR</button>
+              <button type="button" class="pw-chip" data-kind="data" data-id="multi" aria-pressed="false">Multi-site EHR</button>
+            </div>
+          </div>
+          <div class="pw-group">
+            <p class="pw-group-name">Setting</p>
+            <div class="pw-chips">
+              <button type="button" class="pw-chip" data-kind="setting" data-id="icu" aria-pressed="false">ICU</button>
+              <button type="button" class="pw-chip" data-kind="setting" data-id="ward" aria-pressed="false">Inpatient ward</button>
+              <button type="button" class="pw-chip" data-kind="setting" data-id="outpatient" aria-pressed="false">Outpatient clinic</button>
+            </div>
+          </div>
+          <div class="pw-group">
+            <p class="pw-group-name">Patients</p>
+            <div class="pw-chips">
+              <button type="button" class="pw-chip" data-kind="patients" data-id="match" aria-pressed="false">Like the development cohort</button>
+              <button type="button" class="pw-chip" data-kind="patients" data-id="differ" aria-pressed="false">Unlike the development cohort</button>
+            </div>
+          </div>
+          <div class="pw-group">
+            <p class="pw-group-name">Model</p>
+            <div class="pw-chips">
+              <button type="button" class="pw-chip" data-kind="model" data-id="risk" aria-pressed="false">Risk prediction model</button>
+              <button type="button" class="pw-chip" data-kind="model" data-id="llm" aria-pressed="false">Large language model</button>
+              <button type="button" class="pw-chip" data-kind="model" data-id="cds" aria-pressed="false">Decision support alert</button>
+              <button type="button" class="pw-chip" data-kind="model" data-id="expert" aria-pressed="false">Rule-based expert system</button>
+            </div>
+          </div>
+          <div class="pw-group">
+            <p class="pw-group-name">Users</p>
+            <div class="pw-chips">
+              <button type="button" class="pw-chip" data-kind="users" data-id="nurses" aria-pressed="false">Nurses</button>
+              <button type="button" class="pw-chip" data-kind="users" data-id="physicians" aria-pressed="false">Physicians</button>
+              <button type="button" class="pw-chip" data-kind="users" data-id="patients" aria-pressed="false">Patients and families</button>
+            </div>
+          </div>
+          <div class="pw-actions">
+            <button type="button" class="btn" id="pw-example">Load an example</button>
+            <button type="button" class="btn" id="pw-clear">Clear the board</button>
+          </div>
+        </div>
+
+        <div class="pw-board" aria-label="Pathway board">
+          <div class="pw-slot" data-slot="data"><p class="pw-slot-name">EHR used to derive the model</p><div class="pw-slot-body"></div></div>
+          <div class="pw-slot" data-slot="setting"><p class="pw-slot-name">Hospital setting</p><div class="pw-slot-body"></div></div>
+          <div class="pw-slot" data-slot="patients"><p class="pw-slot-name">Patient demographics and characteristics</p><div class="pw-slot-body"></div></div>
+          <div class="pw-join" aria-hidden="true">
+            <svg width="34" height="14" viewBox="0 0 34 14"><path d="M1.5 7h28M23.5 1.5 29.5 7 23.5 12.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="34" height="14" viewBox="0 0 34 14"><path d="M1.5 7h28M23.5 1.5 29.5 7 23.5 12.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="34" height="14" viewBox="0 0 34 14"><path d="M1.5 7h28M23.5 1.5 29.5 7 23.5 12.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="pw-slot pw-slot-core" data-slot="model"><p class="pw-slot-name">AI model</p><div class="pw-slot-body"></div></div>
+          <div class="pw-link" aria-hidden="true"><svg width="58" height="14" viewBox="0 0 58 14"><path d="M4 7h50M10 1.5 4 7 10 12.5M48 1.5 54 7 48 12.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="pw-slot pw-slot-core" data-slot="users"><p class="pw-slot-name">Clinicians and users</p><div class="pw-slot-body"></div></div>
+          <div class="pw-check" data-check="fair"><p class="pw-check-kicker">Fairness</p><p class="pw-check-name">Across patient groups</p><div class="pw-check-body"></div></div>
+          <div class="pw-check" data-check="output"><p class="pw-check-kicker">Uncertainty communication</p><p class="pw-check-name">At the model output</p><div class="pw-check-body"></div></div>
+          <div class="pw-check" data-check="exchange"><p class="pw-check-kicker">Uncertainty communication</p><p class="pw-check-name">In the exchange with users</p><div class="pw-check-body"></div></div>
+          <div class="pw-check" data-check="decision"><p class="pw-check-kicker">Uncertainty communication</p><p class="pw-check-name">At the decision</p><div class="pw-check-body"></div></div>
+        </div>
+        <p class="ix-sr" id="pw-live" aria-live="polite"></p>
+      </div>
+
+      <div class="ix-card pw-read" id="pw-read"></div>
+      <p class="ix-small">Board layout adapted from the project's working diagram of the pathway from EHR data, hospital setting, and patient characteristics through an AI model to clinicians, with fairness and uncertainty communication marked as points of risk.</p>
+    </div>
+  </section>
+
   <nav class="sec next" aria-labelledby="next-title">
     <div class="frame">
       <p class="kicker" id="next-title">Continue reading</p>
@@ -67,5 +149,6 @@
 </footer>
 
 <script src="taxonomy-shared.js"></script>
+<script src="taxonomy-interactive.js"></script>
 </body>
 </html>
