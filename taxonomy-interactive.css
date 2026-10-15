@@ -48,8 +48,6 @@ a.ix-dim:hover{color:var(--ink);box-shadow:0 0 0 1px var(--c)}
 .pw-slot[data-slot="patients"]{grid-area:pat}
 .pw-slot[data-slot="model"]{grid-area:model}
 .pw-slot[data-slot="users"]{grid-area:users}
-.pw-join{grid-area:join}
-.pw-link{grid-area:link}
 .pw-check[data-check="fair"]{grid-area:fair}
 .pw-check[data-check="output"]{grid-area:out}
 .pw-check[data-check="exchange"]{grid-area:exch}
@@ -65,14 +63,13 @@ a.ix-dim:hover{color:var(--ink);box-shadow:0 0 0 1px var(--c)}
 .pw-x{appearance:none;font:inherit;flex:none;width:26px;height:26px;border:0;border-radius:5px;background:transparent;color:var(--muted);font-size:17px;line-height:1;cursor:pointer}
 .pw-x:hover{background:var(--code-bg);color:var(--ink)}
 .pw-slot.pw-target{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.pw-slot.pw-over{border-style:solid;background:var(--accent-soft)}
-.pw-slot.pw-filled.pw-over{background:var(--accent-2)}
+.pw-slot.pw-over{border-style:solid;box-shadow:0 0 0 3px var(--accent)}
 .pw-slot.pw-wrong{animation:pw-shake .35s}
 @keyframes pw-shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.pw-join{display:flex;flex-direction:column;justify-content:space-around;align-items:center;color:var(--accent)}
+.pw-join{grid-area:join;display:flex;flex-direction:column;justify-content:space-around;align-items:center;color:var(--accent)}
 .pw-join svg:nth-child(1){transform:rotate(30deg)}
 .pw-join svg:nth-child(3){transform:rotate(-30deg)}
-.pw-link{display:flex;align-items:center;justify-content:center;color:var(--accent)}
+.pw-link{grid-area:link;display:flex;align-items:center;justify-content:center;color:var(--accent)}
 .pw-check{align-self:start;min-width:0;padding:10px 12px 12px;border:1.5px dashed var(--rule-2);border-radius:6px;background:var(--surface);transition:border-color .2s}
 .pw-check.pw-on{border-style:solid;border-color:var(--d3)}
 .pw-check-kicker{margin:0;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
@@ -82,7 +79,7 @@ a.ix-dim:hover{color:var(--ink);box-shadow:0 0 0 1px var(--c)}
 .pw-dims{display:flex;flex-wrap:wrap;gap:4px;list-style:none;margin:0;padding:0}
 @media (max-width:860px){
   .pw-board{grid-template-columns:minmax(0,1fr);grid-template-areas:"data" "set" "pat" "fair" "join" "model" "out" "link" "exch" "users" "dec";padding:14px}
-  .pw-slot,.pw-slot-core{min-height:84px}
+  .pw-slot{min-height:84px}
   .pw-check{align-self:stretch}
   .pw-join{height:30px}
   .pw-join svg:nth-child(1),.pw-join svg:nth-child(3){display:none}
@@ -90,7 +87,7 @@ a.ix-dim:hover{color:var(--ink);box-shadow:0 0 0 1px var(--c)}
   .pw-link{height:46px}
 }
 .pw-read{margin-top:14px}
-.pw-sentence{margin:0;max-width:62ch;font-family:var(--f-display);font-size:1.2rem;line-height:1.45;color:var(--ink)}
+.pw-sentence{margin:0;max-width:62ch;font-size:1.2rem}
 .pw-sentence .ghost{font-size:.8em;vertical-align:.08em}
 .pw-next{margin:8px 0 0;font-size:14.5px;font-weight:700}
 .pw-findings{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 22px}
@@ -100,9 +97,8 @@ a.ix-dim:hover{color:var(--ink);box-shadow:0 0 0 1px var(--c)}
 .pw-finding-name{margin:0 0 4px;font-weight:700;font-size:15px}
 .pw-finding p:not(.pw-finding-name){margin:0 0 10px;font-size:14.5px;color:var(--ink-2)}
 .pw-finding.pw-wait p:not(.pw-finding-name){color:var(--muted)}
-.pw-finding .chips{margin:0}
 .pw-stake{margin-top:18px;padding-top:14px;border-top:1px solid var(--rule)}
-.pw-stake .chips{margin:0}
+.pw-read .chips{margin:0}
 
 /* sliders, preset buttons and takeaways · used by sections 2 to 4.
    --thumb is the thumb's full width; marks and ticks sit at calc(thumb/2 + (100% - thumb) * --at) so they line up with thumb centers.
@@ -122,23 +118,31 @@ a.ix-dim:hover{color:var(--ink);box-shadow:0 0 0 1px var(--c)}
 .ix-range input[type="range"]:focus-visible{outline:none}
 .ix-range input[type="range"]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--accent)}
 .ix-range input[type="range"]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--accent)}
-.ix-mark{position:absolute;top:18px;left:calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--at,0));width:2px;height:20px;margin-left:-1px;border-radius:1px;background:var(--ink);pointer-events:none}
-.ix-mark span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);padding-bottom:2px;font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;white-space:nowrap;color:var(--ink)}
+/* a labeled vertical line on a track: .ix-mark on a slider (placed by --at), .att-line on the what-if meter (placed by script) */
+.ix-mark,.att-line{position:absolute;width:2px;margin-left:-1px;border-radius:1px;background:var(--ink);pointer-events:none}
+.ix-mark{top:18px;height:20px;left:calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--at,0))}
+.att-line{top:-5px;bottom:-5px}
+.ix-mark span,.att-line span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);padding-bottom:3px;font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;white-space:nowrap;color:var(--ink)}
 .ix-ticks{position:relative;height:18px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
 .ix-ticks span{position:absolute;top:2px;left:calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--at,0));transform:translateX(-50%);white-space:nowrap}
 .ix-ticks span:first-child{left:0;transform:none}
 .ix-ticks span:last-child{left:auto;right:0;transform:none}
 .ix-presets{display:flex;flex-wrap:wrap;gap:6px}
 .ix-presets .btn{padding:6px 11px;font-size:13px}
-.ix-presets .btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .ix-takeaway{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:10px 20px;align-items:start;margin-top:16px;padding:14px 18px;border:1px dashed var(--rule-2);border-radius:10px}
 .ix-takeaway .chips{margin:0;flex-direction:column;align-items:flex-start}
 .ix-takeaway p{margin:0;font-size:15px;color:var(--ink-2)}
 @media (max-width:760px){.ix-takeaway{grid-template-columns:1fr}.ix-takeaway .chips{flex-direction:row}}
+/* the two-column layouts of sections 2 to 4, stacked below 900px */
+.ctx,.rob,.att{display:grid;gap:16px;margin-top:30px;align-items:start}
+.ctx{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)}
+.rob{grid-template-columns:repeat(2,minmax(0,1fr))}
+.att{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+@media (max-width:900px){.ctx,.rob,.att{grid-template-columns:1fr}}
+/* plain-language readouts set in the display face */
+.pw-sentence,.ctx-plain,.rob-plain{font-family:var(--f-display);line-height:1.45;color:var(--ink)}
 
 /* 2 · risk and context (#context) */
-.ctx{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:16px;margin-top:30px;align-items:start}
-@media (max-width:900px){.ctx{grid-template-columns:1fr}}
 .ctx-controls{display:grid;gap:14px}
 .ctx-controls .metrics{margin:0}
 .ctx-presets-label{margin:16px 0 8px}
@@ -161,12 +165,10 @@ i.ctx-tn{background:var(--rule-2)}
 .ctx-stats dt{font-size:13px;line-height:1.35;color:var(--muted)}
 .ctx-stats dd{margin:2px 0 0;font-size:1.7rem;font-weight:600;line-height:1.15;color:var(--ink)}
 @media (max-width:420px){.ctx-stats{grid-template-columns:1fr}.ctx-stats > div{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.ctx-stats dd{font-size:1.3rem}}
-.ctx-plain{margin:16px 0 0;font-family:var(--f-display);font-size:1.16rem;line-height:1.45;color:var(--ink)}
+.ctx-plain{margin:16px 0 0;font-size:1.16rem}
 .ctx-from{margin:10px 0 0;font-size:13.5px;color:var(--accent)}
 
 /* 3 · model robustness (#robust) · both charts are SVGs drawn by taxonomy-interactive.js */
-.rob{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:30px;align-items:start}
-@media (max-width:900px){.rob{grid-template-columns:1fr}}
 .rob-card > .label{margin-bottom:4px}
 .rob-card h3{margin:0 0 16px;font-family:var(--f-display);font-weight:600;font-size:1.3rem;line-height:1.25}
 .rob-card .ix-slider-head label{font-size:14px}
@@ -191,11 +193,9 @@ i.ctx-tn{background:var(--rule-2)}
 .rob-key{width:9px;height:9px;border-radius:50%;flex:none}
 .rob-key-red{background:var(--sig-red)}
 .rob-key-amber{background:var(--sig-amber)}
-.rob-plain{margin:14px 0 0;font-family:var(--f-display);font-size:1.08rem;line-height:1.45;color:var(--ink)}
+.rob-plain{margin:14px 0 0;font-size:1.08rem}
 
 /* 4 · what if (#attention) · the controls stay in view on tall desktop screens while the outputs scroll, as in a scrollytelling panel */
-.att{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:16px;margin-top:30px;align-items:start}
-@media (max-width:900px){.att{grid-template-columns:1fr}}
 @media (min-width:901px) and (min-height:760px){.att-controls{position:sticky;top:68px}}
 .att-controls,.att-out{display:grid;gap:14px;min-width:0}
 .att-range{--track:linear-gradient(90deg,var(--d5),var(--sig-amber) 55%,var(--sig-red))}
@@ -208,8 +208,6 @@ i.ctx-tn{background:var(--rule-2)}
 .att-toggles input:not(:checked) ~ .ix-dim{opacity:.45}
 .att-meter{position:relative;height:16px;margin:26px 0 0;border-radius:8px;background:linear-gradient(90deg,var(--d5),var(--sig-amber) 45%,var(--sig-red))}
 .att-cover{position:absolute;top:0;right:0;bottom:0;left:var(--v,0%);border-radius:0 8px 8px 0;background:var(--rule);transition:left .25s}
-.att-line{position:absolute;top:-5px;bottom:-5px;width:2px;margin-left:-1px;border-radius:1px;background:var(--ink)}
-.att-line span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);padding-bottom:3px;font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;white-space:nowrap;color:var(--ink)}
 .att-out .ix-ticks{margin-top:4px}
 .att-profile{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule)}
 .att-profile .label{margin-bottom:4px}
