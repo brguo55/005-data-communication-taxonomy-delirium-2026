@@ -14,6 +14,7 @@ Project pages for *A Taxonomy of Issues in Healthcare Data-Driven Communication 
 - Shared by all pages: `taxonomy-shared.css`, `taxonomy-shared.js`
 - Decision lab page only: `taxonomy-decision-lab.css`, `taxonomy-decision-lab.js`
 - Figures: `taxonomy-figure1-prisma-flow.svg`, `taxonomy-figure2-classification.svg`
+- `index.html` only forwards the site root to `taxonomy.html`; `.nojekyll` tells GitHub Pages to publish the files as they are
 
 On the Decision lab page, figures attributed to a study come from the delirium cases in the paper. All other values are illustrative, and the what-if index is a teaching device, not a clinical score.
 
