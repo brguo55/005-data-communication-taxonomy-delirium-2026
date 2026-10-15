@@ -1,4 +1,4 @@
-/* Shared by taxonomy.html, taxonomy-delirium.html and taxonomy-publication.html.
+/* Shared by taxonomy.html, taxonomy-delirium.html, taxonomy-interactive.html and taxonomy-publication.html.
    Each part only acts on elements that exist on the current page. */
 (function(){
   // Links to the old single page (taxonomy.html#delirium, #paper, #methods, #cite) open the page that now holds that section.

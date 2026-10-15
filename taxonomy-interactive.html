@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive · Data-Driven Communication Taxonomy</title>
+<meta name="description" content="Interactive demonstrations of how context, model robustness, and clinician attention shape what a delirium risk prediction needs to communicate, read through A Taxonomy of Issues in Healthcare Data-Driven Communication for Clinical Decision-Making.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500;600&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,500;0,600;1,400;1,500&display=swap">
+<link rel="stylesheet" href="taxonomy-shared.css">
+<link rel="stylesheet" href="taxonomy-interactive.css">
+</head>
+<body>
+<!-- Page 3 of 4 · Interactive. Other pages: taxonomy.html, taxonomy-delirium.html, taxonomy-publication.html. Shared files: taxonomy-shared.css, taxonomy-shared.js. Files for this page only: taxonomy-interactive.css, taxonomy-interactive.js. -->
+
+<header class="topbar">
+  <div class="frame topbar-in">
+    <a class="brand" href="taxonomy.html">Data-Driven Communication Taxonomy</a>
+    <nav class="page-tabs" aria-label="Pages">
+      <a class="page-tab" href="taxonomy.html">Taxonomy</a>
+      <a class="page-tab" href="taxonomy-delirium.html">Delirium case</a>
+      <a class="page-tab" href="taxonomy-interactive.html" aria-current="page">Interactive</a>
+      <a class="page-tab" href="taxonomy-publication.html">Publication</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="sec ix-hero" id="interactive" aria-labelledby="ix-title">
+    <div class="frame">
+      <p class="kicker">Interactive</p>
+      <h1 id="ix-title">Try the taxonomy on a delirium risk tool</h1>
+      <p class="lede">The same model output can be read well or poorly depending on where it is used, how much is known about its reliability, and how much attention the person reading it can give. Each section below lets you change one of those conditions and see what the clinician-facing display would need to communicate.</p>
+      <ol class="ix-steps">
+        <li><a href="#pathway"><span class="ix-step-num">1</span><span class="ix-step-name">Build the pathway</span><span class="ix-step-q">Drag data, setting, patients, model, and users into place</span></a></li>
+        <li><a href="#context"><span class="ix-step-num">2</span><span class="ix-step-name">Risk and context</span><span class="ix-step-q">See how the base rate changes what an alert means</span></a></li>
+        <li><a href="#robust"><span class="ix-step-num">3</span><span class="ix-step-name">Model robustness</span><span class="ix-step-q">Sample size, performance, and calibration drift</span></a></li>
+        <li><a href="#attention"><span class="ix-step-num">4</span><span class="ix-step-name">What if</span><span class="ix-step-q">Drag attention down and see what support the decision needs</span></a></li>
+      </ol>
+      <p class="ix-note">Figures attributed to a study come from the delirium cases discussed in the paper. Everything else is illustrative and labeled that way. Nothing on this page is a validated risk score.</p>
+    </div>
+  </section>
+
+  <nav class="sec next" aria-labelledby="next-title">
+    <div class="frame">
+      <p class="kicker" id="next-title">Continue reading</p>
+      <div class="next-grid">
+        <a class="next-card" href="taxonomy.html#taxonomy">
+          <span><span class="label">The taxonomy</span><span class="next-name">Eight dimensions between a tool's output and a clinical decision</span></span>
+          <span class="next-arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="next-card" href="taxonomy-publication.html">
+          <span><span class="label">Publication</span><span class="next-name">Abstract, methods, and how to cite this work</span></span>
+          <span class="next-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="frame">
+    <span>Barney Guo, Jiawei Zhou, Yu Fu, Sunyang Fu · Dell Medical School, The University of Texas at Austin · University of Central Florida</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script src="taxonomy-shared.js"></script>
+</body>
+</html>
