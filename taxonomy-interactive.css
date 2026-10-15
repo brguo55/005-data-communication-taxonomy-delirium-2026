@@ -208,7 +208,7 @@ i.ctx-tn{background:var(--rule-2)}
 .att-toggles input:not(:checked) ~ .ix-dim{opacity:.45}
 .att-meter{position:relative;height:16px;margin:26px 0 0;border-radius:8px;background:linear-gradient(90deg,var(--d5),var(--sig-amber) 45%,var(--sig-red))}
 .att-cover{position:absolute;top:0;right:0;bottom:0;left:var(--v,0%);border-radius:0 8px 8px 0;background:var(--rule);transition:left .25s}
-.att-line{position:absolute;top:-5px;bottom:-5px;left:40%;width:2px;margin-left:-1px;border-radius:1px;background:var(--ink)}
+.att-line{position:absolute;top:-5px;bottom:-5px;width:2px;margin-left:-1px;border-radius:1px;background:var(--ink)}
 .att-line span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);padding-bottom:3px;font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;white-space:nowrap;color:var(--ink)}
 .att-out .ix-ticks{margin-top:4px}
 .att-profile{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule)}
