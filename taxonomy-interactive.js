@@ -14,6 +14,30 @@
     return '<li><a href="taxonomy.html#dim-'+n+'" style="--c:var(--d'+n+');--cf:var(--d'+n+'f)" title="'+DIMS[n-1]+'" aria-label="Dimension '+n+', '+DIMS[n-1]+'">'+n+'</a></li>';
   }
 
+  // Range inputs: color the track left of the thumb (--fill) using the input's own min and max,
+  // write the shown value into its <output for="…">, and give screen readers the spoken form.
+  function syncRange(input,shown,spoken){
+    var min=+input.min,max=+input.max;
+    input.style.setProperty('--fill',((input.value-min)/(max-min)*100)+'%');
+    document.querySelector('output[for="'+input.id+'"]').textContent=shown;
+    input.setAttribute('aria-valuetext',spoken||shown);
+  }
+  // A logarithmic scale from lo to hi laid over a range input: frac(x) is x's position from 0 to 1,
+  // step(x) is the input value for x, and read() turns the input's current value back into x.
+  function logRange(input,lo,hi){
+    var min=+input.min,max=+input.max,span=Math.log(hi/lo);
+    function frac(x){return Math.log(x/lo)/span;}
+    return {
+      frac:frac,
+      step:function(x){return Math.round(min+(max-min)*frac(x));},
+      read:function(){return lo*Math.exp(span*(input.value-min)/(max-min));}
+    };
+  }
+  // Tick labels and marks carry data-value; place each one at its position on the scale (--at, 0 to 1).
+  function placeTicks(root,frac){
+    [].forEach.call(root.querySelectorAll('[data-value]'),function(el){el.style.setProperty('--at',frac(+el.getAttribute('data-value')).toFixed(4));});
+  }
+
   /* 1 · Pathway builder (#pathway). Pieces are dragged with pointer events, so mouse, pen and touch all work;
      pressing a piece (click, Enter or Space) places it too. Each kind of piece has exactly one box on the board. */
   (function(){
@@ -235,8 +259,9 @@
   (function(){
     var input=document.getElementById('ctx-rate');
     if(!input){return;}
-    var SENS=0.76,SPEC=0.84,LO=0.001,HI=0.6,N=1000,ROWS=25,SPAN=Math.log(HI/LO);
-    var out=document.getElementById('ctx-rate-out');
+    var SENS=0.76,SPEC=0.84,N=1000,ROWS=25;
+    var scale=logRange(input,0.001,0.6);
+    placeTicks(input.closest('.ix-card'),scale.frac);
     var grid=document.getElementById('ctx-grid');
     var presets=[].slice.call(document.querySelectorAll('#ctx-presets [data-rate]'));
     var cells=[];
@@ -247,10 +272,7 @@
       r.setAttribute('width',8);r.setAttribute('height',8);r.setAttribute('rx',1.6);
       grid.appendChild(r);cells.push(r);
     }
-    document.getElementById('ctx-mark').style.setProperty('--at',(Math.log(0.003/LO)/SPAN).toFixed(4));
 
-    function toRate(v){return LO*Math.exp(SPAN*v/1000);}
-    function toValue(rate){return Math.round(1000*Math.log(rate/LO)/SPAN);}
     function fmtPct(p){p*=100;return (p<10?p.toFixed(1):String(Math.round(p)))+'%';}
     // Split 1,000 patients into the four outcomes, rounding so the parts still add up to 1,000 (largest remainder).
     function split(p){
@@ -261,11 +283,9 @@
     }
 
     function update(){
-      var p=toRate(+input.value),c=split(p);
+      var p=scale.read(),c=split(p);
       var ppv=SENS*p/(SENS*p+(1-SPEC)*(1-p));
-      out.textContent=fmtPct(p);
-      input.style.setProperty('--fill',(input.value/10)+'%');
-      input.setAttribute('aria-valuetext',fmtPct(p));
+      syncRange(input,fmtPct(p));
       // Flagged patients first (true alerts, then false alarms), then missed cases, then everyone else.
       var k=0;
       [['ctx-tp',c.tp],['ctx-fp',c.fp],['ctx-fn',c.fn],['ctx-tn',c.tn]].forEach(function(g){
@@ -277,9 +297,9 @@
       var chance=ppv<0.5?'roughly a 1 in '+Math.round(1/ppv)+' chance ('+fmtPct(ppv)+')':'roughly a '+fmtPct(ppv)+' chance';
       var verdict=ppv<0.1?'Almost every flag is a false alarm.':ppv<0.5?'Most flags are still false alarms.':'Most flags are correct, yet about 1 in '+Math.round(1/(1-ppv))+' is a false alarm.';
       document.getElementById('ctx-plain').textContent='At a base rate of '+fmtPct(p)+', the tool flags about '+(c.tp+c.fp)+' of 1,000 patients, and about '+c.tp+' of them go on to develop delirium. A flag means '+chance+' that this patient develops delirium. '+verdict;
-      presets.forEach(function(b){b.setAttribute('aria-pressed',toValue(+b.getAttribute('data-rate'))===+input.value?'true':'false');});
+      presets.forEach(function(b){b.setAttribute('aria-pressed',scale.step(+b.getAttribute('data-rate'))===+input.value?'true':'false');});
     }
-    function setRate(rate){input.value=toValue(rate);update();}
+    function setRate(rate){input.value=scale.step(rate);update();}
 
     var from=document.getElementById('ctx-from');
     function clearFrom(){from.hidden=true;from.textContent='';}
@@ -315,14 +335,13 @@
       var n2=9*n1,se=Math.sqrt((A*(1-A)+(n1-1)*(Q1-A*A)+(n2-1)*(Q2-A*A))/(n1*n2));
       return [Math.max(0.5,A-1.96*se),Math.min(1,A+1.96*se)];
     }
-    function toN(v){return Math.round(10*Math.pow(100,v/1000));}
+    var nScale=logRange(nIn,10,1000);
+    placeTicks(nIn.closest('.ix-card'),nScale.frac);
     var ci=document.getElementById('rob-ci');
     function cx(v){return 16+(v-0.5)/0.5*288;}
     function drawA(){
-      var n1=toN(+nIn.value),iv=interval(n1);
-      nIn.style.setProperty('--fill',(nIn.value/10)+'%');
-      nIn.setAttribute('aria-valuetext',n1+' patients with delirium');
-      document.getElementById('rob-n-out').textContent=n1.toLocaleString('en-US');
+      var n1=Math.round(nScale.read()),iv=interval(n1);
+      syncRange(nIn,n1.toLocaleString('en-US'),n1+' patients with delirium');
       document.getElementById('rob-n-sub').textContent='and '+(9*n1).toLocaleString('en-US')+' who did not, '+(10*n1).toLocaleString('en-US')+' evaluated in all';
       var svg='<line class="axis" x1="'+cx(0.5)+'" x2="'+cx(1)+'" y1="38" y2="38"/>';
       [0.5,0.6,0.7,0.8,0.9,1].forEach(function(v){svg+='<line class="axis" x1="'+cx(v)+'" x2="'+cx(v)+'" y1="38" y2="42"/><text class="t" x="'+cx(v)+'" y="55" text-anchor="middle">'+v.toFixed(1)+'</text>';});
@@ -348,10 +367,7 @@
     function py(p){return Y0-p*(Y0-Y1);}
     function drawB(){
       var d=dIn.value/100,odds=Math.exp(d);
-      dIn.style.setProperty('--fill',(dIn.value/1.4)+'%');
-      var label=d===0?'None':'×'+odds.toFixed(1)+' odds';
-      document.getElementById('rob-drift-out').textContent=label;
-      dIn.setAttribute('aria-valuetext',d===0?'No overstatement':'Predicted odds '+odds.toFixed(1)+' times the observed odds');
+      syncRange(dIn,d===0?'None':'×'+odds.toFixed(1)+' odds',d===0?'No overstatement':'Predicted odds '+odds.toFixed(1)+' times the observed odds');
       var svg='';
       [0,0.25,0.5,0.75,1].forEach(function(v){
         svg+='<line class="grid" x1="'+px(0)+'" x2="'+px(1)+'" y1="'+py(v)+'" y2="'+py(v)+'"/>';
@@ -446,8 +462,7 @@
       var v=+rush.value,s=v/100,missing=[],raw=8+22*s;
       boxes.forEach(function(b){if(!b.checked){var k=b.getAttribute('data-el');missing.push(k);raw+=cost(k,s);}});
       var idx=Math.round(Math.min(100,raw)),g=Math.min(1,(raw-8-22*s)/(SUM_BASE+SUM_SLOPE*s));
-      document.getElementById('att-rush-out').textContent=attentionWord(v);
-      rush.setAttribute('aria-valuetext',attentionWord(v)+', '+v+'% of the way to rushed');
+      syncRange(rush,attentionWord(v),attentionWord(v)+', '+v+'% of the way to rushed');
       document.getElementById('att-score').textContent=idx;
       document.getElementById('att-cover').style.setProperty('--v',idx+'%');
       document.getElementById('att-meter').setAttribute('aria-valuenow',idx);

@@ -138,12 +138,12 @@
             <p class="ix-small">The operating point reported by Lee et al. (BMC Psychiatry, 2023). Only the base rate changes here. This is a teaching calculation, not a re-analysis of that study.</p>
           </div>
           <div class="ix-card">
-            <div class="ix-slider-head"><label for="ctx-rate">Base rate of delirium</label><output class="num" id="ctx-rate-out" for="ctx-rate">10%</output></div>
+            <div class="ix-slider-head"><label for="ctx-rate">Base rate of delirium</label><output class="num" for="ctx-rate">10%</output></div>
             <div class="ix-range ctx-range">
               <input type="range" id="ctx-rate" min="0" max="1000" step="1" value="721" aria-describedby="ctx-rate-note">
-              <span class="ix-mark" id="ctx-mark" aria-hidden="true"><span>0.3%</span></span>
+              <span class="ix-mark" data-value="0.003" aria-hidden="true"><span>0.3%</span></span>
             </div>
-            <div class="ix-ticks" aria-hidden="true"><span style="--at:0">0.1%</span><span style="--at:.36">1%</span><span style="--at:.72">10%</span><span style="--at:1">60%</span></div>
+            <div class="ix-ticks" aria-hidden="true"><span>0.1%</span><span data-value="0.01">1%</span><span data-value="0.1">10%</span><span>60%</span></div>
             <p class="label ctx-presets-label">Try a setting</p>
             <div class="ix-presets" id="ctx-presets">
               <button type="button" class="btn" data-rate="0.3" data-setting="icu">ICU</button>
@@ -193,9 +193,9 @@
         <article class="ix-card rob-card" aria-labelledby="rob-a-title">
           <p class="label">A · Sample size</p>
           <h3 id="rob-a-title">How many patients stand behind 0.855?</h3>
-          <div class="ix-slider-head"><label for="rob-n">Patients who developed delirium in the evaluation</label><output class="num" id="rob-n-out" for="rob-n">40</output></div>
+          <div class="ix-slider-head"><label for="rob-n">Patients who developed delirium in the evaluation</label><output class="num" for="rob-n">40</output></div>
           <div class="ix-range"><input type="range" id="rob-n" min="0" max="1000" step="1" value="301" aria-describedby="rob-a-note"></div>
-          <div class="ix-ticks" aria-hidden="true"><span style="--at:0">10</span><span style="--at:.5">100</span><span style="--at:1">1,000</span></div>
+          <div class="ix-ticks" aria-hidden="true"><span>10</span><span data-value="100">100</span><span>1,000</span></div>
           <p class="rob-sub" id="rob-n-sub"></p>
           <svg class="rob-svg" id="rob-ci" viewBox="0 0 320 64" role="img" aria-labelledby="rob-ci-text"></svg>
           <p class="rob-plain" id="rob-ci-text" aria-live="polite"></p>
@@ -205,9 +205,9 @@
         <article class="ix-card rob-card" aria-labelledby="rob-b-title">
           <p class="label">B · After deployment</p>
           <h3 id="rob-b-title">Ranking can hold while calibration drifts</h3>
-          <div class="ix-slider-head"><label for="rob-drift">How far predicted risk overstates observed risk</label><output class="num" id="rob-drift-out" for="rob-drift">None</output></div>
+          <div class="ix-slider-head"><label for="rob-drift">How far predicted risk overstates observed risk</label><output class="num" for="rob-drift">None</output></div>
           <div class="ix-range"><input type="range" id="rob-drift" min="0" max="140" step="5" value="0" aria-describedby="rob-b-note"></div>
-          <div class="ix-ticks" aria-hidden="true"><span style="--at:0">None</span><span style="--at:1">Strong</span></div>
+          <div class="ix-ticks" aria-hidden="true"><span>None</span><span>Strong</span></div>
           <svg class="rob-svg" id="rob-cal" viewBox="0 0 320 236" role="img" aria-labelledby="rob-cal-text"></svg>
           <dl class="rob-read">
             <div><dt>Discrimination (AUROC)</dt><dd class="rob-same">Unchanged</dd></div>
@@ -237,9 +237,9 @@
         <div class="att-controls">
           <div class="ix-card">
             <p class="label">Move the conditions</p>
-            <div class="ix-slider-head"><label for="att-rush">Attention available</label><output class="ix-out-word" id="att-rush-out" for="att-rush">Full</output></div>
+            <div class="ix-slider-head"><label for="att-rush">Attention available</label><output for="att-rush">Full</output></div>
             <div class="ix-range att-range"><input type="range" id="att-rush" min="0" max="100" step="1" value="20"></div>
-            <div class="ix-ticks" aria-hidden="true"><span style="--at:0">Full attention</span><span style="--at:1">Rushed</span></div>
+            <div class="ix-ticks" aria-hidden="true"><span>Full attention</span><span>Rushed</span></div>
             <p class="ix-small">Rushed means interruptions, alert fatigue, many patients, and little time per decision.</p>
           </div>
           <div class="ix-card">
@@ -264,7 +264,7 @@
           <div class="ix-card">
             <div class="ix-slider-head"><p class="label" id="att-meter-label">Risk that the output is misread or not acted on</p><output class="num" id="att-score">0</output></div>
             <div class="att-meter" id="att-meter" role="meter" aria-labelledby="att-meter-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="att-cover" id="att-cover"></span><span class="att-line" aria-hidden="true"><span>Support line</span></span></div>
-            <div class="ix-ticks" aria-hidden="true"><span style="--at:0">Low</span><span style="--at:1">High</span></div>
+            <div class="ix-ticks" aria-hidden="true"><span>Low</span><span>High</span></div>
             <div class="att-profile" id="att-profile">
               <p class="label">Plain meaning</p>
               <h3 id="att-profile-name"></h3>
