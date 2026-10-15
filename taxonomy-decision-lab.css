@@ -313,3 +313,7 @@ i.ctx-tn{background:var(--rule-2)}
 .test-added .chips{margin:0}
 .test-comment{margin:18px 0 14px}
 .test-copybox{display:block;width:100%;margin-top:8px;font-family:var(--f-mono);font-size:12px;padding:8px;border:1px solid var(--rule-2);border-radius:7px;background:var(--code-bg);color:var(--ink)}
+.test-notes{margin-top:18px}
+.test-notes-body{padding:4px 18px 16px}
+.test-notes ol{margin:12px 0 0;padding-left:20px;display:grid;gap:8px;font-size:15px;color:var(--ink-2)}
+.test-notes b{color:var(--ink)}
