@@ -5,14 +5,23 @@
   'use strict';
 
   var DIMS=['Risk information','Uncertainty communication','Presentation and format','Patient and clinician interpretation','Decision support','Explainability and model communication','Equity and subgroup reliability','Shared decision-making'];
-  // Full chip, as on taxonomy.html: links to that dimension's panel.
+  // Each dimension's colors, as on taxonomy.html.
+  function dimStyle(n){return 'style="--c:var(--d'+n+');--cf:var(--d'+n+'f)"';}
+  // Full chip: links to that dimension's panel on the taxonomy page.
   function dimChip(n){
-    return '<li><a class="chip" href="taxonomy.html#dim-'+n+'" style="--c:var(--d'+n+');--cf:var(--d'+n+'f)"><i aria-hidden="true"></i>'+n+' · '+DIMS[n-1]+'</a></li>';
+    return '<li><a class="chip" href="taxonomy.html#dim-'+n+'" '+dimStyle(n)+'><i aria-hidden="true"></i>'+n+' · '+DIMS[n-1]+'</a></li>';
   }
-  // Compact tag for tight spaces: just the number, with the name as a tooltip and accessible label.
+  // Numbered badge for tight spaces. As a link (dimTag) it carries the name as a tooltip and accessible label.
+  function dimBadge(n){
+    return '<span class="ix-dim" '+dimStyle(n)+' aria-hidden="true">'+n+'</span>';
+  }
   function dimTag(n){
-    return '<li><a href="taxonomy.html#dim-'+n+'" style="--c:var(--d'+n+');--cf:var(--d'+n+'f)" title="'+DIMS[n-1]+'" aria-label="Dimension '+n+', '+DIMS[n-1]+'">'+n+'</a></li>';
+    return '<li><a class="ix-dim" href="taxonomy.html#dim-'+n+'" '+dimStyle(n)+' title="'+DIMS[n-1]+'" aria-label="Dimension '+n+', '+DIMS[n-1]+'">'+n+'</a></li>';
   }
+  // Chip lists written in the page as <ul class="chips" data-dims="1 6 5">.
+  [].forEach.call(document.querySelectorAll('ul[data-dims]'),function(ul){
+    ul.innerHTML=ul.getAttribute('data-dims').split(' ').map(Number).map(function(n){return dimChip(n);}).join('');
+  });
 
   // Range inputs: color the track left of the thumb (--fill) using the input's own min and max,
   // write the shown value into its <output for="…">, and give screen readers the spoken form.
@@ -428,9 +437,9 @@
     if(!rush){return;}
     var LINE=40;
     var EL={
-      time:{dim:1,base:11,slope:4,name:'Timeframe and absolute risk',fix:'State the timeframe, denominator, and baseline population, and show absolute risk rather than a bare score.'},
+      time:{dim:1,base:11,slope:4,on:true,name:'Timeframe and absolute risk',fix:'State the timeframe, denominator, and baseline population, and show absolute risk rather than a bare score.'},
       uncertainty:{dim:2,base:10,slope:2,name:'Uncertainty range',fix:'Show an uncertainty range or a qualitative uncertainty cue, and name the main sources of uncertainty in plain language.'},
-      format:{dim:3,base:6,slope:9,name:'Plain-language label and clear visual',fix:'Use a plain-language label, natural frequencies, and an accessible visual, so the output reads at a glance.'},
+      format:{dim:3,base:6,slope:9,on:true,name:'Plain-language label and clear visual',fix:'Use a plain-language label, natural frequencies, and an accessible visual, so the output reads at a glance.'},
       review:{dim:4,base:5,slope:6,name:'Prompt to review, not just accept',fix:'Add interpretation guidance and a prompt that invites critical review rather than passive acceptance.'},
       action:{dim:5,base:7,slope:12,name:'Linked next step',fix:'Link the output to a concrete next step, and cut alert fatigue through prioritization and contextual triggering.'},
       reliability:{dim:6,base:10,slope:3,name:'Calibration and reliability status',fix:'Show calibration and reliability status, including expected false positives and false negatives and when the output should not be relied on.'},
@@ -438,7 +447,12 @@
     };
     var KEYS=Object.keys(EL),SUM_BASE=0,SUM_SLOPE=0;
     KEYS.forEach(function(k){SUM_BASE+=EL[k].base;SUM_SLOPE+=EL[k].slope;});
-    var boxes=[].slice.call(document.querySelectorAll('#att-toggles input'));
+    // One checkbox per element, built from EL; "on" marks what the display shows at the start.
+    var toggles=document.getElementById('att-toggles');
+    toggles.innerHTML=KEYS.map(function(k){
+      return '<li><label><input type="checkbox" data-el="'+k+'"'+(EL[k].on?' checked':'')+'>'+dimBadge(EL[k].dim)+'<span class="att-tx">'+EL[k].name+'</span></label></li>';
+    }).join('');
+    var boxes=[].slice.call(toggles.querySelectorAll('input'));
     var PROFILES={
       wellSupported:{tone:'ok',name:'Well supported',text:'There is time to read the output, and the display answers the questions a careful reader would ask.'},
       stretched:{tone:'warn',name:'Stretched but supported',text:'Attention is short, but the display carries enough on its own: what the risk means and what to do next are visible at a glance.'},
@@ -496,7 +510,7 @@
       }
       sup.innerHTML='<p class="label">'+(idx<LINE?'Worth adding next':'Add these first')+'</p><ol class="att-list">'+missing.slice(0,3).map(function(k){
         var e=EL[k];
-        return '<li><span class="att-sw" style="--c:var(--d'+e.dim+');--cf:var(--d'+e.dim+'f)" aria-hidden="true">'+e.dim+'</span><div><b>'+e.name+'</b><p>'+e.fix+'</p><span class="att-gain">Lowers the index by about '+Math.round(cost(k,s))+' points here</span></div></li>';
+        return '<li>'+dimBadge(e.dim)+'<div><b>'+e.name+'</b><p>'+e.fix+'</p><span class="att-gain">Lowers the index by about '+Math.round(cost(k,s))+' points here</span></div></li>';
       }).join('')+'</ol>';
     }
 

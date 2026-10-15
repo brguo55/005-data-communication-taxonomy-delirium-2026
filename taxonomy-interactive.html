@@ -177,7 +177,7 @@
       </div>
 
       <div class="ix-takeaway">
-        <ul class="chips"><li><a class="chip" href="taxonomy.html#dim-1" style="--c:var(--d1);--cf:var(--d1f)"><i aria-hidden="true"></i>1 · Risk information</a></li><li><a class="chip" href="taxonomy.html#dim-6" style="--c:var(--d6);--cf:var(--d6f)"><i aria-hidden="true"></i>6 · Explainability and model communication</a></li><li><a class="chip" href="taxonomy.html#dim-5" style="--c:var(--d5);--cf:var(--d5f)"><i aria-hidden="true"></i>5 · Decision support</a></li></ul>
+        <ul class="chips" data-dims="1 6 5"></ul>
         <p>A display that shows only the model's output leaves the reader to supply the context. State the absolute risk with its denominator and baseline population, say how many flags are expected to be false alarms, and plan for alert burden where most flags will be false.</p>
       </div>
     </div>
@@ -221,7 +221,7 @@
       </div>
 
       <div class="ix-takeaway">
-        <ul class="chips"><li><a class="chip" href="taxonomy.html#dim-2" style="--c:var(--d2);--cf:var(--d2f)"><i aria-hidden="true"></i>2 · Uncertainty communication</a></li><li><a class="chip" href="taxonomy.html#dim-6" style="--c:var(--d6);--cf:var(--d6f)"><i aria-hidden="true"></i>6 · Explainability and model communication</a></li></ul>
+        <ul class="chips" data-dims="2 6"></ul>
         <p>Report performance with its uncertainty and the size of the evaluation behind it, and keep checking calibration after deployment. A display that encodes only rank cannot show drift, so reliability has to be communicated, not only measured.</p>
       </div>
     </div>
@@ -244,15 +244,7 @@
           </div>
           <div class="ix-card">
             <p class="label" id="att-toggles-label">What the display communicates</p>
-            <ul class="att-toggles" id="att-toggles" aria-labelledby="att-toggles-label">
-              <li><label><input type="checkbox" data-el="time" checked><span class="att-sw" style="--c:var(--d1);--cf:var(--d1f)" aria-hidden="true">1</span><span class="att-tx">Timeframe and absolute risk</span></label></li>
-              <li><label><input type="checkbox" data-el="uncertainty"><span class="att-sw" style="--c:var(--d2);--cf:var(--d2f)" aria-hidden="true">2</span><span class="att-tx">Uncertainty range</span></label></li>
-              <li><label><input type="checkbox" data-el="format" checked><span class="att-sw" style="--c:var(--d3);--cf:var(--d3f)" aria-hidden="true">3</span><span class="att-tx">Plain-language label and clear visual</span></label></li>
-              <li><label><input type="checkbox" data-el="review"><span class="att-sw" style="--c:var(--d4);--cf:var(--d4f)" aria-hidden="true">4</span><span class="att-tx">Prompt to review, not just accept</span></label></li>
-              <li><label><input type="checkbox" data-el="action"><span class="att-sw" style="--c:var(--d5);--cf:var(--d5f)" aria-hidden="true">5</span><span class="att-tx">Linked next step</span></label></li>
-              <li><label><input type="checkbox" data-el="reliability"><span class="att-sw" style="--c:var(--d6);--cf:var(--d6f)" aria-hidden="true">6</span><span class="att-tx">Calibration and reliability status</span></label></li>
-              <li><label><input type="checkbox" data-el="subgroup"><span class="att-sw" style="--c:var(--d7);--cf:var(--d7f)" aria-hidden="true">7</span><span class="att-tx">Caution for groups the model rarely saw</span></label></li>
-            </ul>
+            <ul class="att-toggles" id="att-toggles" aria-labelledby="att-toggles-label"></ul>
             <div class="ix-presets">
               <button type="button" class="btn" id="att-bare">Bare score</button>
               <button type="button" class="btn" id="att-full">Complete display</button>

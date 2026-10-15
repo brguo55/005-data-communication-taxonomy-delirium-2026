@@ -19,6 +19,9 @@
 .ix-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .ix-card{border:1px solid var(--rule);border-radius:12px;background:var(--surface);padding:18px 20px 20px;min-width:0}
 .ix-small{font-size:13px;line-height:1.5;color:var(--muted);margin:10px 0 0;max-width:var(--measure)}
+/* numbered dimension badge (dimBadge and dimTag in taxonomy-interactive.js); --size sets its height and minimum width */
+.ix-dim{display:inline-flex;align-items:center;justify-content:center;flex:none;min-width:var(--size,24px);height:var(--size,24px);padding:0 6px;border:1px solid var(--c);border-radius:5px;background:var(--cf);color:var(--ink);font-family:var(--f-mono);font-size:12px;font-weight:600;text-decoration:none}
+a.ix-dim:hover{color:var(--ink);box-shadow:0 0 0 1px var(--c)}
 
 /* 1 · pathway builder (#pathway) · pieces and the attention map use touch-action:pan-y, so a vertical swipe still scrolls the page on phones and a sideways start drags */
 .pw{margin-top:30px;display:grid;gap:14px}
@@ -77,8 +80,6 @@
 .pw-check-name{margin:2px 0 6px;font-weight:700;font-size:14px;line-height:1.3}
 .pw-check-wait{margin:0;font-size:12.5px;line-height:1.4;color:var(--muted)}
 .pw-dims{display:flex;flex-wrap:wrap;gap:4px;list-style:none;margin:0;padding:0}
-.pw-dims a{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:24px;padding:0 7px;border:1px solid var(--c);border-radius:5px;background:var(--cf);color:var(--ink);font-family:var(--f-mono);font-size:12px;font-weight:600;text-decoration:none}
-.pw-dims a:hover{color:var(--ink);box-shadow:0 0 0 1px var(--c)}
 @media (max-width:860px){
   .pw-board{grid-template-columns:minmax(0,1fr);grid-template-areas:"data" "set" "pat" "fair" "join" "model" "out" "link" "exch" "users" "dec";padding:14px}
   .pw-slot,.pw-slot-core{min-height:84px}
@@ -202,9 +203,9 @@ i.ctx-tn{background:var(--rule-2)}
 .att-toggles label{display:grid;grid-template-columns:auto auto minmax(0,1fr);align-items:center;gap:10px;padding:6px 8px;margin-inline:-8px;border-radius:8px;cursor:pointer;font-size:14.5px;line-height:1.3;color:var(--ink)}
 .att-toggles label:hover{background:var(--raised)}
 .att-toggles input{width:17px;height:17px;margin:0;accent-color:var(--accent);cursor:pointer}
-.att-sw{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;flex:none;border:1px solid var(--c);border-radius:5px;background:var(--cf);font-family:var(--f-mono);font-size:11.5px;font-weight:600;color:var(--ink)}
+.att-toggles .ix-dim{--size:22px}
 .att-toggles input:not(:checked) ~ .att-tx{color:var(--muted)}
-.att-toggles input:not(:checked) ~ .att-sw{opacity:.45}
+.att-toggles input:not(:checked) ~ .ix-dim{opacity:.45}
 .att-meter{position:relative;height:16px;margin:26px 0 0;border-radius:8px;background:linear-gradient(90deg,var(--d5),var(--sig-amber) 45%,var(--sig-red))}
 .att-cover{position:absolute;top:0;right:0;bottom:0;left:var(--v,0%);border-radius:0 8px 8px 0;background:var(--rule);transition:left .25s}
 .att-line{position:absolute;top:-5px;bottom:-5px;left:40%;width:2px;margin-left:-1px;border-radius:1px;background:var(--ink)}
