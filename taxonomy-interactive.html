@@ -227,6 +227,62 @@
     </div>
   </section>
 
+  <section class="sec" id="attention" aria-labelledby="att-title">
+    <div class="frame">
+      <p class="kicker">4 · What if</p>
+      <h2 id="att-title">What if the output does not get full attention?</h2>
+      <p class="lede">Alerts compete with interruptions, time pressure, and other alarms. Drag attention toward “rushed” and switch off what the display communicates. The less attention there is, the more the display has to carry on its own, and the more support the decision needs.</p>
+
+      <div class="att">
+        <div class="att-controls">
+          <div class="ix-card">
+            <p class="label">Move the conditions</p>
+            <div class="ix-slider-head"><label for="att-rush">Attention available</label><output class="ix-out-word" id="att-rush-out" for="att-rush">Full</output></div>
+            <div class="ix-range att-range"><input type="range" id="att-rush" min="0" max="100" step="1" value="20"></div>
+            <div class="ix-ticks" aria-hidden="true"><span style="--at:0">Full attention</span><span style="--at:1">Rushed</span></div>
+            <p class="ix-small">Rushed means interruptions, alert fatigue, many patients, and little time per decision.</p>
+          </div>
+          <div class="ix-card">
+            <p class="label" id="att-toggles-label">What the display communicates</p>
+            <ul class="att-toggles" id="att-toggles" aria-labelledby="att-toggles-label">
+              <li><label><input type="checkbox" data-el="time" checked><span class="att-sw" style="--c:var(--d1);--cf:var(--d1f)" aria-hidden="true">1</span><span class="att-tx">Timeframe and absolute risk</span></label></li>
+              <li><label><input type="checkbox" data-el="uncertainty"><span class="att-sw" style="--c:var(--d2);--cf:var(--d2f)" aria-hidden="true">2</span><span class="att-tx">Uncertainty range</span></label></li>
+              <li><label><input type="checkbox" data-el="format" checked><span class="att-sw" style="--c:var(--d3);--cf:var(--d3f)" aria-hidden="true">3</span><span class="att-tx">Plain-language label and clear visual</span></label></li>
+              <li><label><input type="checkbox" data-el="review"><span class="att-sw" style="--c:var(--d4);--cf:var(--d4f)" aria-hidden="true">4</span><span class="att-tx">Prompt to review, not just accept</span></label></li>
+              <li><label><input type="checkbox" data-el="action"><span class="att-sw" style="--c:var(--d5);--cf:var(--d5f)" aria-hidden="true">5</span><span class="att-tx">Linked next step</span></label></li>
+              <li><label><input type="checkbox" data-el="reliability"><span class="att-sw" style="--c:var(--d6);--cf:var(--d6f)" aria-hidden="true">6</span><span class="att-tx">Calibration and reliability status</span></label></li>
+              <li><label><input type="checkbox" data-el="subgroup"><span class="att-sw" style="--c:var(--d7);--cf:var(--d7f)" aria-hidden="true">7</span><span class="att-tx">Caution for groups the model rarely saw</span></label></li>
+            </ul>
+            <div class="ix-presets">
+              <button type="button" class="btn" id="att-bare">Bare score</button>
+              <button type="button" class="btn" id="att-full">Complete display</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="att-out">
+          <div class="ix-card">
+            <div class="ix-slider-head"><p class="label" id="att-meter-label">Risk that the output is misread or not acted on</p><output class="num" id="att-score">0</output></div>
+            <div class="att-meter" id="att-meter" role="meter" aria-labelledby="att-meter-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="att-cover" id="att-cover"></span><span class="att-line" aria-hidden="true"><span>Support line</span></span></div>
+            <div class="ix-ticks" aria-hidden="true"><span style="--at:0">Low</span><span style="--at:1">High</span></div>
+            <div class="att-profile" id="att-profile">
+              <p class="label">Plain meaning</p>
+              <h3 id="att-profile-name"></h3>
+              <p id="att-profile-text" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="ix-card">
+            <p class="label">Find the dot</p>
+            <svg class="att-map" id="att-map" viewBox="0 0 320 204" role="img" aria-label="Map of attention against display gaps. The shading darkens where the risk index is higher, and a dashed line marks where support becomes necessary."></svg>
+            <p class="ix-small">Right means less attention. Up means more gaps in the display, weighted by what matters at that level of attention. Drag the dot sideways to change attention.</p>
+          </div>
+          <div class="ix-card att-support" id="att-support" aria-live="polite"></div>
+        </div>
+      </div>
+      <p class="ix-small att-note">The index is a teaching device. Its weights are set by hand to show the logic of the paper, where the risk and intervention mappings are design hypotheses rather than validated remedies. It is not estimated from data and is not a clinical score.</p>
+    </div>
+  </section>
+
   <nav class="sec next" aria-labelledby="next-title">
     <div class="frame">
       <p class="kicker" id="next-title">Continue reading</p>

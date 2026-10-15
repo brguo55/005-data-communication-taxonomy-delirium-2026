@@ -386,4 +386,104 @@
     drawA();
     drawB();
   })();
+
+  /* 4 · What if (#attention). A hand-set teaching index, not a clinical score:
+       index = 8 + 22 × rush + Σ over missing elements of (base + slope × rush), capped at 100,
+     where rush runs from 0 (full attention) to 1 (rushed). The base weight is what a missing element costs a careful
+     reader; the slope is what it costs on top of that when attention is short. The support line sits at 40. */
+  (function(){
+    var rush=document.getElementById('att-rush');
+    if(!rush){return;}
+    var LINE=40;
+    var EL={
+      time:{dim:1,base:11,slope:4,name:'Timeframe and absolute risk',fix:'State the timeframe, denominator, and baseline population, and show absolute risk rather than a bare score.'},
+      uncertainty:{dim:2,base:10,slope:2,name:'Uncertainty range',fix:'Show an uncertainty range or a qualitative uncertainty cue, and name the main sources of uncertainty in plain language.'},
+      format:{dim:3,base:6,slope:9,name:'Plain-language label and clear visual',fix:'Use a plain-language label, natural frequencies, and an accessible visual, so the output reads at a glance.'},
+      review:{dim:4,base:5,slope:6,name:'Prompt to review, not just accept',fix:'Add interpretation guidance and a prompt that invites critical review rather than passive acceptance.'},
+      action:{dim:5,base:7,slope:12,name:'Linked next step',fix:'Link the output to a concrete next step, and cut alert fatigue through prioritization and contextual triggering.'},
+      reliability:{dim:6,base:10,slope:3,name:'Calibration and reliability status',fix:'Show calibration and reliability status, including expected false positives and false negatives and when the output should not be relied on.'},
+      subgroup:{dim:7,base:6,slope:2,name:'Caution for groups the model rarely saw',fix:'Flag data limitations and say when the output should be read with caution for underrepresented groups.'}
+    };
+    var KEYS=Object.keys(EL),SUM_BASE=0,SUM_SLOPE=0;
+    KEYS.forEach(function(k){SUM_BASE+=EL[k].base;SUM_SLOPE+=EL[k].slope;});
+    var boxes=[].slice.call(document.querySelectorAll('#att-toggles input'));
+    var PROFILES={
+      wellSupported:{tone:'ok',name:'Well supported',text:'There is time to read the output, and the display answers the questions a careful reader would ask.'},
+      stretched:{tone:'warn',name:'Stretched but supported',text:'Attention is short, but the display carries enough on its own: what the risk means and what to do next are visible at a glance.'},
+      reader:{tone:'warn',name:'Relies on the reader',text:'An attentive clinician may fill some gaps from experience, but the display leaves important questions unanswered.'},
+      needs:{tone:'bad',name:'Needs support',text:'Attention is short and the display leaves gaps. Misreading, overtrust, and inaction become likely, so support has to be built into the display and the workflow.'}
+    };
+    function cost(k,s){return EL[k].base+EL[k].slope*s;}
+    function attentionWord(v){return v<20?'Full':v<45?'Some distraction':v<70?'Divided':'Rushed';}
+
+    // The map: x is rush, y is the share of the possible gap cost that is missing at this rush level,
+    // so the shading (index at x, y) and the dashed support line are exact for the dot.
+    var map=document.getElementById('att-map');
+    var MX0=30,MX1=312,MY0=176,MY1=8;
+    function mx(s){return MX0+s*(MX1-MX0);}
+    function my(g){return MY0-g*(MY0-MY1);}
+    function indexAt(s,g){return Math.min(100,8+22*s+g*(SUM_BASE+SUM_SLOPE*s));}
+    // Shading is nearly clear at low index values and deepens toward the top right.
+    var base='<g class="heat">',i,j,C=28,R=16;
+    for(i=0;i<C;i++){for(j=0;j<R;j++){
+      var s0=(i+0.5)/C,g0=(j+0.5)/R,t=Math.max(0,(indexAt(s0,g0)-12)/88);
+      base+='<rect class="cell" x="'+mx(i/C).toFixed(2)+'" y="'+my((j+1)/R).toFixed(2)+'" width="'+((MX1-MX0)/C).toFixed(2)+'" height="'+((MY0-MY1)/R).toFixed(2)+'" opacity="'+(0.03+0.55*Math.pow(t,1.3)).toFixed(3)+'"/>';
+    }}
+    base+='</g>';
+    var line='';
+    for(i=0;i<=40;i++){var s1=i/40,g1=(LINE-8-22*s1)/(SUM_BASE+SUM_SLOPE*s1);line+=(i?'L':'M')+mx(s1).toFixed(1)+' '+my(Math.max(0,Math.min(1,g1))).toFixed(1);}
+    base+='<line class="mid" x1="'+mx(0.5)+'" x2="'+mx(0.5)+'" y1="'+MY1+'" y2="'+MY0+'"/>';
+    base+='<path class="line" d="'+line+'"/>';
+    base+='<rect class="frame-line" x="'+MX0+'" y="'+MY1+'" width="'+(MX1-MX0)+'" height="'+(MY0-MY1)+'"/>';
+    base+='<text class="q" x="'+(MX0+6)+'" y="'+(MY1+14)+'">Relies on the reader</text>';
+    base+='<text class="q" x="'+(MX1-6)+'" y="'+(MY1+14)+'" text-anchor="end">Needs support</text>';
+    base+='<text class="q" x="'+(MX0+6)+'" y="'+(MY0-7)+'">Well supported</text>';
+    base+='<text class="q" x="'+(MX1-6)+'" y="'+(MY0-7)+'" text-anchor="end">Stretched</text>';
+    base+='<text class="ax" x="'+MX0+'" y="'+(MY0+14)+'">Full attention</text><text class="ax" x="'+MX1+'" y="'+(MY0+14)+'" text-anchor="end">Rushed →</text>';
+    base+='<text class="ax" x="11" y="'+my(0.5)+'" text-anchor="middle" transform="rotate(-90 11 '+my(0.5)+')">Display gaps →</text>';
+
+    function update(){
+      var v=+rush.value,s=v/100,missing=[],raw=8+22*s;
+      boxes.forEach(function(b){if(!b.checked){var k=b.getAttribute('data-el');missing.push(k);raw+=cost(k,s);}});
+      var idx=Math.round(Math.min(100,raw)),g=Math.min(1,(raw-8-22*s)/(SUM_BASE+SUM_SLOPE*s));
+      document.getElementById('att-rush-out').textContent=attentionWord(v);
+      rush.setAttribute('aria-valuetext',attentionWord(v)+', '+v+'% of the way to rushed');
+      document.getElementById('att-score').textContent=idx;
+      document.getElementById('att-cover').style.setProperty('--v',idx+'%');
+      document.getElementById('att-meter').setAttribute('aria-valuenow',idx);
+      var p=idx<LINE?(s<0.5?PROFILES.wellSupported:PROFILES.stretched):(s<0.5?PROFILES.reader:PROFILES.needs);
+      document.getElementById('att-profile').setAttribute('data-tone',p.tone);
+      document.getElementById('att-profile-name').textContent=p.name;
+      document.getElementById('att-profile-text').textContent=p.text;
+      map.innerHTML=base+'<circle class="halo" cx="'+mx(s)+'" cy="'+my(g)+'" r="13"/><circle class="dot" cx="'+mx(s)+'" cy="'+my(g)+'" r="7"/>';
+      // What to add first: the missing elements that cost the most at the current level of attention.
+      missing.sort(function(a,b){return cost(b,s)-cost(a,s);});
+      var sup=document.getElementById('att-support');
+      if(!missing.length){
+        sup.innerHTML='<p class="label">Support to add</p><p class="att-done">Nothing is missing from the display. What remains is attention itself: protect time for the decision, and keep alerts few enough that each one is read.</p>';
+        return;
+      }
+      sup.innerHTML='<p class="label">'+(idx<LINE?'Worth adding next':'Add these first')+'</p><ol class="att-list">'+missing.slice(0,3).map(function(k){
+        var e=EL[k];
+        return '<li><span class="att-sw" style="--c:var(--d'+e.dim+');--cf:var(--d'+e.dim+'f)" aria-hidden="true">'+e.dim+'</span><div><b>'+e.name+'</b><p>'+e.fix+'</p><span class="att-gain">Lowers the index by about '+Math.round(cost(k,s))+' points here</span></div></li>';
+      }).join('')+'</ol>';
+    }
+
+    rush.addEventListener('input',update);
+    boxes.forEach(function(b){b.addEventListener('change',update);});
+    document.getElementById('att-bare').addEventListener('click',function(){boxes.forEach(function(b){b.checked=false;});update();});
+    document.getElementById('att-full').addEventListener('click',function(){boxes.forEach(function(b){b.checked=true;});update();});
+    // Dragging anywhere on the map moves attention, like dragging the dot itself.
+    var dragging=false;
+    function fromPointer(e){
+      var r=map.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*320;
+      rush.value=Math.round(Math.max(0,Math.min(1,(x-MX0)/(MX1-MX0)))*100);
+      update();
+    }
+    map.addEventListener('pointerdown',function(e){dragging=true;try{map.setPointerCapture(e.pointerId);}catch(err){}fromPointer(e);});
+    map.addEventListener('pointermove',function(e){if(dragging){fromPointer(e);}});
+    map.addEventListener('pointerup',function(){dragging=false;});
+    map.addEventListener('pointercancel',function(){dragging=false;});
+    update();
+  })();
 })();

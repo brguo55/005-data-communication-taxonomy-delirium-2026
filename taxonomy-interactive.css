@@ -109,6 +109,7 @@
 .ix-slider-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:2px}
 .ix-slider-head label{font-weight:700;font-size:15px;color:var(--ink)}
 .ix-slider-head output{flex:none;font-size:1.55rem;font-weight:600;line-height:1.2;white-space:nowrap;color:var(--ink)}
+.ix-slider-head output.ix-out-word{font-family:var(--f-body);font-size:1.05rem;font-weight:700}
 .ix-range{--thumb:22px;position:relative;padding-top:22px}
 .ix-range input[type="range"]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:28px;margin:0;background:transparent;cursor:pointer}
 .ix-range input[type="range"]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:var(--track,linear-gradient(90deg,var(--accent) 0 var(--fill,50%),var(--rule-2) var(--fill,50%) 100%))}
@@ -188,3 +189,47 @@ i.ctx-tn{background:var(--rule-2)}
 .rob-key-red{background:var(--sig-red)}
 .rob-key-amber{background:var(--sig-amber)}
 .rob-plain{margin:14px 0 0;font-family:var(--f-display);font-size:1.08rem;line-height:1.45;color:var(--ink)}
+
+/* 4 · what if (#attention) · the controls stay in view on tall desktop screens while the outputs scroll, as in a scrollytelling panel */
+.att{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:16px;margin-top:30px;align-items:start}
+@media (max-width:900px){.att{grid-template-columns:1fr}}
+@media (min-width:901px) and (min-height:760px){.att-controls{position:sticky;top:68px}}
+.att-controls,.att-out{display:grid;gap:14px;min-width:0}
+.att-range{--track:linear-gradient(90deg,var(--d5),var(--sig-amber) 55%,var(--sig-red))}
+.att-toggles{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:2px}
+.att-toggles label{display:grid;grid-template-columns:auto auto minmax(0,1fr);align-items:center;gap:10px;padding:6px 8px;margin-inline:-8px;border-radius:8px;cursor:pointer;font-size:14.5px;line-height:1.3;color:var(--ink)}
+.att-toggles label:hover{background:var(--raised)}
+.att-toggles input{width:17px;height:17px;margin:0;accent-color:var(--accent);cursor:pointer}
+.att-sw{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;flex:none;border:1px solid var(--c);border-radius:5px;background:var(--cf);font-family:var(--f-mono);font-size:11.5px;font-weight:600;color:var(--ink)}
+.att-toggles input:not(:checked) ~ .att-tx{color:var(--muted)}
+.att-toggles input:not(:checked) ~ .att-sw{opacity:.45}
+.att-meter{position:relative;height:16px;margin:26px 0 0;border-radius:8px;background:linear-gradient(90deg,var(--d5),var(--sig-amber) 45%,var(--sig-red))}
+.att-cover{position:absolute;top:0;right:0;bottom:0;left:var(--v,0%);border-radius:0 8px 8px 0;background:var(--rule);transition:left .25s}
+.att-line{position:absolute;top:-5px;bottom:-5px;left:40%;width:2px;margin-left:-1px;border-radius:1px;background:var(--ink)}
+.att-line span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);padding-bottom:3px;font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;white-space:nowrap;color:var(--ink)}
+.att-out .ix-ticks{margin-top:4px}
+.att-profile{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule)}
+.att-profile .label{margin-bottom:4px}
+.att-profile h3{margin:0 0 6px;font-family:var(--f-display);font-weight:600;font-size:1.45rem;line-height:1.2}
+.att-profile[data-tone="ok"] h3{color:var(--d5)}
+.att-profile[data-tone="warn"] h3{color:var(--d3)}
+.att-profile[data-tone="bad"] h3{color:var(--sig-red)}
+.att-profile p:not(.label){margin:0;font-size:15px;color:var(--ink-2)}
+.att-map{display:block;width:100%;height:auto;touch-action:none;cursor:ew-resize;-webkit-user-select:none;user-select:none}
+.att-map .heat{shape-rendering:crispEdges}
+.att-map .cell{fill:var(--sig-red)}
+.att-map .mid{stroke:var(--rule-2);stroke-width:1;stroke-dasharray:2 3}
+.att-map .line{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-dasharray:5 4}
+.att-map .q{font-family:var(--f-mono);font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;fill:var(--ink-2)}
+.att-map .ax{font-family:var(--f-mono);font-size:9.5px;fill:var(--muted)}
+.att-map .frame-line{fill:none;stroke:var(--rule-2);stroke-width:1}
+.att-map .halo{fill:var(--accent);opacity:.28}
+.att-map .dot{fill:var(--ink);stroke:var(--surface);stroke-width:3}
+.att-support .label{margin-bottom:10px}
+.att-list{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.att-list li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 12px;align-items:start}
+.att-list b{display:block;font-size:15px;line-height:1.3;color:var(--ink)}
+.att-list p{margin:3px 0 0;font-size:14.5px;color:var(--ink-2)}
+.att-gain{display:block;margin-top:3px;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.att-support .att-done{margin:0;font-size:15px;color:var(--ink-2)}
+.att-note{margin-top:16px}
