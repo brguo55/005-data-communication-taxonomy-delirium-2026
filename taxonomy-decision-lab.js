@@ -268,7 +268,8 @@
       var btn=e.target.closest('button'),id=btn?btn.id:'';
       if(id==='test-download'){
         var name='decision-lab-'+t.participant+'.csv';
-        var url=URL.createObjectURL(new Blob([csv()],{type:'text/csv'}));
+        // The byte order mark tells Excel the file is UTF-8, so Chinese comments are not garbled.
+        var url=URL.createObjectURL(new Blob(['\ufeff'+csv()],{type:'text/csv;charset=utf-8'}));
         var a=document.createElement('a');
         a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
         setTimeout(function(){URL.revokeObjectURL(url);},1000);
