@@ -1,6 +1,26 @@
 /* Shared by taxonomy.html, taxonomy-delirium.html, taxonomy-decision-lab.html and taxonomy-publication.html.
    Each part only acts on elements that exist on the current page. */
 (function(){
+  // Theme switch (all pages). A choice is saved in localStorage; without one the page follows the system setting.
+  // The inline script in each page's <head> applies a saved choice before the first paint, so there is no flash.
+  var root=document.documentElement,toggle=document.querySelector('.theme-toggle');
+  var systemDark=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+  function isDark(){var t=root.getAttribute('data-theme');return t?t==='dark':!!(systemDark&&systemDark.matches);}
+  function syncToggle(){
+    var d=isDark();
+    toggle.setAttribute('aria-pressed',d?'true':'false');
+    toggle.title=d?'Switch to light theme':'Switch to dark theme';
+  }
+  if(toggle){
+    toggle.addEventListener('click',function(){
+      var t=isDark()?'light':'dark';
+      root.setAttribute('data-theme',t);
+      try{localStorage.setItem('taxonomy-theme',t);}catch(e){}
+      syncToggle();
+    });
+    if(systemDark&&systemDark.addEventListener){systemDark.addEventListener('change',syncToggle);}
+    syncToggle();
+  }
   // Links to the old single page (taxonomy.html#delirium, #paper, #methods, #cite) open the page that now holds that section.
   var moved={delirium:'taxonomy-delirium.html',paper:'taxonomy-publication.html',methods:'taxonomy-publication.html#methods',cite:'taxonomy-publication.html#cite'};
   var hash=location.hash.slice(1);

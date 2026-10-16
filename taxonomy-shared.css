@@ -24,6 +24,7 @@
     color-scheme:dark;
   }
 }
+:root[data-theme="light"]{color-scheme:light}
 :root[data-theme="dark"]{
   --bg:#0D1317; --surface:#141C21; --raised:#18222A; --ink:#E2E8EC; --ink-2:#B8C4CB; --muted:#8B99A3;
   --rule:#25313A; --rule-2:#3B4952; --accent:#6BC2D6; --accent-2:#93D5E5; --accent-soft:#153039; --on-accent:#0D1317;
@@ -67,7 +68,13 @@ code{font-family:var(--f-mono);font-size:.86em;background:var(--code-bg);color:v
 .page-tab{font-family:var(--f-mono);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);text-decoration:none;text-align:center;padding:6px 15px;border-radius:999px;white-space:nowrap}
 .page-tab:hover{background:var(--accent-soft);color:var(--ink)}
 .page-tab[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--rule-2),0 1px 3px rgba(18,32,42,.12)}
-@media (max-width:760px){.brand{display:none}.page-tabs{flex:1;margin-left:0}.page-tab{flex:1;padding-inline:6px}}
+/* theme switch · all pages. taxonomy-shared.js sets data-theme on <html> and saves the choice; the icon shows the theme a press switches to */
+.theme-toggle{flex:none;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;border:1px solid var(--rule);border-radius:999px;background:var(--code-bg);color:var(--ink-2);cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.theme-toggle .i-sun,:root[data-theme="dark"] .theme-toggle .i-moon{display:none}
+:root[data-theme="dark"] .theme-toggle .i-sun{display:block}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .theme-toggle .i-moon{display:none}:root:not([data-theme="light"]) .theme-toggle .i-sun{display:block}}
+@media (max-width:760px){.topbar-in{gap:10px}.brand{display:none}.page-tabs{flex:1;margin-left:0}.page-tab{flex:1;padding-inline:6px}}
 @media (max-width:540px){.topbar-in{padding-block:6px}.page-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-radius:14px}.page-tab{border-radius:10px}:root{--header-h:84px}}
 @media (max-width:380px){.page-tab{font-size:11px;letter-spacing:.04em}}
 
