@@ -529,17 +529,29 @@
       say(L('Board cleared.','面板已清空。'));
     });
 
-    // Dragging. drag.target is the one box that accepts the piece being dragged.
+    // Dragging. drag.target is the one box that accepts the piece being dragged. The pointer is captured as soon as a
+    // piece is pressed and moves are followed on the whole document, so a fast drag that leaves the piece within one
+    // frame still starts (listening only on the piece missed those moves). A piece dropped anywhere on the board except
+    // another piece's box goes into its own box; that box shows the drop ring whenever the pointer is in such a place.
     var drag=null,suppressClick=false;
-    function slotAt(x,y){
-      var el=document.elementFromPoint(x,y);
-      return el?el.closest('.pw-slot'):null;
+    function under(x,y){return document.elementFromPoint(x,y);}
+    function slotAt(x,y){var el=under(x,y);return el?el.closest('.pw-slot'):null;}
+    function landsIn(target,x,y){
+      var el=under(x,y),s=el&&el.closest('.pw-slot');
+      return s?s===target:!!(el&&el.closest('.pw-board'));
     }
-    function hover(){drag.target.classList.toggle('pw-over',slotAt(drag.x,drag.y)===drag.target);}
+    function hover(){drag.target.classList.toggle('pw-over',landsIn(drag.target,drag.x,drag.y));}
+    function listen(on){
+      var m=on?'addEventListener':'removeEventListener';
+      document[m]('pointermove',onMove);
+      document[m]('pointerup',onUp);
+      document[m]('pointercancel',onCancel);
+    }
     function endDrag(drop){
       if(!drag){return;}
       var d=drag;
       drag=null;
+      listen(false);
       if(!d.on){return;}
       cancelAnimationFrame(d.raf);
       d.ghost.remove();
@@ -550,7 +562,7 @@
       setTimeout(function(){suppressClick=false;},0);
       if(!drop){return;}
       var s=slotAt(d.x,d.y);
-      if(s===d.target){place(d.kind,d.id);}
+      if(landsIn(d.target,d.x,d.y)){place(d.kind,d.id);}
       else if(s){
         s.classList.remove('pw-wrong');void s.offsetWidth;s.classList.add('pw-wrong');
         var lb=LABELS[d.kind][d.id];
@@ -564,10 +576,9 @@
       if(v){window.scrollBy(0,v);hover();}
       drag.raf=requestAnimationFrame(edgeScroll);
     }
-    function startDrag(c,e){
+    function startDrag(c){
       var r=c.getBoundingClientRect();
       drag.on=true;
-      try{c.setPointerCapture(e.pointerId);}catch(err){}
       drag.dx=drag.sx-r.left;drag.dy=drag.sy-r.top;
       drag.ghost=c.cloneNode(true);
       drag.ghost.classList.add('pw-ghost');
@@ -578,6 +589,19 @@
       drag.target.classList.add('pw-target');
       drag.raf=requestAnimationFrame(edgeScroll);
     }
+    function onMove(e){
+      if(!drag||e.pointerId!==drag.pid){return;}
+      drag.x=e.clientX;drag.y=e.clientY;
+      if(!drag.on){
+        if(Math.abs(drag.x-drag.sx)+Math.abs(drag.y-drag.sy)<7){return;}
+        startDrag(drag.chip);
+      }
+      // Hit-test before moving the ghost, so the move does not force a second layout.
+      hover();
+      drag.ghost.style.transform='translate('+(drag.x-drag.dx)+'px,'+(drag.y-drag.dy)+'px)';
+    }
+    function onUp(e){if(drag&&e.pointerId===drag.pid){drag.x=e.clientX;drag.y=e.clientY;endDrag(true);}}
+    function onCancel(e){if(drag&&e.pointerId===drag.pid){endDrag(false);}}
     chips.forEach(function(c){
       // Pressing a piece (click, Enter or Space) places it.
       c.addEventListener('click',function(){
@@ -585,22 +609,12 @@
       });
       c.addEventListener('pointerdown',function(e){
         if(e.button!==0){return;}
+        endDrag(false);
         var kind=c.getAttribute('data-kind');
         drag={chip:c,kind:kind,id:c.getAttribute('data-id'),target:slots[kind],sx:e.clientX,sy:e.clientY,x:e.clientX,y:e.clientY,on:false,pid:e.pointerId};
+        try{c.setPointerCapture(e.pointerId);}catch(err){}
+        listen(true);
       });
-      c.addEventListener('pointermove',function(e){
-        if(!drag||drag.chip!==c||e.pointerId!==drag.pid){return;}
-        drag.x=e.clientX;drag.y=e.clientY;
-        if(!drag.on){
-          if(Math.abs(drag.x-drag.sx)+Math.abs(drag.y-drag.sy)<7){return;}
-          startDrag(c,e);
-        }
-        // Hit-test before moving the ghost, so the move does not force a second layout.
-        hover();
-        drag.ghost.style.transform='translate('+(drag.x-drag.dx)+'px,'+(drag.y-drag.dy)+'px)';
-      });
-      c.addEventListener('pointerup',function(e){if(drag&&drag.chip===c){drag.x=e.clientX;drag.y=e.clientY;endDrag(true);}});
-      c.addEventListener('pointercancel',function(){endDrag(false);});
     });
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&drag){endDrag(false);}});
 
