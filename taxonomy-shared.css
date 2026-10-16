@@ -25,6 +25,12 @@
   }
 }
 :root[data-theme="light"]{color-scheme:light}
+/* language · all pages. Text is written in both languages as sibling [data-l="en"] and [data-l="zh"] elements, and <html lang>
+   decides which shows (taxonomy-shared.js switches it and saves the choice). Chinese falls back to system CJK faces and drops italics. */
+html:not([lang|="zh"]) [data-l="zh"],html[lang|="zh"] [data-l="en"]{display:none!important}
+html[lang|="zh"]{--f-display:"Spectral","Songti SC","Noto Serif SC","Source Han Serif SC",Georgia,serif;--f-body:"Atkinson Hyperlegible Next","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--f-mono:"Atkinson Hyperlegible Mono","PingFang SC","Microsoft YaHei",ui-monospace,monospace}
+html[lang|="zh"] body{line-height:1.72}
+html[lang|="zh"] .pull,html[lang|="zh"] .panel-q{font-style:normal}
 :root[data-theme="dark"]{
   --bg:#0D1317; --surface:#141C21; --raised:#18222A; --ink:#E2E8EC; --ink-2:#B8C4CB; --muted:#8B99A3;
   --rule:#25313A; --rule-2:#3B4952; --accent:#6BC2D6; --accent-2:#93D5E5; --accent-soft:#153039; --on-accent:#0D1317;
@@ -68,13 +74,16 @@ code{font-family:var(--f-mono);font-size:.86em;background:var(--code-bg);color:v
 .page-tab{font-family:var(--f-mono);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);text-decoration:none;text-align:center;padding:6px 15px;border-radius:999px;white-space:nowrap}
 .page-tab:hover{background:var(--accent-soft);color:var(--ink)}
 .page-tab[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--rule-2),0 1px 3px rgba(18,32,42,.12)}
-/* theme switch · all pages. taxonomy-shared.js sets data-theme on <html> and saves the choice; the icon shows the theme a press switches to */
+/* language and theme switches · all pages. taxonomy-shared.js sets lang and data-theme on <html> and saves both choices;
+   the language button names the language a press switches to, and the theme icon shows the theme a press switches to */
+.lang-toggle{flex:none;display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:38px;padding:0 11px;border:1px solid var(--rule);border-radius:999px;background:var(--code-bg);color:var(--ink-2);font-family:var(--f-body);font-size:13px;font-weight:700;line-height:1;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.lang-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
 .theme-toggle{flex:none;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;border:1px solid var(--rule);border-radius:999px;background:var(--code-bg);color:var(--ink-2);cursor:pointer;transition:background .15s,border-color .15s,color .15s}
 .theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
 .theme-toggle .i-sun,:root[data-theme="dark"] .theme-toggle .i-moon{display:none}
 :root[data-theme="dark"] .theme-toggle .i-sun{display:block}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .theme-toggle .i-moon{display:none}:root:not([data-theme="light"]) .theme-toggle .i-sun{display:block}}
-@media (max-width:760px){.topbar-in{gap:10px}.brand{display:none}.page-tabs{flex:1;margin-left:0}.page-tab{flex:1;padding-inline:6px}}
+@media (max-width:760px){.topbar-in{gap:8px}.brand{display:none}.page-tabs{flex:1;margin-left:0}.page-tab{flex:1;padding-inline:6px}}
 @media (max-width:540px){.topbar-in{padding-block:6px}.page-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-radius:14px}.page-tab{border-radius:10px}:root{--header-h:84px}}
 @media (max-width:380px){.page-tab{font-size:11px;letter-spacing:.04em}}
 
@@ -214,6 +223,8 @@ h1{font-family:var(--f-display);font-weight:600;font-size:clamp(2.05rem,1.15rem 
 .full > summary::-webkit-details-marker{display:none}
 .full > summary::after{content:"Show";font-family:var(--f-mono);font-weight:500;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
 .full[open] > summary::after{content:"Hide"}
+html[lang|="zh"] .full > summary::after{content:"展开"}
+html[lang|="zh"] .full[open] > summary::after{content:"收起"}
 .full[open] > summary{border-bottom:1px solid var(--rule)}
 .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table.tx{border-collapse:collapse;width:100%;min-width:900px;font-size:14px}
