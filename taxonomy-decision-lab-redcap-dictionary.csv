@@ -1,0 +1,59 @@
+Variable / Field Name,Form Name,Section Header,Field Type,Field Label,"Choices, Calculations, OR Slider Labels",Field Note,Text Validation Type OR Show Slider Number,Text Validation Min,Text Validation Max,Identifier?,Branching Logic (Show field only if...),Required Field?,Custom Alignment,Question Number (surveys only),Matrix Group Name,Matrix Ranking?,Field Annotation
+record_id,decision_lab_answers,,text,Record ID,,,,,,,,,,,,,
+intro,decision_lab_answers,,descriptive,"Your answers from the Decision lab clinician test are attached to this form. Check that the participant code below is yours, add a comment if you like, and press Submit to send them to the research team.<br>你在决策实验室临床医生测试中的回答已附在这张表里。请确认下面的参与者编号是你的，可以补充意见，然后点击提交，把回答发给研究团队。",,,,,,,,,,,,,
+participant,decision_lab_answers,,text,Participant code / 参与者编号,,,,,,,,,,,,,@READONLY-SURVEY
+role,decision_lab_answers,,radio,Role,"1, Nurse | 2, Physician | 3, Other clinician | 4, Not a clinician",,,,,,,,,,,,@HIDDEN-SURVEY
+years_practice,decision_lab_answers,,text,Years in clinical practice,,,integer,0,60,,,,,,,,@HIDDEN-SURVEY
+study_group,decision_lab_answers,,radio,Group (which cases showed the score-only display),"1, Group 1: score only on cases 1, 3, 5 | 2, Group 2: score only on cases 2, 4, 6",,,,,,,,,,,,@HIDDEN-SURVEY
+page_language,decision_lab_answers,,radio,Language of the page,"1, English | 2, Chinese",,,,,,,,,,,,@HIDDEN-SURVEY
+finished_at,decision_lab_answers,,text,Finished at,,"UTC time from the web page, ISO 8601",,,,,,,,,,,@HIDDEN-SURVEY
+c1_case_id,decision_lab_answers,,text,Case 1: case identifier,,"Medical ward, 84-year-old woman",,,,,,,,,,,@HIDDEN-SURVEY
+c1_display,decision_lab_answers,,radio,Case 1: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
+c1_estimate,decision_lab_answers,,text,"Case 1: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c1_reference,decision_lab_answers,,text,"Case 1: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c1_points_off,decision_lab_answers,,text,"Case 1: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c1_action,decision_lab_answers,,radio,Case 1: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now",,,,,,,,,,,,@HIDDEN-SURVEY
+c1_sure,decision_lab_answers,,radio,Case 1: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
+c1_seconds,decision_lab_answers,,text,Case 1: seconds spent on the case,,,number,0,,,,,,,,,@HIDDEN-SURVEY
+c2_case_id,decision_lab_answers,,text,Case 2: case identifier,,"Pre-surgical clinic, 67-year-old man",,,,,,,,,,,@HIDDEN-SURVEY
+c2_display,decision_lab_answers,,radio,Case 2: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
+c2_estimate,decision_lab_answers,,text,"Case 2: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c2_reference,decision_lab_answers,,text,"Case 2: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c2_points_off,decision_lab_answers,,text,"Case 2: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c2_action,decision_lab_answers,,radio,Case 2: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now",,,,,,,,,,,,@HIDDEN-SURVEY
+c2_sure,decision_lab_answers,,radio,Case 2: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
+c2_seconds,decision_lab_answers,,text,Case 2: seconds spent on the case,,,number,0,,,,,,,,,@HIDDEN-SURVEY
+c3_case_id,decision_lab_answers,,text,Case 3: case identifier,,"Intensive care unit, 71-year-old man",,,,,,,,,,,@HIDDEN-SURVEY
+c3_display,decision_lab_answers,,radio,Case 3: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
+c3_estimate,decision_lab_answers,,text,"Case 3: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c3_reference,decision_lab_answers,,text,"Case 3: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c3_points_off,decision_lab_answers,,text,"Case 3: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c3_action,decision_lab_answers,,radio,Case 3: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now",,,,,,,,,,,,@HIDDEN-SURVEY
+c3_sure,decision_lab_answers,,radio,Case 3: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
+c3_seconds,decision_lab_answers,,text,Case 3: seconds spent on the case,,,number,0,,,,,,,,,@HIDDEN-SURVEY
+c4_case_id,decision_lab_answers,,text,Case 4: case identifier,,"Surgical ward, 79-year-old woman",,,,,,,,,,,@HIDDEN-SURVEY
+c4_display,decision_lab_answers,,radio,Case 4: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
+c4_estimate,decision_lab_answers,,text,"Case 4: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c4_reference,decision_lab_answers,,text,"Case 4: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c4_points_off,decision_lab_answers,,text,"Case 4: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c4_action,decision_lab_answers,,radio,Case 4: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now",,,,,,,,,,,,@HIDDEN-SURVEY
+c4_sure,decision_lab_answers,,radio,Case 4: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
+c4_seconds,decision_lab_answers,,text,Case 4: seconds spent on the case,,,number,0,,,,,,,,,@HIDDEN-SURVEY
+c5_case_id,decision_lab_answers,,text,Case 5: case identifier,,"Orthopedic ward, 76-year-old man",,,,,,,,,,,@HIDDEN-SURVEY
+c5_display,decision_lab_answers,,radio,Case 5: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
+c5_estimate,decision_lab_answers,,text,"Case 5: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c5_reference,decision_lab_answers,,text,"Case 5: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c5_points_off,decision_lab_answers,,text,"Case 5: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c5_action,decision_lab_answers,,radio,Case 5: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now",,,,,,,,,,,,@HIDDEN-SURVEY
+c5_sure,decision_lab_answers,,radio,Case 5: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
+c5_seconds,decision_lab_answers,,text,Case 5: seconds spent on the case,,,number,0,,,,,,,,,@HIDDEN-SURVEY
+c6_case_id,decision_lab_answers,,text,Case 6: case identifier,,"Medical ward, 81-year-old woman",,,,,,,,,,,@HIDDEN-SURVEY
+c6_display,decision_lab_answers,,radio,Case 6: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
+c6_estimate,decision_lab_answers,,text,"Case 6: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c6_reference,decision_lab_answers,,text,"Case 6: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c6_points_off,decision_lab_answers,,text,"Case 6: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c6_action,decision_lab_answers,,radio,Case 6: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now",,,,,,,,,,,,@HIDDEN-SURVEY
+c6_sure,decision_lab_answers,,radio,Case 6: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
+c6_seconds,decision_lab_answers,,text,Case 6: seconds spent on the case,,,number,0,,,,,,,,,@HIDDEN-SURVEY
+comment,decision_lab_answers,,notes,Comments (optional) / 意见（选填）,,,,,,,,,,,,,
+share_ok,decision_lab_answers,,yesno,I agree to send these answers to the research team. / 我同意把这些回答发给研究团队。,,,,,,,,y,,,,,
