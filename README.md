@@ -23,7 +23,7 @@ On the Decision lab page, figures attributed to a study come from the delirium c
 The test on the Decision lab page shows six illustrative patient cases. Each case uses either a score-only display or a display built from the taxonomy, and participants estimate the chance of delirium, choose a next step, and rate their confidence.
 
 - Send each participant one link, alternating between them: `taxonomy-decision-lab.html?group=1#test` and `taxonomy-decision-lab.html?group=2#test`. The groups see the two displays on opposite cases, so every case is seen both ways.
-- Answers stay in the participant's browser. At the end they download a CSV with one row per case and send it to the research team.
+- Answers stay in the participant's browser. At the end they download a CSV with one row per case and send it to the research team. Codes in the CSV are always English, and a `language` column records whether the participant used the English or Chinese page; add `&lang=zh` to a group link to open the test in Chinese.
 - Pilot with a few clinicians first, and check whether your institution's review board needs to approve the study.
 
 ## Viewing
@@ -31,3 +31,5 @@ The test on the Decision lab page shows six illustrative patient cases. Each cas
 The pages are static HTML with no build step. Open `taxonomy.html` in a browser, or serve the folder with any static file server.
 
 Readers can switch between the light and dark themes with the button at the top right of every page. The choice is remembered in their browser; until they make one, the pages follow the system setting.
+
+Every page is also available in Chinese: the 中文 / EN button next to it switches languages instantly, the choice is remembered, and links can open a page in either language with `?lang=zh` or `?lang=en`. In the markup, each text appears twice as sibling `data-l="en"` and `data-l="zh"` spans, and the stylesheet shows the one that matches `<html lang>`. Text written by scripts comes in English and Chinese pairs. The formatted citation, BibTeX, PubMed search terms, and the two figure images stay in English.
