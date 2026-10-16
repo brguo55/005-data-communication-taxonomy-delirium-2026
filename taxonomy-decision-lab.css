@@ -124,11 +124,11 @@ a.lab-dim:hover{color:var(--ink);box-shadow:0 0 0 1px var(--c)}
 .lab-mark,.att-line{position:absolute;width:2px;margin-left:-1px;border-radius:1px;background:var(--ink);pointer-events:none}
 .lab-mark{top:18px;height:20px;left:calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--at,0))}
 .att-line{top:-5px;bottom:-5px}
-.lab-mark span,.att-line span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);padding-bottom:3px;font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;white-space:nowrap;color:var(--ink)}
+.lab-mark > span,.att-line > span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);padding-bottom:3px;font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;white-space:nowrap;color:var(--ink)}
 .lab-ticks{position:relative;height:18px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
-.lab-ticks span{position:absolute;top:2px;left:calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--at,0));transform:translateX(-50%);white-space:nowrap}
-.lab-ticks span:first-child{left:0;transform:none}
-.lab-ticks span:last-child{left:auto;right:0;transform:none}
+.lab-ticks > span{position:absolute;top:2px;left:calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--at,0));transform:translateX(-50%);white-space:nowrap}
+.lab-ticks > span:first-child{left:0;transform:none}
+.lab-ticks > span:last-child{left:auto;right:0;transform:none}
 .lab-presets{display:flex;flex-wrap:wrap;gap:6px}
 .lab-presets .btn{padding:6px 11px;font-size:13px}
 .lab-takeaway{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:10px 20px;align-items:start;margin-top:16px;padding:14px 18px;border:1px dashed var(--rule-2);border-radius:10px}
@@ -284,9 +284,9 @@ i.ctx-tn{background:var(--rule-2)}
 .test-options label:hover{background:var(--raised)}
 .test-options input,.test-scale input{accent-color:var(--accent);margin:0}
 .test-scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;max-width:460px}
-.test-scale label{position:relative;cursor:pointer}
+.test-scale label{position:relative;display:flex;cursor:pointer}
 .test-scale input{position:absolute;opacity:0;inset:0}
-.test-scale span{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:52px;padding:6px 4px;border:1px solid var(--rule-2);border-radius:8px;background:var(--surface);font-family:var(--f-mono);font-weight:600;font-size:15px;color:var(--ink);text-align:center}
+.test-scale label > span{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:52px;padding:6px 4px;border:1px solid var(--rule-2);border-radius:8px;background:var(--surface);font-family:var(--f-mono);font-weight:600;font-size:15px;color:var(--ink);text-align:center}
 .test-scale small{font-family:var(--f-body);font-weight:400;font-size:11px;line-height:1.2;color:var(--muted)}
 .test-scale input:checked + span{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .test-scale input:checked + span small{color:var(--on-accent)}
