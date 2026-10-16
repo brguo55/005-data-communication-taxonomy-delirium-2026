@@ -87,6 +87,14 @@
      The versions alternate, and the group decides which cases get which, so across groups every case is seen both ways.
      ref is the risk in each scenario that a perfectly informed reader would arrive at; when is the time window asked
      about (48 hours unless the case says otherwise). */
+  /* REDCap hand-off. Paste the project's public survey link here, for example https://redcap.<institution>.edu/surveys/?s=XXXXXXXXXX,
+     to show a "Send to the research team" button on the results screen. The button opens the survey with every answer filled
+     in through the link, using the variable names in taxonomy-decision-lab-redcap-dictionary.csv, and the participant presses
+     Submit there. With an empty link the page offers the CSV download only. Set method to 'post' if the REDCap administrators
+     prefer that answers not appear in the link and their REDCap version accepts pre-filled values by POST.
+     Never put a REDCap API token in this file: the page is public, so anyone could read it. */
+  var REDCAP={surveyUrl:'',method:'get'};
+
   var WARD_BASE={en:'About 10 in 100 patients on this ward',zh:'这个病房约每 100 位患者中有 10 位'};
   var RECALIBRATED={en:'Checked last month: predictions on this ward had been running higher than observed, so this estimate has been recalibrated.',zh:'上月检查：这个病房的预测一直高于实际，因此这个估计已重新校准。'};
   var WARD_NEXT={en:'Start the ward’s delirium prevention measures and screen for delirium each shift.',zh:'启动病房的谵妄预防措施，并每班筛查谵妄。'};
@@ -155,6 +163,9 @@
       });
     }
     syncOptions();
+    if(REDCAP.surveyUrl){
+      document.getElementById('test-privacy').innerHTML=bi('Your answers stay in this browser until you choose to send them to the research team at the end. Please do not enter your name.','你的回答会一直保存在这个浏览器中，直到你在最后选择发给研究团队。请不要填写姓名。');
+    }
 
     // ?group=1 or ?group=2 in the link assigns a group; otherwise one is picked at random.
     var asked=/[?&]group=([12])/.exec(location.search);
@@ -244,7 +255,9 @@
                                    '偏差是你的估计与情境参考风险之间的差距，单位是百分点。单个人的回答说明不了太多；研究会汇总比较许多临床医生的回答。')+'</p>'
         +'<div class="test-added"><p class="label">'+bi('What the full display added','完整显示多提供了什么')+'</p><ul class="chips">'+[1,2,3,6,7,5].map(function(n){return dimChip(n);}).join('')+'</ul></div>'
         +'<label class="test-field test-comment"><span>'+bi('Anything that confused you, or that you would change? <em>optional</em>','有没有让你困惑、或你想修改的地方？<em>选填</em>')+'</span><textarea id="test-comment" rows="3"></textarea></label>'
-        +'<div class="test-next-row"><button class="btn primary" type="button" id="test-download">'+bi('Download answers (CSV)','下载回答（CSV）')+'</button>'
+        +'<div class="test-next-row">'
+        +(REDCAP.surveyUrl?'<button class="btn primary" type="button" id="test-redcap">'+bi('Send to the research team','发给研究团队')+'</button>':'')
+        +'<button class="btn'+(REDCAP.surveyUrl?'':' primary')+'" type="button" id="test-download">'+bi('Download answers (CSV)','下载回答（CSV）')+'</button>'
         +'<button class="btn" type="button" id="test-copy">'+bi('Copy answers','复制回答')+'</button>'
         +'<button class="btn" type="button" id="test-again">'+bi('Start over for the next person','为下一位参与者重新开始')+'</button></div>'
         +'<p class="lab-small" id="test-saved" aria-live="polite"></p>';
@@ -264,9 +277,43 @@
       return lines.join('\n')+'\n';
     }
     function saved(en,zh){document.getElementById('test-saved').innerHTML=bi(en,zh);}
+
+    // The same answers as REDCap fields: names and coded choices follow taxonomy-decision-lab-redcap-dictionary.csv.
+    var ROLE_CODE={'Nurse':1,'Physician':2,'Other clinician':3,'Not a clinician':4};
+    var ACTION_CODE={usual:1,reassess:2,prevent:3,review:4};
+    function redcapFields(){
+      var f={participant:t.participant,role:ROLE_CODE[t.role]||'',years_practice:t.years,study_group:t.group,
+             page_language:t.lang==='zh'?2:1,finished_at:t.finishedAt,comment:document.getElementById('test-comment').value.trim()};
+      t.answers.forEach(function(a,i){
+        var p='c'+(i+1)+'_';
+        f[p+'case_id']=CASES[a.index].id;
+        f[p+'display']=a.version==='A'?1:2;
+        f[p+'estimate']=a.estimate;
+        f[p+'reference']=a.ref;
+        f[p+'points_off']=Math.abs(a.estimate-a.ref);
+        f[p+'action']=ACTION_CODE[a.action];
+        f[p+'sure']=a.sure;
+        f[p+'seconds']=a.seconds;
+      });
+      return f;
+    }
+    // Open the survey in a new tab with the answers filled in (a link with the values, or a POST form).
+    function sendToRedcap(){
+      var f=redcapFields(),keys=Object.keys(f);
+      if(REDCAP.method==='post'){
+        var form=document.createElement('form');
+        form.method='post';form.action=REDCAP.surveyUrl;form.target='_blank';
+        keys.forEach(function(k){var i=document.createElement('input');i.type='hidden';i.name=k;i.value=f[k];form.appendChild(i);});
+        document.body.appendChild(form);form.submit();form.remove();
+      }else{
+        window.open(REDCAP.surveyUrl+(REDCAP.surveyUrl.indexOf('?')<0?'?':'&')+keys.map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(f[k]);}).join('&'),'_blank','noopener');
+      }
+      saved('REDCap opened in a new tab. Check your answers there and press Submit to send them.','已在新标签页打开 REDCap。请在那里核对回答，然后点击提交。');
+    }
     done.addEventListener('click',function(e){
       var btn=e.target.closest('button'),id=btn?btn.id:'';
-      if(id==='test-download'){
+      if(id==='test-redcap'){sendToRedcap();}
+      else if(id==='test-download'){
         var name='decision-lab-'+t.participant+'.csv';
         // The byte order mark tells Excel the file is UTF-8, so Chinese comments are not garbled.
         var url=URL.createObjectURL(new Blob(['\ufeff'+csv()],{type:'text/csv;charset=utf-8'}));
