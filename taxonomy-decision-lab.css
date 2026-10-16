@@ -72,8 +72,9 @@ a.lab-dim:hover{color:var(--ink);box-shadow:0 0 0 1px var(--c)}
 .pw-join svg:nth-child(1){transform:rotate(30deg)}
 .pw-join svg:nth-child(3){transform:rotate(-30deg)}
 .pw-link{grid-area:link;display:flex;align-items:center;justify-content:center;color:var(--accent)}
-.pw-check{align-self:start;min-width:0;padding:10px 12px 12px;border:1.5px dashed var(--rule-2);border-radius:6px;background:var(--surface);transition:border-color .2s}
-.pw-check.pw-on{border-style:solid;border-color:var(--d3)}
+/* checkpoints are not drop targets: a solid, quiet frame while they wait, so only the dashed boxes read as places to drop */
+.pw-check{align-self:start;min-width:0;padding:10px 12px 12px;border:1.5px solid var(--rule);border-radius:6px;background:var(--raised);transition:border-color .2s,background .2s}
+.pw-check.pw-on{border-color:var(--d3);background:var(--surface)}
 .pw-check-kicker{margin:0;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
 .pw-check.pw-on .pw-check-kicker{color:var(--d3)}
 .pw-check-name{margin:2px 0 6px;font-weight:700;font-size:14px;line-height:1.3}

@@ -399,7 +399,7 @@
 
     // What each checkpoint on the board asks, given the pieces placed so far. Returns null until its pieces are in place.
     var CHECKS=[
-      {key:'fair',name:{en:'Fairness across patient groups',zh:'跨患者群体的公平性'},wait:{en:'Place the patients.',zh:'请放入患者。'},fn:function(s){
+      {key:'fair',name:{en:'Fairness across patient groups',zh:'跨患者群体的公平性'},wait:{en:'Appears once the patients are placed.',zh:'放入患者后显示。'},fn:function(s){
         if(!s.patients){return null;}
         return s.patients==='match'
           ?{dims:[7],text:{en:'The patients resemble the development cohort, so the headline performance is a reasonable starting point. Performance can still differ by sex, age, or language, and those subgroup results should be shown where they exist.',
@@ -407,7 +407,7 @@
           :{dims:[7],text:{en:'The patients differ from the development cohort. Performance and calibration may not carry over, and users should be told when an output deserves extra caution for groups the model rarely saw.',
                            zh:'患者与开发队列不同。性能和校准可能无法照搬过来；当输出对模型很少见过的人群需要格外谨慎时，应当告知使用者。'}};
       }},
-      {key:'output',name:{en:'Uncertainty at the model output',zh:'模型输出处的不确定性'},wait:{en:'Place a model.',zh:'请放入一个模型。'},fn:function(s){
+      {key:'output',name:{en:'Uncertainty at the model output',zh:'模型输出处的不确定性'},wait:{en:'Appears once a model is placed.',zh:'放入模型后显示。'},fn:function(s){
         if(!s.model){return null;}
         var m={
           risk:{dims:[1,2,6],text:{en:'A risk score needs its timeframe, its absolute scale, and an uncertainty range. Calibration matters as much as ranking: a well-ranked score can still overstate risk.',zh:'风险评分需要写明时间范围、绝对尺度和不确定性范围。校准与排序同样重要：排序很好的评分仍可能高估风险。'}},
@@ -420,7 +420,7 @@
         if(s.data==='multi'){t=both(t,{en:' Derived from several sites, it should report whether performance holds at each site, not only on average.',zh:'由于来自多家医院，它应当报告各家医院的性能是否都成立，而不只是平均值。'});}
         return {dims:m.dims,text:t};
       }},
-      {key:'exchange',name:{en:'Uncertainty in the exchange with users',zh:'与使用者交互中的不确定性'},wait:{en:'Place a model and its users.',zh:'请放入模型和使用者。'},fn:function(s){
+      {key:'exchange',name:{en:'Uncertainty in the exchange with users',zh:'与使用者交互中的不确定性'},wait:{en:'Appears once a model and its users are placed.',zh:'放入模型和使用者后显示。'},fn:function(s){
         if(!s.model||!s.users){return null;}
         var u={
           nurses:{dims:[3,4,5],text:{en:'Nurses meet the output inside busy patient lists and rounds. Keep the encoding simple, label what each color or icon means, and avoid adding to alert burden.',zh:'护士是在繁忙的患者列表和查房中看到输出的。编码要简单，标明每种颜色或图标的含义，并避免增加警报负担。'}},
@@ -431,7 +431,7 @@
         if(s.model==='llm'){t=both(t,{en:' The exchange runs both ways: how a question is put to the model can change its answer.',zh:'这种交互是双向的：怎样向模型提问，可能会改变它的回答。'});}
         return {dims:u.dims,text:t};
       }},
-      {key:'decision',name:{en:'Uncertainty at the decision',zh:'决策处的不确定性'},wait:{en:'Place the setting and the users.',zh:'请放入场景和使用者。'},fn:function(s){
+      {key:'decision',name:{en:'Uncertainty at the decision',zh:'决策处的不确定性'},wait:{en:'Appears once the setting and the users are placed.',zh:'放入场景和使用者后显示。'},fn:function(s){
         if(!s.users||!s.setting){return null;}
         var d={
           icu:{dims:[5],text:{en:'In the ICU, alarms compete for attention and many patients are already at high risk. Link the output to a specific next step and a time window.',zh:'在 ICU，各种报警争夺注意力，很多患者本来就是高风险。请把输出与具体的下一步和时间窗口联系起来。'}},
@@ -501,7 +501,7 @@
         el.querySelector('.pw-check-body').innerHTML=r?'<ul class="pw-dims">'+r.dims.map(dimTag).join('')+'</ul>':'<p class="pw-check-wait">'+biT(c.wait)+'</p>';
         if(r){r.dims.forEach(function(n){count[n]=(count[n]||0)+1;});}
         findings+='<li class="pw-finding'+(r?'':' pw-wait')+'"><p class="pw-finding-name">'+biT(c.name)+'</p><p>'
-          +(r?biT(r.text):bi(c.wait.en+' This check appears once they are on the board.',c.wait.zh+'放好之后就会显示这项检查。'))+'</p>'
+          +(r?biT(r.text):biT(c.wait))+'</p>'
           +(r?'<ul class="chips">'+r.dims.map(dimChip).join('')+'</ul>':'')+'</li>';
       });
       var stake=Object.keys(count).map(Number).sort(function(a,b){return count[b]-count[a]||a-b;});
