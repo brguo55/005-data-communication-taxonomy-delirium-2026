@@ -31,6 +31,8 @@ html:not([lang|="zh"]) [data-l="zh"],html[lang|="zh"] [data-l="en"]{display:none
 html[lang|="zh"]{--f-display:"Spectral","Songti SC","Noto Serif SC","Source Han Serif SC",Georgia,serif;--f-body:"Atkinson Hyperlegible Next","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--f-mono:"Atkinson Hyperlegible Mono","PingFang SC","Microsoft YaHei",ui-monospace,monospace}
 html[lang|="zh"] body{line-height:1.72}
 html[lang|="zh"] .pull,html[lang|="zh"] .panel-q{font-style:normal}
+html[lang|="zh"] .sec h1,html[lang|="zh"] .sec h2{max-width:18em}
+html[lang|="zh"] .pub-title{max-width:24em}
 :root[data-theme="dark"]{
   --bg:#0D1317; --surface:#141C21; --raised:#18222A; --ink:#E2E8EC; --ink-2:#B8C4CB; --muted:#8B99A3;
   --rule:#25313A; --rule-2:#3B4952; --accent:#6BC2D6; --accent-2:#93D5E5; --accent-soft:#153039; --on-accent:#0D1317;

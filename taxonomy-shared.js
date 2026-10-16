@@ -11,6 +11,8 @@
   var titleEn=document.title,titleZh=root.getAttribute('data-title-zh')||titleEn;
   function isZh(){return /^zh/i.test(root.lang);}
   function L(en,zh){return isZh()?zh:en;}
+  // Both languages as a [data-l] pair, for labels that stay correct when the language changes later.
+  function bi(en,zh){return '<span data-l="en">'+en+'</span><span data-l="zh">'+zh+'</span>';}
   function swapAttrs(zh){
     ['alt','aria-label','title'].forEach(function(a){
       var key=a==='aria-label'?'label':a;
@@ -98,7 +100,7 @@
     var on=ob.getAttribute('aria-pressed')!=='true';
     ob.setAttribute('aria-pressed',on?'true':'false');
     rail.classList.toggle('overlap',on);
-    ob.textContent=on?'Clear highlight':'Highlight on the rail';
+    ob.innerHTML=on?bi('Clear highlight','取消高亮'):bi('Highlight on the rail','在轨道上高亮');
   });}
   // Copy buttons (taxonomy-publication.html)
   document.querySelectorAll('[data-copy]').forEach(function(b){
