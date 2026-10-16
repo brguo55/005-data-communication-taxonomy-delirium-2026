@@ -29,3 +29,5 @@ The test on the Decision lab page shows six illustrative patient cases. Each cas
 ## Viewing
 
 The pages are static HTML with no build step. Open `taxonomy.html` in a browser, or serve the folder with any static file server.
+
+Readers can switch between the light and dark themes with the button at the top right of every page. The choice is remembered in their browser; until they make one, the pages follow the system setting.
