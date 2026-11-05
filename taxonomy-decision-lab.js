@@ -155,9 +155,9 @@
     var next=document.getElementById('test-next'),display=document.getElementById('test-display');
     placeTicks(range.parentNode,function(v){return v/100;});
 
-    // <option> cannot hold markup, so the role labels are swapped here; their values stay English for the CSV.
+    // <option> cannot hold markup, so the background question labels are swapped here; their values stay English for the CSV.
     function syncOptions(){
-      [].forEach.call(document.querySelectorAll('#test-role option[data-zh]'),function(o){
+      [].forEach.call(intro.querySelectorAll('option[data-zh]'),function(o){
         if(!o.hasAttribute('data-en')){o.setAttribute('data-en',o.text);}
         o.text=isZh()?o.getAttribute('data-zh'):o.getAttribute('data-en');
       });
@@ -270,9 +270,9 @@
     function csv(){
       function cell(v){v=String(v===undefined||v===null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
       var comment=document.getElementById('test-comment').value.trim();
-      var lines=[['participant','role','years_in_practice','group','case_number','case_id','display','estimate_in_100','reference_in_100','points_off','action','sure_1_to_5','seconds','comment','finished_at','language'].join(',')];
+      var lines=[['participant','role','years_in_practice','informatics_training','ai_understanding_1_to_5','alert_response','group','case_number','case_id','display','estimate_in_100','reference_in_100','points_off','action','sure_1_to_5','seconds','comment','finished_at','language'].join(',')];
       t.answers.forEach(function(a,i){
-        lines.push([t.participant,t.role,t.years,t.group,i+1,CASES[a.index].id,VERSION_NAME[a.version].en,a.estimate,a.ref,Math.abs(a.estimate-a.ref),a.action,a.sure,a.seconds,comment,t.finishedAt,t.lang].map(cell).join(','));
+        lines.push([t.participant,t.role,t.years,t.informatics,t.ai,t.alerts,t.group,i+1,CASES[a.index].id,VERSION_NAME[a.version].en,a.estimate,a.ref,Math.abs(a.estimate-a.ref),a.action,a.sure,a.seconds,comment,t.finishedAt,t.lang].map(cell).join(','));
       });
       return lines.join('\n')+'\n';
     }
@@ -280,9 +280,12 @@
 
     // The same answers as REDCap fields: names and coded choices follow taxonomy-decision-lab-redcap-dictionary.csv.
     var ROLE_CODE={'Nurse':1,'Physician':2,'Other clinician':3,'Not a clinician':4};
+    var INFORMATICS_CODE={'None':1,'Courses or workshops':2,'Degree or certification':3};
+    var ALERTS_CODE={'Follow it':1,'Weigh it with my own judgment':2,'Often dismiss or skip it':3,'Rarely see them':4};
     var ACTION_CODE={usual:1,reassess:2,prevent:3,review:4};
     function redcapFields(){
-      var f={participant:t.participant,role:ROLE_CODE[t.role]||'',years_practice:t.years,study_group:t.group,
+      var f={participant:t.participant,role:ROLE_CODE[t.role]||'',years_practice:t.years,
+             informatics_training:INFORMATICS_CODE[t.informatics]||'',ai_understanding:t.ai,alert_response:ALERTS_CODE[t.alerts]||'',study_group:t.group,
              page_language:t.lang==='zh'?2:1,finished_at:t.finishedAt,comment:document.getElementById('test-comment').value.trim()};
       t.answers.forEach(function(a,i){
         var p='c'+(i+1)+'_';
@@ -347,6 +350,9 @@
       t.participant=code||'P-'+Math.random().toString(36).slice(2,6).toUpperCase();
       t.role=document.getElementById('test-role').value;
       t.years=document.getElementById('test-years').value;
+      t.informatics=document.getElementById('test-informatics').value;
+      t.ai=document.getElementById('test-ai').value;
+      t.alerts=document.getElementById('test-alerts').value;
       intro.hidden=true;
       caseEl.hidden=false;
       showCase();

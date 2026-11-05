@@ -242,7 +242,7 @@ i.ctx-tn{background:var(--rule-2)}
 .test{margin-top:30px;padding:22px 24px 24px}
 .test-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:4px 0 0}
 @media (max-width:760px){.test-fields{grid-template-columns:1fr}}
-.test-field{display:grid;gap:6px;font-size:14px;font-weight:700;color:var(--ink)}
+.test-field{display:grid;grid-template-rows:1fr auto;gap:6px;font-size:14px;font-weight:700;color:var(--ink)}
 .test-field em{font-style:normal;font-weight:400;color:var(--muted)}
 .test-field input,.test-field select,.test-field textarea{font:inherit;font-weight:400;font-size:15px;padding:8px 10px;border:1px solid var(--rule-2);border-radius:7px;background:var(--surface);color:var(--ink);min-width:0;width:100%}
 .test-intro .lab-small{margin:14px 0 16px}
