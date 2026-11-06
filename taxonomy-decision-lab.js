@@ -155,11 +155,11 @@
      ref:2}
   ];
   var ACTIONS={
-    usual:{en:'Continue usual care',zh:'继续常规护理'},
-    reassess:{en:'Reassess at the next shift',zh:'下一班次再评估'},
-    prevent:{en:'Start prevention now',zh:'现在开始预防'},
-    review:{en:'Ask the team to review now',zh:'现在请团队查看'},
-    dismiss:{en:'Dismiss the tool’s output',zh:'关掉工具的提示'}
+    usual:{en:'Continue Usual Care',zh:'继续常规护理'},
+    reassess:{en:'Reassess at the Next Shift',zh:'下一班次再评估'},
+    prevent:{en:'Start Prevention Now',zh:'现在开始预防'},
+    review:{en:'Ask the Team to Review Now',zh:'现在请团队查看'},
+    dismiss:{en:'Dismiss the Tool’s Output',zh:'关掉工具的提示'}
   };
 
   (function(){
