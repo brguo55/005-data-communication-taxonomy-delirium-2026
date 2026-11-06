@@ -373,7 +373,8 @@
     intro.addEventListener('submit',function(e){
       e.preventDefault();
       var code=document.getElementById('test-code').value.trim();
-      t.participant=code||'P-'+Math.random().toString(36).slice(2,6).toUpperCase();
+      // The page cannot count participants across browsers, so without a code from the research team it picks a random six-digit number.
+      t.participant=code||String(100000+Math.floor(Math.random()*900000));
       t.role=document.getElementById('test-role').value;
       t.years=document.getElementById('test-years').value;
       t.informatics=document.getElementById('test-informatics').value;
