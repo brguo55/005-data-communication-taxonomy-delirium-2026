@@ -301,13 +301,20 @@ i.ctx-tn{background:var(--rule-2)}
 .test-summary dd b{font-size:1.8rem;font-weight:600;color:var(--ink)}
 @media (max-width:480px){.test-summary{grid-template-columns:1fr}}
 .test-key{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:0 0 8px;font-size:13px;color:var(--muted)}
-.test-key-ref,.test-key-you{display:inline-block;flex:none}
+.test-key-ref,.test-key-you,.test-key-tool{display:inline-block;flex:none}
 .test-key-ref{width:2px;height:14px;background:var(--ink)}
 .test-key-you{width:11px;height:11px;margin-left:10px;border-radius:50%;background:var(--accent)}
+/* the tool's estimate, drawn only in the cases where it is wrong on purpose: a hollow diamond, behind the participant's dot */
+.test-key-tool,.test-tool{box-sizing:border-box;width:10px;height:10px;border:2px solid var(--sig-red);background:var(--surface);transform:rotate(45deg)}
+.test-key-tool{margin-left:12px}
+.test-tool{position:absolute;top:50%;margin:-5px 0 0 -5px}
 .test-results{list-style:none;margin:0 0 6px;padding:0;display:grid;gap:14px}
 .test-result-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;font-size:15px}
 .test-tag{font-family:var(--f-body);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:1px 7px;border-radius:4px;border:1px solid var(--rule-2);color:var(--ink-2)}
 .test-tag-B{border-color:var(--accent);color:var(--accent)}
+.test-tag-off{border-color:var(--sig-red);color:var(--sig-red)}
+.test-result-tags{display:inline-flex;gap:6px}
+.test-debrief{margin:0 0 16px;max-width:var(--measure);font-size:14.5px;color:var(--ink-2)}
 .test-strip{position:relative;height:16px;margin:8px 0 4px;border-radius:8px;background:var(--rule)}
 .test-ref{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--ink)}
 .test-you{position:absolute;top:50%;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px var(--surface)}

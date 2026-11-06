@@ -250,6 +250,14 @@
       var off=Math.round(mean(rows.map(function(a){return Math.abs(a.estimate-a.ref);}))),sure=mean(rows.map(function(a){return a.sure;})).toFixed(1),relied=mean(rows.map(function(a){return a.relied;})).toFixed(1);
       return '<div><dt>'+biT(VERSION_NAME[v])+'</dt><dd>'+bi('<b class="num">'+off+'</b> points off on average','平均偏差 <b class="num">'+off+'</b> 个百分点')+'</dd><dd>'+bi('Confidence '+sure+' of 5','确定程度 '+sure+' / 5')+'</dd><dd>'+bi('Relied on the tool '+relied+' of 5','依赖工具 '+relied+' / 5')+'</dd></div>';
     }
+    // In the cases where the tool is wrong on purpose, an estimate closer to the tool than to the reference counts as following it.
+    function toolWrong(a){return a.tool!==a.ref;}
+    function followedTool(a){return Math.abs(a.estimate-a.tool)<Math.abs(a.estimate-a.ref);}
+    function debrief(){
+      var wrong=t.answers.filter(toolWrong),n=wrong.length,k=wrong.filter(followedTool).length;
+      return '<p class="test-debrief">'+bi('In '+n+' of these cases the tool’s estimate was wrong on purpose, and they are marked below. Your estimate was closer to the tool than to the reference in '+k+' of those '+n+'. The study looks at how often clinicians follow a tool that is wrong or set aside one that is right.',
+                                          '其中有 '+n+' 个病例的工具估计是我们有意设置错误的，已在下方标出。在这 '+n+' 个病例中，你有 '+k+' 个的估计更接近工具而不是参考风险。研究关注的是，临床医生有多常听从出错的工具，或搁置正确的工具。')+'</p>';
+    }
     function finish(){
       t.finishedAt=new Date().toISOString();
       t.lang=isZh()?'zh':'en';
@@ -258,13 +266,14 @@
       done.innerHTML='<p class="label">'+bi('Your results · '+t.participant+' · group '+t.group,'你的结果 · '+t.participant+' · 第 '+t.group+' 组')+'</p>'
         +'<h3 class="test-patient">'+bi('Thank you. Here is how your estimates compare','谢谢！下面是你的估计与参考值的比较')+'</h3>'
         +'<dl class="test-summary">'+summary('A')+summary('B')+'</dl>'
-        +'<p class="test-key"><span class="test-key-ref"></span>'+bi('Reference risk in the scenario','情境中的参考风险')+'<span class="test-key-you"></span>'+bi('Your estimate','你的估计')+'</p>'
+        +debrief()
+        +'<p class="test-key"><span class="test-key-ref"></span>'+bi('Reference risk in the scenario','情境中的参考风险')+'<span class="test-key-you"></span>'+bi('Your estimate','你的估计')+'<span class="test-key-tool"></span>'+bi('The tool’s estimate, where it was wrong','工具出错时的估计')+'</p>'
         +'<ol class="test-results">'+t.answers.map(function(a){
-          var c=CASES[a.index],off=Math.abs(a.estimate-a.ref);
-          return '<li><div class="test-result-head"><b>'+biT(c.title)+'</b><span class="test-tag test-tag-'+a.version+'">'+biT(VERSION_NAME[a.version])+'</span></div>'
-            +'<div class="test-strip" role="img" '+biAttr('aria-label','Your estimate '+a.estimate+' in 100, reference '+a.ref+' in 100','你的估计为 100 人中 '+a.estimate+' 人，参考值为 100 人中 '+a.ref+' 人')+'><span class="test-ref" style="left:'+a.ref+'%"></span><span class="test-you" style="left:'+a.estimate+'%"></span></div>'
-            +'<p class="test-line">'+bi('You '+a.estimate+' · reference '+a.ref+' · '+off+' points off · '+ACTIONS[a.action].en+' · sure '+a.sure+' of 5 · relied on the tool '+a.relied+' of 5 · '+a.seconds+' s',
-                                      '你 '+a.estimate+' · 参考 '+a.ref+' · 偏差 '+off+' · '+ACTIONS[a.action].zh+' · 确定程度 '+a.sure+'/5 · 依赖工具 '+a.relied+'/5 · '+a.seconds+' 秒')+'</p></li>';
+          var c=CASES[a.index],off=Math.abs(a.estimate-a.ref),wrong=toolWrong(a);
+          return '<li><div class="test-result-head"><b>'+biT(c.title)+'</b><span class="test-result-tags">'+(wrong?'<span class="test-tag test-tag-off">'+bi('Tool wrong','工具出错')+'</span>':'')+'<span class="test-tag test-tag-'+a.version+'">'+biT(VERSION_NAME[a.version])+'</span></span></div>'
+            +'<div class="test-strip" role="img" '+biAttr('aria-label','Your estimate '+a.estimate+' in 100, reference '+a.ref+' in 100'+(wrong?', tool '+a.tool+' in 100':''),'你的估计为 100 人中 '+a.estimate+' 人，参考值为 100 人中 '+a.ref+' 人'+(wrong?'，工具为 100 人中 '+a.tool+' 人':''))+'><span class="test-ref" style="left:'+a.ref+'%"></span>'+(wrong?'<span class="test-tool" style="left:'+a.tool+'%"></span>':'')+'<span class="test-you" style="left:'+a.estimate+'%"></span></div>'
+            +'<p class="test-line">'+bi('You '+a.estimate+(wrong?' · tool '+a.tool:'')+' · reference '+a.ref+' · '+off+' points off · '+ACTIONS[a.action].en+' · sure '+a.sure+' of 5 · relied on the tool '+a.relied+' of 5 · '+a.seconds+' s',
+                                      '你 '+a.estimate+(wrong?' · 工具 '+a.tool:'')+' · 参考 '+a.ref+' · 偏差 '+off+' · '+ACTIONS[a.action].zh+' · 确定程度 '+a.sure+'/5 · 依赖工具 '+a.relied+'/5 · '+a.seconds+' 秒')+'</p></li>';
         }).join('')+'</ol>'
         +'<p class="lab-small">'+bi('Points off is the distance between your estimate and the scenario’s reference risk, in percentage points. One person’s answers say little on their own; the study compares answers pooled across clinicians.',
                                    '偏差是你的估计与情境参考风险之间的差距，单位是百分点。单个人的回答说明不了太多；研究会汇总比较许多临床医生的回答。')+'</p>'
