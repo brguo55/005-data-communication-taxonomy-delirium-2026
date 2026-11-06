@@ -271,9 +271,9 @@
     function csv(){
       function cell(v){v=String(v===undefined||v===null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
       var comment=document.getElementById('test-comment').value.trim();
-      var lines=[['participant','role','years_in_practice','informatics_training','ai_understanding_1_to_5','alert_response','group','case_number','case_id','display','estimate_in_100','reference_in_100','points_off','action','sure_1_to_5','relied_on_tool_1_to_5','seconds','comment','finished_at','language'].join(',')];
+      var lines=[['participant','role','years_in_practice','informatics_training','ai_understanding_1_to_5','alert_response','group','case_number','case_id','display','estimate_in_100','reference_in_100','tool_in_100','points_off','action','sure_1_to_5','relied_on_tool_1_to_5','seconds','comment','finished_at','language'].join(',')];
       t.answers.forEach(function(a,i){
-        lines.push([t.participant,t.role,t.years,t.informatics,t.ai,t.alerts,t.group,i+1,CASES[a.index].id,VERSION_NAME[a.version].en,a.estimate,a.ref,Math.abs(a.estimate-a.ref),a.action,a.sure,a.relied,a.seconds,comment,t.finishedAt,t.lang].map(cell).join(','));
+        lines.push([t.participant,t.role,t.years,t.informatics,t.ai,t.alerts,t.group,i+1,CASES[a.index].id,VERSION_NAME[a.version].en,a.estimate,a.ref,a.tool,Math.abs(a.estimate-a.ref),a.action,a.sure,a.relied,a.seconds,comment,t.finishedAt,t.lang].map(cell).join(','));
       });
       return lines.join('\n')+'\n';
     }
@@ -294,6 +294,7 @@
         f[p+'display']=a.version==='A'?1:2;
         f[p+'estimate']=a.estimate;
         f[p+'reference']=a.ref;
+        f[p+'tool']=a.tool;
         f[p+'points_off']=Math.abs(a.estimate-a.ref);
         f[p+'action']=ACTION_CODE[a.action];
         f[p+'sure']=a.sure;
@@ -368,7 +369,7 @@
     form.addEventListener('submit',function(e){
       e.preventDefault();
       if(next.disabled){return;}
-      t.answers.push({index:t.i,version:versionOf(t.i),estimate:+est.value,ref:CASES[t.i].ref,action:checked('test-act'),sure:+checked('test-sure'),relied:+checked('test-rely'),seconds:Math.round((performance.now()-t.start)/100)/10});
+      t.answers.push({index:t.i,version:versionOf(t.i),estimate:+est.value,ref:CASES[t.i].ref,tool:CASES[t.i].b.risk,action:checked('test-act'),sure:+checked('test-sure'),relied:+checked('test-rely'),seconds:Math.round((performance.now()-t.start)/100)/10});
       t.i++;
       if(t.i<CASES.length){showCase();}else{finish();}
     });

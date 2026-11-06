@@ -14,6 +14,7 @@ c1_case_id,decision_lab_answers,,text,Case 1: case identifier,,"Medical ward, 84
 c1_display,decision_lab_answers,,radio,Case 1: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
 c1_estimate,decision_lab_answers,,text,"Case 1: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c1_reference,decision_lab_answers,,text,"Case 1: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c1_tool,decision_lab_answers,,text,"Case 1: the tool's own estimate, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c1_points_off,decision_lab_answers,,text,"Case 1: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c1_action,decision_lab_answers,,radio,Case 1: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now | 5, Dismiss the tool's output and move on",,,,,,,,,,,,@HIDDEN-SURVEY
 c1_sure,decision_lab_answers,,radio,Case 1: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
@@ -23,6 +24,7 @@ c2_case_id,decision_lab_answers,,text,Case 2: case identifier,,"Pre-surgical cli
 c2_display,decision_lab_answers,,radio,Case 2: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
 c2_estimate,decision_lab_answers,,text,"Case 2: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c2_reference,decision_lab_answers,,text,"Case 2: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c2_tool,decision_lab_answers,,text,"Case 2: the tool's own estimate, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c2_points_off,decision_lab_answers,,text,"Case 2: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c2_action,decision_lab_answers,,radio,Case 2: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now | 5, Dismiss the tool's output and move on",,,,,,,,,,,,@HIDDEN-SURVEY
 c2_sure,decision_lab_answers,,radio,Case 2: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
@@ -32,6 +34,7 @@ c3_case_id,decision_lab_answers,,text,Case 3: case identifier,,"Intensive care u
 c3_display,decision_lab_answers,,radio,Case 3: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
 c3_estimate,decision_lab_answers,,text,"Case 3: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c3_reference,decision_lab_answers,,text,"Case 3: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c3_tool,decision_lab_answers,,text,"Case 3: the tool's own estimate, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c3_points_off,decision_lab_answers,,text,"Case 3: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c3_action,decision_lab_answers,,radio,Case 3: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now | 5, Dismiss the tool's output and move on",,,,,,,,,,,,@HIDDEN-SURVEY
 c3_sure,decision_lab_answers,,radio,Case 3: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
@@ -41,6 +44,7 @@ c4_case_id,decision_lab_answers,,text,Case 4: case identifier,,"Surgical ward, 7
 c4_display,decision_lab_answers,,radio,Case 4: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
 c4_estimate,decision_lab_answers,,text,"Case 4: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c4_reference,decision_lab_answers,,text,"Case 4: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c4_tool,decision_lab_answers,,text,"Case 4: the tool's own estimate, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c4_points_off,decision_lab_answers,,text,"Case 4: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c4_action,decision_lab_answers,,radio,Case 4: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now | 5, Dismiss the tool's output and move on",,,,,,,,,,,,@HIDDEN-SURVEY
 c4_sure,decision_lab_answers,,radio,Case 4: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
@@ -50,6 +54,7 @@ c5_case_id,decision_lab_answers,,text,Case 5: case identifier,,"Orthopedic ward,
 c5_display,decision_lab_answers,,radio,Case 5: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
 c5_estimate,decision_lab_answers,,text,"Case 5: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c5_reference,decision_lab_answers,,text,"Case 5: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c5_tool,decision_lab_answers,,text,"Case 5: the tool's own estimate, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c5_points_off,decision_lab_answers,,text,"Case 5: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c5_action,decision_lab_answers,,radio,Case 5: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now | 5, Dismiss the tool's output and move on",,,,,,,,,,,,@HIDDEN-SURVEY
 c5_sure,decision_lab_answers,,radio,Case 5: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
@@ -59,6 +64,7 @@ c6_case_id,decision_lab_answers,,text,Case 6: case identifier,,"Medical ward, 81
 c6_display,decision_lab_answers,,radio,Case 6: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
 c6_estimate,decision_lab_answers,,text,"Case 6: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c6_reference,decision_lab_answers,,text,"Case 6: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c6_tool,decision_lab_answers,,text,"Case 6: the tool's own estimate, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c6_points_off,decision_lab_answers,,text,"Case 6: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
 c6_action,decision_lab_answers,,radio,Case 6: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now | 5, Dismiss the tool's output and move on",,,,,,,,,,,,@HIDDEN-SURVEY
 c6_sure,decision_lab_answers,,radio,Case 6: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
