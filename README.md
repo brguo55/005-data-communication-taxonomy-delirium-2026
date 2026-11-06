@@ -21,9 +21,11 @@ On the Decision lab page, figures attributed to a study come from the delirium c
 
 ## Running the clinician test
 
-The test on the Decision lab page shows six illustrative patient cases. Each case uses either a score-only display or a display built from the taxonomy, and participants estimate the chance of delirium, choose a next step, and rate their confidence.
+The test on the Decision lab page shows eight illustrative patient cases. Each case uses either a score-only display or a display built from the taxonomy, and participants estimate the chance of delirium, choose a next step (or dismiss the tool's output), rate their confidence, and rate how much the display shaped their answers.
 
 Before the cases, participants give their role and years in practice and answer three background questions: their training in clinical or medical informatics, how well they understand how AI and risk prediction models work, and what they usually do when a risk score or alert appears at work (follow it, weigh it, often dismiss it, or rarely see one). These let the team compare the two displays across levels of AI literacy, and look for over-reliance and alert fatigue, so recruit on purpose across these backgrounds rather than taking whoever answers first.
+
+Those answers are self-reports, so the test also measures behavior. In three cases the tool's estimate is wrong on purpose: too low in cases 4 and 7, too high in case 8. Case 4 warns about this on the full display, and cases 7 and 8 give no warning. An estimate closer to the tool than to the reference on these cases means the participant followed a wrong tool, and choosing "Dismiss" on a case where the tool was right means they set aside a correct one. The results screen tells participants which cases were wrong on purpose. Mention this in any IRB application, and have a clinician review the cases and reference risks before piloting.
 
 - Send each participant one link, alternating between them: `taxonomy-decision-lab.html?group=1#test` and `taxonomy-decision-lab.html?group=2#test`. The groups see the two displays on opposite cases, so every case is seen both ways.
 - Answers stay in the participant's browser. At the end they download a CSV with one row per case and send it to the research team, or, once REDCap is connected (see below), send them straight to the project's survey. Codes in the CSV are always English, and a `language` column records whether the participant used the English or Chinese page; add `&lang=zh` to a group link to open the test in Chinese.
@@ -34,7 +36,7 @@ Before the cases, participants give their role and years in practice and answer 
 The clinician test can hand each participant's answers to a REDCap survey, so they reach the research team without anyone emailing files. Nothing leaves the participant's browser until they press "Send to the research team" and then Submit in REDCap.
 
 1. Ask your institution's REDCap administrators (at Dell Med, the research office) for a project, and confirm whether the study needs IRB review.
-2. In the project, open Designer, then Data Dictionary, and upload `taxonomy-decision-lab-redcap-dictionary.csv`. It creates one instrument, `decision_lab_answers`, with 61 fields.
+2. In the project, open Designer, then Data Dictionary, and upload `taxonomy-decision-lab-redcap-dictionary.csv`. It creates one instrument, `decision_lab_answers`, with 93 fields.
 3. In Project Setup, enable surveys, enable the instrument as a survey, and keep record auto-numbering on.
 4. Open Survey Distribution Tools and copy the public survey link.
 5. Paste the link into `REDCAP.surveyUrl` near the top of the clinician test part of `taxonomy-decision-lab.js`, then commit and push. The results screen now shows "Send to the research team" above the CSV download.
