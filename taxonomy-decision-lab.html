@@ -57,7 +57,7 @@
     <div class="frame">
       <p class="kicker"><span data-l="en">Clinician test · about 5 minutes</span><span data-l="zh">临床医生测试 · 约 5 分钟</span></p>
       <h2 id="test-title"><span data-l="en">Read the delirium risk of six patients</span><span data-l="zh">判断六位患者的谵妄风险</span></h2>
-      <p class="lede"><span data-l="en">Each case shows a patient and what a delirium risk tool displays for them. Estimate the chance of delirium, choose what you would do next, and say how sure you are. The displays differ from case to case; at the end you can see how close your estimates were.</span><span data-l="zh">每个病例展示一位患者，以及谵妄风险工具为这位患者显示的内容。请估计发生谵妄的可能性，选择下一步怎么做，并说明你有多确定。各病例的显示方式不同；最后你可以看到自己的估计有多接近。</span></p>
+      <p class="lede"><span data-l="en">Each case shows a patient and what a delirium risk tool displays for them. Estimate the chance of delirium, choose what you would do next, then say how sure you are and how much the display shaped your answers. The displays differ from case to case; at the end you can see how close your estimates were.</span><span data-l="zh">每个病例展示一位患者，以及谵妄风险工具为这位患者显示的内容。请估计发生谵妄的可能性，选择下一步怎么做，再说明你有多确定，以及显示内容在多大程度上影响了你的回答。各病例的显示方式不同；最后你可以看到自己的估计有多接近。</span></p>
 
       <div class="lab-card test" id="test-box">
         <form class="test-intro" id="test-intro">
@@ -137,6 +137,16 @@
                 <label><input type="radio" name="test-sure" value="3"><span>3</span></label>
                 <label><input type="radio" name="test-sure" value="4"><span>4</span></label>
                 <label><input type="radio" name="test-sure" value="5"><span>5<small><span data-l="en">Very sure</span><span data-l="zh">非常确定</span></small></span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend><span data-l="en">4. How much did the tool’s display shape your answers?</span><span data-l="zh">4. 工具显示的内容在多大程度上影响了你的回答？</span></legend>
+              <div class="test-scale">
+                <label><input type="radio" name="test-rely" value="1"><span>1<small><span data-l="en">Not at all</span><span data-l="zh">完全没有</span></small></span></label>
+                <label><input type="radio" name="test-rely" value="2"><span>2</span></label>
+                <label><input type="radio" name="test-rely" value="3"><span>3</span></label>
+                <label><input type="radio" name="test-rely" value="4"><span>4</span></label>
+                <label><input type="radio" name="test-rely" value="5"><span>5<small><span data-l="en">Completely</span><span data-l="zh">完全照它</span></small></span></label>
               </div>
             </fieldset>
             <button class="btn primary" type="submit" id="test-next" disabled><span data-l="en">Next case</span><span data-l="zh">下一个病例</span></button>

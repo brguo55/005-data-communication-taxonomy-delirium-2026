@@ -203,7 +203,7 @@
         +'<div>'+bi('<b>Suggested next step:</b> '+b.next.en,'<b>建议的下一步：</b>'+b.next.zh)+'</div></div>';
     }
     function checked(name){var el=form.querySelector('input[name="'+name+'"]:checked');return el?el.value:'';}
-    function ready(){next.disabled=!(t.touched&&checked('test-act')&&checked('test-sure'));}
+    function ready(){next.disabled=!(t.touched&&checked('test-act')&&checked('test-sure')&&checked('test-rely'));}
     function showEstimate(){
       var v=+est.value;
       syncRange(est,L(v+' in 100','100 人中 '+v+' 人'),L(v+' in 100, '+v+' percent','100 人中 '+v+' 人，即 '+v+'%'));
@@ -233,8 +233,8 @@
     function mean(xs){var sum=0;xs.forEach(function(x){sum+=x;});return xs.length?sum/xs.length:0;}
     function summary(v){
       var rows=t.answers.filter(function(a){return a.version===v;});
-      var off=Math.round(mean(rows.map(function(a){return Math.abs(a.estimate-a.ref);}))),sure=mean(rows.map(function(a){return a.sure;})).toFixed(1);
-      return '<div><dt>'+biT(VERSION_NAME[v])+'</dt><dd>'+bi('<b class="num">'+off+'</b> points off on average','平均偏差 <b class="num">'+off+'</b> 个百分点')+'</dd><dd>'+bi('Confidence '+sure+' of 5','确定程度 '+sure+' / 5')+'</dd></div>';
+      var off=Math.round(mean(rows.map(function(a){return Math.abs(a.estimate-a.ref);}))),sure=mean(rows.map(function(a){return a.sure;})).toFixed(1),relied=mean(rows.map(function(a){return a.relied;})).toFixed(1);
+      return '<div><dt>'+biT(VERSION_NAME[v])+'</dt><dd>'+bi('<b class="num">'+off+'</b> points off on average','平均偏差 <b class="num">'+off+'</b> 个百分点')+'</dd><dd>'+bi('Confidence '+sure+' of 5','确定程度 '+sure+' / 5')+'</dd><dd>'+bi('Relied on the tool '+relied+' of 5','依赖工具 '+relied+' / 5')+'</dd></div>';
     }
     function finish(){
       t.finishedAt=new Date().toISOString();
@@ -249,8 +249,8 @@
           var c=CASES[a.index],off=Math.abs(a.estimate-a.ref);
           return '<li><div class="test-result-head"><b>'+biT(c.title)+'</b><span class="test-tag test-tag-'+a.version+'">'+biT(VERSION_NAME[a.version])+'</span></div>'
             +'<div class="test-strip" role="img" '+biAttr('aria-label','Your estimate '+a.estimate+' in 100, reference '+a.ref+' in 100','你的估计为 100 人中 '+a.estimate+' 人，参考值为 100 人中 '+a.ref+' 人')+'><span class="test-ref" style="left:'+a.ref+'%"></span><span class="test-you" style="left:'+a.estimate+'%"></span></div>'
-            +'<p class="test-line">'+bi('You '+a.estimate+' · reference '+a.ref+' · '+off+' points off · '+ACTIONS[a.action].en+' · sure '+a.sure+' of 5 · '+a.seconds+' s',
-                                      '你 '+a.estimate+' · 参考 '+a.ref+' · 偏差 '+off+' · '+ACTIONS[a.action].zh+' · 确定程度 '+a.sure+'/5 · '+a.seconds+' 秒')+'</p></li>';
+            +'<p class="test-line">'+bi('You '+a.estimate+' · reference '+a.ref+' · '+off+' points off · '+ACTIONS[a.action].en+' · sure '+a.sure+' of 5 · relied on the tool '+a.relied+' of 5 · '+a.seconds+' s',
+                                      '你 '+a.estimate+' · 参考 '+a.ref+' · 偏差 '+off+' · '+ACTIONS[a.action].zh+' · 确定程度 '+a.sure+'/5 · 依赖工具 '+a.relied+'/5 · '+a.seconds+' 秒')+'</p></li>';
         }).join('')+'</ol>'
         +'<p class="lab-small">'+bi('Points off is the distance between your estimate and the scenario’s reference risk, in percentage points. One person’s answers say little on their own; the study compares answers pooled across clinicians.',
                                    '偏差是你的估计与情境参考风险之间的差距，单位是百分点。单个人的回答说明不了太多；研究会汇总比较许多临床医生的回答。')+'</p>'
@@ -271,9 +271,9 @@
     function csv(){
       function cell(v){v=String(v===undefined||v===null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
       var comment=document.getElementById('test-comment').value.trim();
-      var lines=[['participant','role','years_in_practice','informatics_training','ai_understanding_1_to_5','alert_response','group','case_number','case_id','display','estimate_in_100','reference_in_100','points_off','action','sure_1_to_5','seconds','comment','finished_at','language'].join(',')];
+      var lines=[['participant','role','years_in_practice','informatics_training','ai_understanding_1_to_5','alert_response','group','case_number','case_id','display','estimate_in_100','reference_in_100','points_off','action','sure_1_to_5','relied_on_tool_1_to_5','seconds','comment','finished_at','language'].join(',')];
       t.answers.forEach(function(a,i){
-        lines.push([t.participant,t.role,t.years,t.informatics,t.ai,t.alerts,t.group,i+1,CASES[a.index].id,VERSION_NAME[a.version].en,a.estimate,a.ref,Math.abs(a.estimate-a.ref),a.action,a.sure,a.seconds,comment,t.finishedAt,t.lang].map(cell).join(','));
+        lines.push([t.participant,t.role,t.years,t.informatics,t.ai,t.alerts,t.group,i+1,CASES[a.index].id,VERSION_NAME[a.version].en,a.estimate,a.ref,Math.abs(a.estimate-a.ref),a.action,a.sure,a.relied,a.seconds,comment,t.finishedAt,t.lang].map(cell).join(','));
       });
       return lines.join('\n')+'\n';
     }
@@ -297,6 +297,7 @@
         f[p+'points_off']=Math.abs(a.estimate-a.ref);
         f[p+'action']=ACTION_CODE[a.action];
         f[p+'sure']=a.sure;
+        f[p+'relied']=a.relied;
         f[p+'seconds']=a.seconds;
       });
       return f;
@@ -367,7 +368,7 @@
     form.addEventListener('submit',function(e){
       e.preventDefault();
       if(next.disabled){return;}
-      t.answers.push({index:t.i,version:versionOf(t.i),estimate:+est.value,ref:CASES[t.i].ref,action:checked('test-act'),sure:+checked('test-sure'),seconds:Math.round((performance.now()-t.start)/100)/10});
+      t.answers.push({index:t.i,version:versionOf(t.i),estimate:+est.value,ref:CASES[t.i].ref,action:checked('test-act'),sure:+checked('test-sure'),relied:+checked('test-rely'),seconds:Math.round((performance.now()-t.start)/100)/10});
       t.i++;
       if(t.i<CASES.length){showCase();}else{finish();}
     });
