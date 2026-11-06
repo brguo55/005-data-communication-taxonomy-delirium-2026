@@ -7,7 +7,7 @@ years_practice,decision_lab_answers,,text,Years in clinical practice,,,integer,0
 informatics_training,decision_lab_answers,,radio,Training in clinical or medical informatics,"1, None | 2, Courses or workshops | 3, Degree or certification",,,,,,,,,,,,@HIDDEN-SURVEY
 ai_understanding,decision_lab_answers,,radio,Self-rated understanding of how AI and risk prediction models work,"1, 1 Not at all | 2, 2 A little | 3, 3 Moderately | 4, 4 Well | 5, 5 Very well",,,,,,,,,,,,@HIDDEN-SURVEY
 alert_response,decision_lab_answers,,radio,Usual response when a risk score or alert appears at work,"1, Follow it | 2, Weigh it with my own judgment | 3, Often dismiss or skip it | 4, Rarely see them",,,,,,,,,,,,@HIDDEN-SURVEY
-study_group,decision_lab_answers,,radio,Group (which cases showed the score-only display),"1, Group 1: score only on cases 1, 3, 5 | 2, Group 2: score only on cases 2, 4, 6",,,,,,,,,,,,@HIDDEN-SURVEY
+study_group,decision_lab_answers,,radio,Group (which cases showed the score-only display),"1, Group 1: score only on cases 1, 3, 5, 7 | 2, Group 2: score only on cases 2, 4, 6, 8",,,,,,,,,,,,@HIDDEN-SURVEY
 page_language,decision_lab_answers,,radio,Language of the page,"1, English | 2, Chinese",,,,,,,,,,,,@HIDDEN-SURVEY
 finished_at,decision_lab_answers,,text,Finished at,,"UTC time from the web page, ISO 8601",,,,,,,,,,,@HIDDEN-SURVEY
 c1_case_id,decision_lab_answers,,text,Case 1: case identifier,,"Medical ward, 84-year-old woman",,,,,,,,,,,@HIDDEN-SURVEY
@@ -70,5 +70,25 @@ c6_action,decision_lab_answers,,radio,Case 6: next step chosen,"1, Continue usua
 c6_sure,decision_lab_answers,,radio,Case 6: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
 c6_relied,decision_lab_answers,,radio,Case 6: how much the tool's display shaped the answers,"1, 1 Not at all | 2, 2 | 3, 3 | 4, 4 | 5, 5 Completely",,,,,,,,,,,,@HIDDEN-SURVEY
 c6_seconds,decision_lab_answers,,text,Case 6: seconds spent on the case,,,number,0,,,,,,,,,@HIDDEN-SURVEY
+c7_case_id,decision_lab_answers,,text,Case 7: case identifier,,"Cardiology ward, 86-year-old man",,,,,,,,,,,@HIDDEN-SURVEY
+c7_display,decision_lab_answers,,radio,Case 7: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
+c7_estimate,decision_lab_answers,,text,"Case 7: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c7_reference,decision_lab_answers,,text,"Case 7: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c7_tool,decision_lab_answers,,text,"Case 7: the tool's own estimate, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c7_points_off,decision_lab_answers,,text,"Case 7: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c7_action,decision_lab_answers,,radio,Case 7: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now | 5, Dismiss the tool's output and move on",,,,,,,,,,,,@HIDDEN-SURVEY
+c7_sure,decision_lab_answers,,radio,Case 7: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
+c7_relied,decision_lab_answers,,radio,Case 7: how much the tool's display shaped the answers,"1, 1 Not at all | 2, 2 | 3, 3 | 4, 4 | 5, 5 Completely",,,,,,,,,,,,@HIDDEN-SURVEY
+c7_seconds,decision_lab_answers,,text,Case 7: seconds spent on the case,,,number,0,,,,,,,,,@HIDDEN-SURVEY
+c8_case_id,decision_lab_answers,,text,Case 8: case identifier,,"Surgical ward, 44-year-old woman",,,,,,,,,,,@HIDDEN-SURVEY
+c8_display,decision_lab_answers,,radio,Case 8: display shown,"1, Score only | 2, Full display",,,,,,,,,,,,@HIDDEN-SURVEY
+c8_estimate,decision_lab_answers,,text,"Case 8: estimated chance of delirium, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c8_reference,decision_lab_answers,,text,"Case 8: reference risk in the scenario, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c8_tool,decision_lab_answers,,text,"Case 8: the tool's own estimate, in 100",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c8_points_off,decision_lab_answers,,text,"Case 8: points off (estimate minus reference, absolute)",,,integer,0,100,,,,,,,,@HIDDEN-SURVEY
+c8_action,decision_lab_answers,,radio,Case 8: next step chosen,"1, Continue usual care | 2, Reassess at the next shift | 3, Start delirium prevention measures now | 4, Ask the team to review the patient now | 5, Dismiss the tool's output and move on",,,,,,,,,,,,@HIDDEN-SURVEY
+c8_sure,decision_lab_answers,,radio,Case 8: confidence in the estimate,"1, 1 Not at all sure | 2, 2 | 3, 3 | 4, 4 | 5, 5 Very sure",,,,,,,,,,,,@HIDDEN-SURVEY
+c8_relied,decision_lab_answers,,radio,Case 8: how much the tool's display shaped the answers,"1, 1 Not at all | 2, 2 | 3, 3 | 4, 4 | 5, 5 Completely",,,,,,,,,,,,@HIDDEN-SURVEY
+c8_seconds,decision_lab_answers,,text,Case 8: seconds spent on the case,,,number,0,,,,,,,,,@HIDDEN-SURVEY
 comment,decision_lab_answers,,notes,Comments (optional) / 意见（选填）,,,,,,,,,,,,,
 share_ok,decision_lab_answers,,yesno,I agree to send these answers to the research team. / 我同意把这些回答发给研究团队。,,,,,,,,y,,,,,

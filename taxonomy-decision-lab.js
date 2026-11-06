@@ -82,11 +82,13 @@
     return parent.appendChild(el);
   }
 
-  /* 0 · Clinician test (#test). Six illustrative cases in a fixed order. Each is shown either as a score-only display
+  /* 0 · Clinician test (#test). Eight illustrative cases in a fixed order. Each is shown either as a score-only display
      (version A, like the displays in the paper's delirium cases) or as a display built from the taxonomy (version B).
      The versions alternate, and the group decides which cases get which, so across groups every case is seen both ways.
-     ref is the risk in each scenario that a perfectly informed reader would arrive at; when is the time window asked
-     about (48 hours unless the case says otherwise). */
+     ref is the risk in each scenario that a perfectly informed reader would arrive at, and b.risk is the tool's own
+     estimate. They match except in cases 4, 7 and 8, where the tool is wrong on purpose to show who follows it: case 4
+     warns about this on the full display, and cases 7 and 8 give no warning. Those two come last, so the tool has been
+     right for most of the test by then. when is the time window asked about (48 hours unless the case says otherwise). */
   /* REDCap hand-off. Paste the project's public survey link here, for example https://redcap.<institution>.edu/surveys/?s=XXXXXXXXXX,
      to show a "Send to the research team" button on the results screen. The button opens the survey with every answer filled
      in through the link, using the variable names in taxonomy-decision-lab-redcap-dictionary.csv, and the participant presses
@@ -97,7 +99,9 @@
 
   var WARD_BASE={en:'About 10 in 100 patients on this ward',zh:'这个病房约每 100 位患者中有 10 位'};
   var RECALIBRATED={en:'Checked last month: predictions on this ward had been running higher than observed, so this estimate has been recalibrated.',zh:'上月检查：这个病房的预测一直高于实际，因此这个估计已重新校准。'};
+  var WARD_MATCHED={en:'Checked last month: predictions on this ward matched observed rates overall.',zh:'上月检查：这个病房的预测总体上与实际发生率一致。'};
   var WARD_NEXT={en:'Start the ward’s delirium prevention measures and screen for delirium each shift.',zh:'启动病房的谵妄预防措施，并每班筛查谵妄。'};
+  var PREVENT_NEXT={en:'Start prevention measures and screen for delirium each shift.',zh:'启动预防措施，并每班筛查谵妄。'};
   var CASES=[
     {id:'ward-red',title:{en:'Medical ward · 84-year-old woman',zh:'内科病房 · 84 岁女性'},
      vignette:{en:'Admitted yesterday with pneumonia. Hard of hearing, new to the ward, oriented this morning.',zh:'昨天因肺炎入院。听力不好，刚转入病房，今早定向力正常。'},
@@ -123,7 +127,7 @@
      vignette:{en:'Admitted from a nursing home for hip fracture repair tomorrow. Lives with moderate dementia.',zh:'从养老院入院，明天做髋部骨折修复手术。患有中度痴呆。'},
      a:{kind:'list',icon:'none',unit:{en:'Surgical ward 2A',zh:'外科病房 2A'}},
      b:{risk:8,lo:3,hi:20,base:WARD_BASE,
-        reliability:{en:'Checked last month: predictions on this ward matched observed rates overall.',zh:'上月检查：这个病房的预测总体上与实际发生率一致。'},
+        reliability:WARD_MATCHED,
         caution:{en:'The model saw few patients admitted from nursing homes or living with dementia. For patients like her, its estimate is likely too low.',zh:'模型见过的养老院入院或痴呆患者很少。对像她这样的患者，这个估计很可能偏低。'},
         next:{en:'Use clinical judgment; consider starting prevention measures and screening each shift.',zh:'请结合临床判断；考虑启动预防措施，并每班筛查。'}},
      ref:25},
@@ -132,13 +136,23 @@
      a:{kind:'value',label:{en:'Predicted probability of delirium',zh:'谵妄预测概率'},value:'0.20'},
      b:{risk:20,lo:9,hi:38,base:WARD_BASE,
         reliability:{en:'The model was checked on few patients after hip surgery, so the range around this estimate is wide.',zh:'这个模型只在很少的髋部手术后患者身上检验过，所以这个估计的范围很宽。'},
-        next:{en:'Start prevention measures and screen for delirium each shift.',zh:'启动预防措施，并每班筛查谵妄。'}},
+        next:PREVENT_NEXT},
      ref:20},
     {id:'ward-amber',title:{en:'Medical ward · 81-year-old woman',zh:'内科病房 · 81 岁女性'},
      vignette:{en:'Admitted with a urinary tract infection. Mild memory problems at home, needed help to the bathroom overnight.',zh:'因尿路感染入院。在家时有轻度记忆问题，夜里需要人扶着去卫生间。'},
      a:{kind:'list',icon:'amber',unit:{en:'Medical ward 4B',zh:'内科病房 4B'}},
      b:{risk:18,lo:13,hi:24,base:WARD_BASE,reliability:RECALIBRATED,next:WARD_NEXT},
-     ref:18}
+     ref:18},
+    {id:'cardiac-value',title:{en:'Cardiology ward · 86-year-old man',zh:'心内科病房 · 86 岁男性'},
+     vignette:{en:'Admitted three days ago with heart failure. Started a sedating sleep medication last night. The nurse reports he is newly drowsy by day and restless at night, and he lost track of the conversation twice this morning.',zh:'三天前因心力衰竭入院。昨晚开始服用有镇静作用的助眠药。护士反映他新出现白天嗜睡、夜里躁动，今早还两次跟不上谈话。'},
+     a:{kind:'value',label:{en:'Delirium risk score',zh:'谵妄风险评分'},value:'0.06'},
+     b:{risk:6,lo:3,hi:11,base:WARD_BASE,reliability:WARD_MATCHED,next:{en:'Continue usual care.',zh:'继续常规护理。'}},
+     ref:60},
+    {id:'surgical-red',title:{en:'Surgical ward · 44-year-old woman',zh:'外科病房 · 44 岁女性'},
+     vignette:{en:'Day one after a planned gallbladder removal. Alert and oriented, walking the corridor, eating normally, and expecting to go home tomorrow. No memory problems, takes no sedatives.',zh:'计划性胆囊切除术后第一天。神志清楚，定向力正常，能在走廊里走动，进食正常，预计明天出院。没有记忆问题，不服用镇静药。'},
+     a:{kind:'list',icon:'red',unit:{en:'Surgical ward 2A',zh:'外科病房 2A'}},
+     b:{risk:45,lo:36,hi:55,base:WARD_BASE,reliability:WARD_MATCHED,next:PREVENT_NEXT},
+     ref:2}
   ];
   var ACTIONS={
     usual:{en:'Continue usual care',zh:'继续常规护理'},
