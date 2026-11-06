@@ -144,7 +144,8 @@
     usual:{en:'Continue usual care',zh:'继续常规护理'},
     reassess:{en:'Reassess at the next shift',zh:'下一班次再评估'},
     prevent:{en:'Start prevention now',zh:'现在开始预防'},
-    review:{en:'Ask the team to review now',zh:'现在请团队查看'}
+    review:{en:'Ask the team to review now',zh:'现在请团队查看'},
+    dismiss:{en:'Dismiss the tool’s output',zh:'关掉工具的提示'}
   };
 
   (function(){
@@ -282,7 +283,7 @@
     var ROLE_CODE={'Nurse':1,'Physician':2,'Other clinician':3,'Not a clinician':4};
     var INFORMATICS_CODE={'None':1,'Courses or workshops':2,'Degree or certification':3};
     var ALERTS_CODE={'Follow it':1,'Weigh it with my own judgment':2,'Often dismiss or skip it':3,'Rarely see them':4};
-    var ACTION_CODE={usual:1,reassess:2,prevent:3,review:4};
+    var ACTION_CODE={usual:1,reassess:2,prevent:3,review:4,dismiss:5};
     function redcapFields(){
       var f={participant:t.participant,role:ROLE_CODE[t.role]||'',years_practice:t.years,
              informatics_training:INFORMATICS_CODE[t.informatics]||'',ai_understanding:t.ai,alert_response:ALERTS_CODE[t.alerts]||'',study_group:t.group,
