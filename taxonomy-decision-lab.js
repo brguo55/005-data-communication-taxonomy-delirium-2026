@@ -343,7 +343,8 @@
       var btn=e.target.closest('button'),id=btn?btn.id:'';
       if(id==='test-redcap'){sendToRedcap();}
       else if(id==='test-download'){
-        var name='decision-lab-'+t.participant+'.csv';
+        // Anything unusual in a typed code becomes an underscore, so the file name stays safe on every system.
+        var name='participant_id_'+t.participant.replace(/[^\w-]+/g,'_')+'.csv';
         // The byte order mark tells Excel the file is UTF-8, so Chinese comments are not garbled.
         var url=URL.createObjectURL(new Blob(['\ufeff'+csv()],{type:'text/csv;charset=utf-8'}));
         var a=document.createElement('a');
