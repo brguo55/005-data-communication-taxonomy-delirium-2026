@@ -15,6 +15,8 @@ Project pages for *A Taxonomy of Issues in Healthcare Data-Driven Communication 
 - Decision lab page only: `taxonomy-decision-lab.css`, `taxonomy-decision-lab.js`
 - Figures: `taxonomy-figure1-prisma-flow.svg`, `taxonomy-figure2-classification.svg`
 - REDCap data dictionary for the clinician test: `taxonomy-decision-lab-redcap-dictionary.csv`
+- BigQuery queries that move the clinician test to MIMIC-IV results: `mimic-iv-queries/` (queries only, no data)
+- Notes for continuing the work on another computer: `HANDOFF.md`
 - `index.html` only forwards the site root to `taxonomy.html`; `.nojekyll` tells GitHub Pages to publish the files as they are
 
 On the Decision lab page, figures attributed to a study come from the delirium cases in the paper. All other values are illustrative, and the what-if index is a teaching device, not a clinical score.
