@@ -1,0 +1,324 @@
+\documentclass[10pt]{article}
+\pagestyle{plain}
+
+\usepackage{amsmath}
+\usepackage{newpxtext,newpxmath}
+\usepackage[scaled=1.03]{inconsolata}
+
+\usepackage[top=1in, bottom=1in, left=1.25in, right=1.25in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{listings}
+	\lstset{basicstyle = \linespread{1.2}\ttfamily, basewidth = {0.5em,0.5em}, breaklines}
+\usepackage{parskip}
+\usepackage{setspace}
+	\setstretch{1.3}
+
+\usepackage{booktabs}
+	\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\usepackage{dcolumn}
+	\newcolumntype{.}{D{.}{.}{-1}}
+
+\makeatletter
+\let\ftype@table\ftype@figure
+\makeatother
+
+
+
+\begin{document}
+
+
+
+Decision Lab, MIMIC-IV v3.1 \\
+Barney Guo, November 26, 2026
+
+
+
+\subsection*{A logistic regression for delirium in the ICU}
+\bigskip
+\subsubsection*{Purpose}
+
+The clinician test on the Decision Lab page currently shows illustrative risks. To replace them, we fit a simple prediction model on MIMIC-IV and choose the eight test cases from its real predictions, including cases where it is wrong. This note sets out the model, how it turns a patient's record into a risk, and how it will be checked.
+
+Numbers marked as illustrative are made up to show the arithmetic. Empty table cells are filled in as queries 13--19 in this folder are run.
+
+
+
+\subsubsection*{Part 1: Cohort and outcome}
+
+Each row of the data is one ICU stay (queries 09 and 14).
+
+\begin{itemize}
+	\item \emph{Who:} each adult patient's first ICU stay that lasted at least 24 hours.
+	\item \emph{When the prediction is made:} at $t_0$, 24 hours after ICU admission. Predictors use only data recorded before $t_0$.
+	\item \emph{Outcome:} $y_i = 1$ if any CAM-ICU assessment (item 228332) between $t_0$ and $t_0 + 48$~hours is positive, and $y_i = 0$ if the assessments in that window are all negative. Stays with no valid assessment in the window, and stays already positive before $t_0$, are excluded.
+	\item \emph{Training and test years:} the model is fit on 2008--2016 and tested on 2017--2019, which mimics using it on new patients after deployment. 2020--2022 is left out because only 42\% of those stays have any medication or procedure record (query 12).
+\end{itemize}
+
+\textbf{Table 1.} Cohort flow. Delirium counts for the two splits come from query 14.
+\begin{center}
+	\begin{tabular*}{\textwidth}{@{\hskip\tabcolsep\extracolsep{\fill}} l r r}
+	\toprule
+	Stays											& Number	& Delirium in 48 h \\
+	\midrule
+	First ICU stays of 24 hours or more					& 51,837	& \\
+	\quad Excluded: delirium found in the first 24 hours	& 8,079		& \\
+	\quad Excluded: no valid assessment in the next 48 hours	& 20,958	& \\
+	Cohort, 2008--2022									& 22,800	& 3,535 (15.5\%) \\
+	\quad Training, 2008--2016							& 13,520	& \\
+	\quad Test, 2017--2019								& 5,495		& \\
+	\bottomrule
+	\end{tabular*}
+\end{center}
+
+
+
+\subsubsection*{Part 2: The model}
+
+Let $p_i$ be the probability that stay $i$ develops delirium in the 48 hours after $t_0$. Logistic regression models the log odds of $p_i$ as a linear function of the predictors:
+\begin{equation*}
+	\begin{aligned}
+	z_i = \log \frac{p_i}{1 - p_i} &= \beta_0 + \beta_1 \, \text{age}_i + \beta_2 \, \text{female}_i \\
+	&\quad + \beta_3 \, \text{emergency}_i + \beta_4 \, \text{planned}_i + \textstyle\sum_{k} \gamma_k \, \text{unit}_{ik} \\
+	&\quad + \beta_5 \, \text{dementia}_i + \beta_6 \, \text{vent}_i + \beta_7 \, \text{benzo}_i + \beta_8 \, \text{sedative}_i + \beta_9 \, \text{opioid}_i .
+	\end{aligned}
+\end{equation*}
+Solving for $p_i$ turns the score $z_i$ into a risk between 0 and 1:
+\begin{equation*}
+	p_i = \frac{1}{1 + e^{-z_i}} .
+\end{equation*}
+
+Every predictor except age is an indicator equal to 1 or 0. Each text variable (sex, admission group, ICU type) has one reference category that gets no term. The intercept $\beta_0$ is the log odds when every predictor is zero, which includes an age of zero, so it only sets the level of the scale and has no clinical meaning of its own. The equation is written with male, observation admission, and one ICU type as references for readability. BigQuery chooses the references itself when it fits the model, and Table 4 records which categories it left out.
+
+\textbf{Table 2.} Predictors.
+\begin{center}
+	\begin{tabular}{@{} l p{0.72\textwidth} @{}}
+	\toprule
+	Predictor			& Definition \\
+	\midrule
+	age					& Age in years at ICU admission. MIMIC-IV shifts dates and caps the oldest ages, so ages are approximate. \\
+	female				& Sex recorded as female. \\
+	emergency, planned	& Admission type grouped as emergency (EW EMER., URGENT, DIRECT EMER.), planned (SURGICAL SAME DAY ADMISSION, ELECTIVE), or observation (all other types). \\
+	unit				& First care unit of the ICU stay, one indicator per type other than the reference. \\
+	dementia			& ICD-10 F01--F03 or G30, or ICD-9 290, 294.1 or 331.0 (excluding 290.3, 290.11 and 290.41), coded in the same hospitalization. \\
+	vent				& Invasive ventilation started before $t_0$. \\
+	benzo				& Midazolam, lorazepam or diazepam started before $t_0$. \\
+	sedative			& Propofol or dexmedetomidine started before $t_0$. \\
+	opioid				& Fentanyl, morphine or hydromorphone started before $t_0$. \\
+	\bottomrule
+	\end{tabular}
+\end{center}
+
+Language, race and insurance are kept for the subgroup checks in Part 5 but are not predictors.
+
+
+
+\subsubsection*{Part 3: Fitting the model}
+
+The coefficients are chosen to minimize the log loss on the training stays, which is the same as maximizing the likelihood:
+\begin{equation*}
+	\hat{\beta} = \arg\min_{\beta} \; -\frac{1}{n} \sum_{i=1}^{n} \bigl[ y_i \log p_i + (1 - y_i) \log (1 - p_i) \bigr] .
+\end{equation*}
+
+Query 15 fits the model in BigQuery ML:
+\begin{lstlisting}
+CREATE OR REPLACE MODEL `physionet-data-513915.delirium.lr_24h`
+OPTIONS (
+  model_type = 'logistic_reg',
+  input_label_cols = ['delirium_48h'],
+  data_split_method = 'NO_SPLIT',
+  category_encoding_method = 'DUMMY_ENCODING',
+  max_iterations = 50,
+  min_rel_progress = 0.0001
+) AS
+SELECT delirium_48h, age, gender, admission_group, first_careunit,
+       dementia, ventilated_24h, benzo_24h, sedative_24h, opioid_24h
+FROM `physionet-data-513915.delirium.model_data`
+WHERE split = 'train';
+\end{lstlisting}
+
+\begin{itemize}
+	\item \emph{No class weighting.} With about 15\% delirium, weighting the cases would push every predicted risk up, and the test page shows those risks to clinicians.
+	\item \emph{No penalty.} L1 and L2 regularization stay at BigQuery's default of zero. With about 2,000 delirium cases in the training years and fewer than 20 coefficients, the fit is stable without one.
+	\item \emph{Dummy encoding.} Each text variable loses one category, so each remaining coefficient compares a category with its reference. BigQuery's default one-hot encoding keeps every category, and its coefficients cannot be read that way.
+	\item \emph{Convergence.} BigQuery fits by gradient descent. It runs up to 50 iterations and stops once the loss improves by less than 0.01\% in an iteration. The second statement in query 15 lists the loss at each iteration, which should level off before the last one.
+	\item \emph{Scale.} BigQuery standardizes age while fitting, and query 19 reports the coefficients on the original scale, per year of age.
+\end{itemize}
+
+\textbf{Table 3.} Convergence, from query 15.
+\begin{center}
+	\begin{tabular*}{0.6 \textwidth}{@{\hskip\tabcolsep\extracolsep{\fill}} l r}
+	\toprule
+	Iterations run							& \\
+	Training loss at the last iteration		& \\
+	Change in the last iteration			& \\
+	\bottomrule
+	\end{tabular*}
+\end{center}
+
+
+
+\subsubsection*{Part 4: Reading the coefficients}
+
+\begin{itemize}
+	\item \emph{Odds ratios.} When an indicator changes from 0 to 1 with everything else fixed, the odds of delirium are multiplied by $e^{\beta_j}$. For age, $e^{\beta_1}$ is per year and $e^{10 \beta_1}$ is per ten years.
+	\item \emph{Odds are not risks.} At a baseline risk of 15\%, an odds ratio of 2 raises the risk to 26\%, not 30\%: the odds go from $0.15 / 0.85 = 0.176$ to $0.353$, and $0.353 / 1.353 = 0.261$.
+\end{itemize}
+
+\emph{Worked example, with illustrative coefficients.} Suppose $\beta_0 = -3.0$, $\beta_1 = 0.02$, $\beta_6 = 0.8$, and every other term is zero (a man in the reference ICU type, admitted for observation, with no dementia and no sedating drugs). For a 75-year-old ventilated patient,
+\begin{equation*}
+	z = -3.0 + 0.02 \cdot 75 + 0.8 = -0.7 ,
+	\qquad
+	p = \frac{1}{1 + e^{0.7}} = 0.332 .
+\end{equation*}
+The full display on the test page would show this as ``33 in 100 similar patients develop delirium in the next 48 hours.'' The real coefficients come from query 19.
+
+\textbf{Table 4.} Coefficients, from query 19.
+\begin{center}
+	\begin{tabular*}{0.8 \textwidth}{@{\hskip\tabcolsep\extracolsep{\fill}} l . .}
+	\toprule
+	Predictor							& \multicolumn{1}{c}{Log odds, $\hat{\beta}$}	& \multicolumn{1}{c}{Odds ratio, $e^{\hat{\beta}}$} \\
+	\midrule
+	Intercept							& & \\
+	Age, per year						& & \\
+	Sex:								& & \\
+	Admission:							& & \\
+	Admission:							& & \\
+	ICU type, one row per category		& & \\
+	Dementia							& & \\
+	Invasive ventilation				& & \\
+	Benzodiazepine						& & \\
+	Other sedative						& & \\
+	Opioid								& & \\
+	\midrule
+	\multicolumn{3}{@{}l}{Reference categories:} \\
+	\bottomrule
+	\end{tabular*}
+\end{center}
+
+
+
+\subsubsection*{Part 5: Checking the model}
+
+All checks use the test years, 2017--2019, except the training row of Table 5.
+
+\emph{Discrimination.} The AUROC is the probability that a randomly chosen stay with delirium gets a higher predicted risk than a randomly chosen stay without it, with ties counted as half:
+\begin{equation*}
+	\text{AUROC} = \frac{1}{n_1 n_0} \sum_{i : y_i = 1} \; \sum_{j : y_j = 0} \Bigl( \mathbf{1}[\hat{p}_i > \hat{p}_j] + \tfrac{1}{2} \, \mathbf{1}[\hat{p}_i = \hat{p}_j] \Bigr) ,
+\end{equation*}
+where $n_1$ and $n_0$ are the numbers of stays with and without delirium. Query 18 computes the same quantity from ranks, $\text{AUROC} = \bigl( R_1 - n_1 (n_1 + 1) / 2 \bigr) / (n_1 n_0)$, where $R_1$ is the sum of the ranks of the stays with delirium and tied stays share their average rank.
+
+\emph{Calibration.} A model is calibrated when its predicted risks match the rates actually observed. Query 17 sorts the test stays into ten equal groups by predicted risk and compares the mean predicted risk with the observed share in each group. The test page shows risks as numbers, so calibration matters as much as the AUROC. In Jauk et al., the AUROC held steady during deployment while calibration drifted.
+
+\textbf{Table 5.} Performance, from query 16.
+\begin{center}
+	\begin{tabular*}{0.7 \textwidth}{@{\hskip\tabcolsep\extracolsep{\fill}} l r . .}
+	\toprule
+	Years					& Stays		& \multicolumn{1}{c}{AUROC}	& \multicolumn{1}{c}{Log loss} \\
+	\midrule
+	Training, 2008--2016	& 13,520	& & \\
+	Test, 2017--2019		& 5,495		& & \\
+	\bottomrule
+	\end{tabular*}
+\end{center}
+
+\textbf{Table 6.} Calibration in the test years, from query 17. Group 1 has the lowest predicted risks.
+\begin{center}
+	\begin{tabular*}{0.6 \textwidth}{@{\hskip\tabcolsep\extracolsep{\fill}} c r . .}
+	\toprule
+	Group	& Stays	& \multicolumn{1}{c}{Predicted (\%)}	& \multicolumn{1}{c}{Observed (\%)} \\
+	\midrule
+	1		& & & \\
+	2		& & & \\
+	3		& & & \\
+	4		& & & \\
+	5		& & & \\
+	6		& & & \\
+	7		& & & \\
+	8		& & & \\
+	9		& & & \\
+	10		& & & \\
+	\bottomrule
+	\end{tabular*}
+\end{center}
+
+\emph{Subgroups.} Query 18 repeats the checks within groups of patients. A group whose mean predicted risk sits well below its observed rate is underestimated by the model, which makes it a candidate for the test case that carries a warning. AUROCs from fewer than about 30 delirium cases are unstable, so they are reported with their counts.
+
+\textbf{Table 7.} Subgroups in the test years, from query 18. Insurance has one row per category in the output.
+\begin{center}
+	\begin{tabular*}{\textwidth}{@{\hskip\tabcolsep\extracolsep{\fill}} l r r . . .}
+	\toprule
+	Group					& Stays	& Delirium	& \multicolumn{1}{c}{Observed (\%)}	& \multicolumn{1}{c}{Predicted (\%)}	& \multicolumn{1}{c}{AUROC} \\
+	\midrule
+	All						& & & & & \\
+	\midrule
+	Age 18--64				& & & & & \\
+	Age 65--79				& & & & & \\
+	Age 80+					& & & & & \\
+	\midrule
+	Dementia				& & & & & \\
+	No dementia				& & & & & \\
+	\midrule
+	Sex: F					& & & & & \\
+	Sex: M					& & & & & \\
+	\midrule
+	Admission: emergency	& & & & & \\
+	Admission: planned		& & & & & \\
+	Admission: observation	& & & & & \\
+	\midrule
+	Language: English		& & & & & \\
+	Language: Other			& & & & & \\
+	Language: Unknown		& & & & & \\
+	\midrule
+	Race: White				& & & & & \\
+	Race: Black				& & & & & \\
+	Race: Hispanic or Latino	& & & & & \\
+	Race: Asian				& & & & & \\
+	Race: Other				& & & & & \\
+	Race: Unknown			& & & & & \\
+	\midrule
+	Insurance:				& & & & & \\
+	\bottomrule
+	\end{tabular*}
+\end{center}
+
+
+
+\subsubsection*{Part 6: Decisions still open}
+
+\begin{itemize}
+	\item \emph{Prediction time.} Predict 12 or 24 hours after ICU admission. Table 8 shows when delirium is first detected: a 12-hour prediction loses only the stays first positive in the first 12 hours, while a 24-hour prediction also loses those first positive between 12 and 24 hours.
+	\item \emph{What counts as a high risk.} Choosing test cases where the model is right or wrong needs a cut-off. One option is the top 15\% of predicted risk, which matches the red and yellow icons in Jauk et al.\ (85th percentile and above). Another is a fixed predicted risk agreed with clinicians.
+	\item \emph{Outcome window.} The main analysis keeps 48 hours. Sensitivity analyses widen the window and count patients who left the ICU without an assessment as not delirious, which alone lowers the rate from 15.5\% to about 10.2\%.
+\end{itemize}
+
+\textbf{Table 8.} When the first positive CAM-ICU appears, among first ICU stays with any positive result, from query 13.
+\begin{center}
+	\begin{tabular*}{0.6 \textwidth}{@{\hskip\tabcolsep\extracolsep{\fill}} l r .}
+	\toprule
+	Time after ICU admission	& Stays	& \multicolumn{1}{c}{Share (\%)} \\
+	\midrule
+	Day 1, 0--12 hours		& & \\
+	Day 1, 12--24 hours		& & \\
+	Day 2, 24--48 hours		& & \\
+	Day 3, 48--72 hours		& & \\
+	Days 4--7				& & \\
+	After day 7				& & \\
+	\bottomrule
+	\end{tabular*}
+\end{center}
+
+
+
+\subsubsection*{Limitations}
+
+\begin{itemize}
+	\item Dementia comes from diagnosis codes for the same hospitalization, which are assigned at discharge. Coded dementia is only 2--4\%, so it is probably under-recorded.
+	\item Coding moved from ICD-9 to ICD-10 in October 2015, inside the training years.
+	\item CAM-ICU is missing or ``unable to assess'' more often for patients with a language barrier or advanced dementia, so the outcome itself is less complete for them.
+	\item All stays come from one academic medical center in Boston.
+\end{itemize}
+
+
+
+\end{document}
