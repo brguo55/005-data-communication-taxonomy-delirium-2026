@@ -1,6 +1,6 @@
 -- 14 Modeling table: train on 2008-2016, test on 2017-2019; 2020-2022 left out (incomplete records, see 12).
 -- Status: not run yet. Check after running: train 13,520 stays, test 5,495 stays.
--- language_group is kept for subgroup checks only and is not a model input.
+-- language_group, race_group and insurance are kept for subgroup checks only and are not model inputs.
 CREATE OR REPLACE TABLE `physionet-data-513915.delirium.model_data` AS
 SELECT
   stay_id,
@@ -16,7 +16,16 @@ SELECT
     WHEN UPPER(language) = 'ENGLISH' THEN 'English'
     WHEN language IS NULL OR language = '?' THEN 'Unknown'
     ELSE 'Other'
-  END AS language_group
+  END AS language_group,
+  CASE
+    WHEN STARTS_WITH(race, 'WHITE') THEN 'White'
+    WHEN STARTS_WITH(race, 'BLACK') THEN 'Black'
+    WHEN STARTS_WITH(race, 'HISPANIC') OR race = 'SOUTH AMERICAN' THEN 'Hispanic or Latino'
+    WHEN STARTS_WITH(race, 'ASIAN') THEN 'Asian'
+    WHEN race IS NULL OR race IN ('UNKNOWN', 'UNABLE TO OBTAIN', 'PATIENT DECLINED TO ANSWER') THEN 'Unknown'
+    ELSE 'Other'
+  END AS race_group,
+  COALESCE(insurance, 'Unknown') AS insurance
 FROM `physionet-data-513915.delirium.icu_cohort`
 WHERE NOT positive_first_24h
   AND delirium_48h IS NOT NULL

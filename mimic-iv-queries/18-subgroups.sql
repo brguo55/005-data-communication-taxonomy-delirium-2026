@@ -1,6 +1,7 @@
 -- 18 Test-year performance by subgroup: observed and mean predicted delirium, and AUROC (Mann-Whitney, ties averaged).
 -- Status: not run yet. The "All" AUROC should be close to the test AUROC in 16.
 -- A subgroup whose predicted_pct sits well below observed_pct is underestimated: a candidate for the warned case.
+-- Subgroups with few delirium cases (under about 30) give unstable AUROCs; report them with their counts.
 WITH t AS (
   SELECT *,
          CASE WHEN age < 65 THEN 'Age 18-64' WHEN age < 80 THEN 'Age 65-79' ELSE 'Age 80+' END AS age_group
@@ -8,7 +9,7 @@ WITH t AS (
   WHERE split = 'test'
 ),
 p AS (
-  SELECT age_group, dementia, language_group, admission_group, gender, delirium_48h,
+  SELECT age_group, dementia, language_group, race_group, insurance, admission_group, gender, delirium_48h,
          (SELECT prob FROM UNNEST(predicted_delirium_48h_probs) WHERE label = 1) AS risk
   FROM ML.PREDICT(MODEL `physionet-data-513915.delirium.lr_24h`, (SELECT * FROM t))
 ),
@@ -17,6 +18,8 @@ long AS (
   UNION ALL SELECT age_group, delirium_48h, risk FROM p
   UNION ALL SELECT IF(dementia = 1, 'Dementia', 'No dementia'), delirium_48h, risk FROM p
   UNION ALL SELECT CONCAT('Language: ', language_group), delirium_48h, risk FROM p
+  UNION ALL SELECT CONCAT('Race: ', race_group), delirium_48h, risk FROM p
+  UNION ALL SELECT CONCAT('Insurance: ', insurance), delirium_48h, risk FROM p
   UNION ALL SELECT CONCAT('Admission: ', admission_group), delirium_48h, risk FROM p
   UNION ALL SELECT CONCAT('Sex: ', gender), delirium_48h, risk FROM p
 ),
