@@ -1,4 +1,6 @@
 -- 19 Model coefficients as log odds and odds ratios (age is per year).
+-- Text variables use dummy encoding (see 15): the category missing from the output is the reference,
+--   and each listed category's odds ratio is against it.
 -- Status: not run yet.
 SELECT processed_input, CAST(NULL AS STRING) AS category,
        ROUND(weight, 3) AS log_odds, ROUND(EXP(weight), 2) AS odds_ratio
