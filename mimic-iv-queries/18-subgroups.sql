@@ -1,5 +1,5 @@
 -- 18 Test-year performance by subgroup: observed and mean predicted delirium, and AUROC (Mann-Whitney, ties averaged).
--- Status: run on 2026-11-27 after fixing a FLOAT64 partition error. All: 5,495 stays, 15.7% observed, 13.9% predicted,
+-- Status: run on 2026-11-27 on the refit model, after fixing a FLOAT64 partition error. All: 5,495 stays, 15.7% observed, 14.0% predicted,
 --   AUROC 0.764 (matches 16). Largest underestimate: dementia, 42.4% observed vs 34.9% predicted, AUROC 0.63. Also
 --   underestimated: emergency admissions, age 80+, race unknown, Medicaid. Observation admissions are overestimated.
 -- Groups with fewer than 20 stays are left out (HAVING below), so no small cell reaches a public file.

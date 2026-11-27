@@ -230,11 +230,13 @@ where $n_1$ and $n_0$ are the numbers of stays with and without delirium. Query 
 	\toprule
 	Years					& Stays		& \multicolumn{1}{c}{AUROC}	& \multicolumn{1}{c}{Log loss} \\
 	\midrule
-	Training, 2008--2016	& 13,520	& 0.739 & 0.3722 \\
-	Test, 2017--2019		& 5,495		& 0.764 & 0.3730 \\
+	Training, 2008--2016	& 13,520	& 0.739 & 0.3723 \\
+	Test, 2017--2019		& 5,495		& 0.764 & 0.3723 \\
 	\bottomrule
 	\end{tabular*}
 \end{center}
+
+The training log loss from query 16 (0.3723) differs slightly from the last loss BigQuery reports during fitting (0.37224, Table 3).
 
 \textbf{Table 6.} Calibration in the test years, from query 17. Group 1 has the lowest predicted risks.
 \begin{center}
@@ -245,18 +247,18 @@ where $n_1$ and $n_0$ are the numbers of stays with and without delirium. Query 
 	1		& 550 & 3.8 & 3.3 \\
 	2		& 550 & 5.4 & 4.7 \\
 	3		& 550 & 6.8 & 6.9 \\
-	4		& 550 & 8.3 & 8.2 \\
+	4		& 550 & 8.3 & 8.0 \\
 	5		& 550 & 9.8 & 7.5 \\
-	6		& 549 & 11.4 & 13.8 \\
-	7		& 549 & 13.5 & 14.9 \\
+	6		& 549 & 11.4 & 14.2 \\
+	7		& 549 & 13.5 & 14.8 \\
 	8		& 549 & 17.0 & 14.9 \\
-	9		& 549 & 23.0 & 31.3 \\
-	10		& 549 & 40.5 & 51.4 \\
+	9		& 549 & 23.0 & 31.1 \\
+	10		& 549 & 40.7 & 51.5 \\
 	\bottomrule
 	\end{tabular*}
 \end{center}
 
-In the test years, predicted and observed risks agree within about 2.5 percentage points in groups 1 to 8. The model underestimates the two highest groups: 23.0\% predicted against 31.3\% observed in group 9, and 40.5\% against 51.4\% in group 10. Across all test stays the mean predicted risk is 14.0\% and the observed rate 15.7\%. With about 550 stays per group, the observed rates carry a 95\% interval of roughly $\pm 4$ points in the top two groups, so both gaps are larger than chance alone.
+In the test years, predicted and observed risks agree within about 3 percentage points in groups 1 to 8. The model underestimates the two highest groups: 23.0\% predicted against 31.1\% observed in group 9, and 40.7\% against 51.5\% in group 10. Across all test stays the mean predicted risk is 14.0\% and the observed rate 15.7\%. With about 550 stays per group, the observed rates carry a 95\% interval of roughly $\pm 4$ points in the top two groups, so both gaps are larger than chance alone.
 
 \emph{Subgroups.} Query 18 repeats the checks within groups of patients. A group whose mean predicted risk sits well below its observed rate is underestimated by the model, which makes it a candidate for the test case that carries a warning. AUROCs from fewer than about 30 delirium cases are unstable, so they are reported with their counts.
 
@@ -266,42 +268,42 @@ In the test years, predicted and observed risks agree within about 2.5 percentag
 	\toprule
 	Group					& Stays	& Delirium	& \multicolumn{1}{c}{Observed (\%)}	& \multicolumn{1}{c}{Predicted (\%)}	& \multicolumn{1}{c}{AUROC} \\
 	\midrule
-	All	& 5,495 & 862 & 15.7 & 13.9 & 0.764 \\
+	All	& 5,495 & 862 & 15.7 & 14.0 & 0.764 \\
 	\midrule
-	Age 18--64	& 2,561 & 326 & 12.7 & 11.6 & 0.800 \\
-	Age 65--79	& 1,976 & 321 & 16.2 & 14.6 & 0.720 \\
+	Age 18--64	& 2,561 & 326 & 12.7 & 11.6 & 0.801 \\
+	Age 65--79	& 1,976 & 321 & 16.2 & 14.6 & 0.721 \\
 	Age 80+	& 958 & 215 & 22.4 & 18.8 & 0.716 \\
 	\midrule
 	Dementia	& 205 & 87 & 42.4 & 34.9 & 0.630 \\
-	No dementia	& 5,290 & 775 & 14.7 & 13.1 & 0.755 \\
+	No dementia	& 5,290 & 775 & 14.7 & 13.2 & 0.756 \\
 	\midrule
-	Sex: F	& 2,320 & 350 & 15.1 & 13.7 & 0.771 \\
-	Sex: M	& 3,175 & 512 & 16.1 & 14.1 & 0.758 \\
+	Sex: F	& 2,320 & 350 & 15.1 & 13.8 & 0.772 \\
+	Sex: M	& 3,175 & 512 & 16.1 & 14.1 & 0.759 \\
 	\midrule
-	Admission: emergency	& 2,929 & 592 & 20.2 & 15.7 & 0.768 \\
+	Admission: emergency	& 2,929 & 592 & 20.2 & 15.8 & 0.768 \\
 	Admission: planned	& 1,000 & 82 & 8.2 & 8.2 & 0.734 \\
-	Admission: observation	& 1,566 & 188 & 12.0 & 14.2 & 0.733 \\
+	Admission: observation	& 1,566 & 188 & 12.0 & 14.3 & 0.732 \\
 	\midrule
 	Language: English	& 4,942 & 769 & 15.6 & 13.7 & 0.761 \\
-	Language: Other	& 543 & 91 & 16.8 & 16.0 & 0.788 \\
+	Language: Other	& 543 & 91 & 16.8 & 16.1 & 0.788 \\
 	\midrule
 	Race: White	& 3,521 & 507 & 14.4 & 13.3 & 0.741 \\
-	Race: Black	& 398 & 62 & 15.6 & 13.7 & 0.769 \\
-	Race: Hispanic or Latino	& 174 & 25 & 14.4 & 12.1 & 0.837 \\
-	Race: Asian	& 175 & 20 & 11.4 & 13.1 & 0.790 \\
+	Race: Black	& 398 & 62 & 15.6 & 13.8 & 0.768 \\
+	Race: Hispanic or Latino	& 174 & 25 & 14.4 & 12.1 & 0.838 \\
+	Race: Asian	& 175 & 20 & 11.4 & 13.2 & 0.790 \\
 	Race: Other	& 289 & 44 & 15.2 & 12.6 & 0.751 \\
 	Race: Unknown	& 938 & 204 & 21.7 & 17.4 & 0.798 \\
 	\midrule
 	Insurance: Medicare	& 2,740 & 502 & 18.3 & 15.9 & 0.724 \\
 	Insurance: Medicaid	& 857 & 138 & 16.1 & 12.7 & 0.798 \\
-	Insurance: Private	& 1,676 & 190 & 11.3 & 11.5 & 0.787 \\
+	Insurance: Private	& 1,676 & 190 & 11.3 & 11.6 & 0.787 \\
 	Insurance: Other	& 149 & 20 & 13.4 & 13.5 & 0.850 \\
 	Insurance: Unknown	& 72 & 12 & 16.7 & 13.0 & 0.840 \\
 	\bottomrule
 	\end{tabular*}
 \end{center}
 
-Across all test stays the model predicts 13.9\% against 15.7\% observed, a gap of 1.8 points. The largest gap is in patients with coded dementia: 34.9\% predicted against 42.4\% observed, with the lowest AUROC (0.63). Emergency admissions (15.7\% against 20.2\%), patients aged 80 and over (18.8\% against 22.4\%), stays with race recorded as unknown (17.4\% against 21.7\%) and Medicaid patients (12.7\% against 16.1\%) are also underestimated by more than the overall gap. Observation admissions are overestimated (14.2\% against 12.0\%). Patients whose language is not English show no gap (16.0\% against 16.8\%), but a language barrier can block the assessment itself (query 02), so patients left without an outcome are missing from this check. Groups with fewer than about 30 delirium cases give unstable AUROCs.
+Across all test stays the model predicts 14.0\% against 15.7\% observed, a gap of 1.7 points. The largest gap is in patients with coded dementia: 34.9\% predicted against 42.4\% observed, with the lowest AUROC (0.63). Emergency admissions (15.8\% against 20.2\%), patients aged 80 and over (18.8\% against 22.4\%), stays with race recorded as unknown (17.4\% against 21.7\%) and Medicaid patients (12.7\% against 16.1\%) are also underestimated by more than the overall gap. Observation admissions are overestimated (14.3\% against 12.0\%). Patients whose language is not English show little gap (16.1\% against 16.8\%), but a language barrier can block the assessment itself (query 02), so patients left without an outcome are missing from this check. Groups with fewer than about 30 delirium cases give unstable AUROCs.
 
 
 

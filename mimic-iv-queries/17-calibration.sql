@@ -1,7 +1,7 @@
 -- 17 Calibration on the test years: predicted against observed delirium in ten risk groups.
--- Status: run on 2026-11-27. Predicted vs observed (%) by decile: 3.8/3.3, 5.4/4.7, 6.8/6.9, 8.3/8.2, 9.8/7.5,
---   11.4/13.8, 13.5/14.9, 17.0/14.9, 23.0/31.3, 40.5/51.4. Mean predicted 14.0% vs observed 15.7%: well calibrated
---   up to decile 8, underestimating the two highest-risk deciles.
+-- Status: run on 2026-11-27 on the refit model. Predicted vs observed (%) by decile: 3.8/3.3, 5.4/4.7, 6.8/6.9, 8.3/8.0,
+--   9.8/7.5, 11.4/14.2, 13.5/14.8, 17.0/14.9, 23.0/31.1, 40.7/51.5. Mean predicted 14.0% vs observed 15.7%: within about
+--   3 points up to decile 8, underestimating the two highest-risk deciles.
 WITH p AS (
   SELECT delirium_48h,
          (SELECT prob FROM UNNEST(predicted_delirium_48h_probs) WHERE label = 1) AS risk
