@@ -39,7 +39,7 @@
 \vspace{0.3em}
 {\color{black!60}Prepared by Barney Guo for Dr.\ Fu}
 
-The clinician test currently uses patients and risk numbers that were written as illustrations. Over the past two weeks I set up MIMIC-IV, built an ICU cohort, and fitted a first prediction model, so that the test can use numbers from real ICU stays. Each step says what I did, what I found, and why it shapes the next step.
+The clinician test currently uses patients and risk numbers that were written as illustrations. Over the past two weeks I set up MIMIC-IV, built an ICU cohort, fitted a first prediction model, and chose eight test cases from its real results. Each step says what I did, what I found, and why it shapes the next step.
 
 \begin{plainbox}{In short}
 \begin{itemize}
@@ -47,6 +47,7 @@ The clinician test currently uses patients and risk numbers that were written as
 	\item Delirium can be measured reliably in the ICU through CAM-ICU. Diagnosis codes miss most cases, so ward numbers are not usable yet.
 	\item From an ICU cohort of \textbf{22,800} stays, a first logistic regression reaches an AUROC of \textbf{0.76} on 2017--2019 patients it has not seen.
 	\item Its risks match the observed rates for most patients, but it underestimates the highest-risk group (41\% predicted, 52\% observed) and patients with dementia (35\% predicted, 42\% observed). These are real errors the test can use.
+	\item The eight test cases are now chosen from groups of real ICU stays: five where the model is right and three where it is wrong.
 \end{itemize}
 \end{plainbox}
 
@@ -348,20 +349,51 @@ Up to group 8, predicted and observed risks agree within about 3 percentage poin
 \why{The model ranks patients reasonably well and gives sensible risks for most of them. Its errors fall where the taxonomy expects them: the highest-risk patients and patients with dementia are underestimated. That gives the test real cases where the tool is wrong, such as a patient with dementia whose displayed risk is too low, with the full display warning about it.}
 
 %--------------------------------------------------------------------------------------------------
-\step{9}{What this adds to the taxonomy}
+\step{9}{Choose the eight cases}
+
+Each case is written from a group of at least 30 similar test-year stays (2017--2019). The tool shows the model's mean prediction for the group, and the correct answer is the group's observed rate. No case describes a real patient. As in the current test, the model is wrong in cases 4, 7 and 8, and only case 4's full display carries a warning.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{c l X r r r}
+	\toprule
+	Case & Model & Patients like these & Stays & Tool shows & Observed \\
+	\midrule
+	1 & Right & Aged 65--79, emergency admission, medical ICU & 104 & 13.8\% & 13.5\% \\
+	2 & Right & Aged 65--79, emergency admission, coronary care unit & 127 & 5.9\% & 6.3\% \\
+	3 & Right & Aged 80 and over, observation admission, neuro intermediate unit & 93 & 14.0\% & 11.8\% \\
+	4 & Too low, warned & Under 80, with dementia & 73 & 31.6\% & 43.8\% \\
+	5 & Right & Aged 65--79, planned admission, cardiac vascular ICU, ventilated after heart surgery & 206 & 11.0\% & 10.7\% \\
+	6 & Right & Aged 80 and over, emergency admission, medical ICU & 55 & 16.9\% & 16.4\% \\
+	7 & Too low & Aged 18--64, emergency admission, medical ICU, ventilated & 50 & 30.2\% & 62.0\% \\
+	8 & Too high & Aged 65--79, observation admission, cardiac vascular ICU, ventilated & 68 & 18.7\% & 4.4\% \\
+	\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{itemize}
+	\item \textbf{No high-risk group is predicted correctly.} Every group of at least 30 stays with a predicted risk above about 20\% is underestimated, by 17 to 32 points, which matches the calibration in step 8. So the correct cases run from 6\% to 17\%, and the high tool values in the test are the wrong ones. That is how this model behaves, but participants could pick up the pattern.
+	\item \textbf{Ventilation means different things in different ICUs.} Ventilated patients after planned heart surgery are predicted correctly (11.0\% against 10.7\%), ventilated observation admissions to the cardiac ICU are overestimated (18.7\% against 4.4\%), and ventilated medical ICU patients are underestimated (30.2\% against 62.0\%). The model only knows that a patient is ventilated, not why.
+	\item \textbf{Dementia.} The clearest gap is in patients under 80 with dementia (31.6\% against 43.8\%). For those 80 and over the gap is smaller and within chance (36.6\% against 41.7\%).
+\end{itemize}
+
+\why{Every number in the test now comes from real ICU stays, and every error is one the model really makes. Each wrong case has a clue a careful clinician can use: a young patient on a ventilator in the medical ICU, a short observation stay after a cardiac procedure, a patient with dementia.}
+
+%--------------------------------------------------------------------------------------------------
+\step{10}{What this adds to the taxonomy}
 
 \begin{itemize}
 	\item \textbf{Under-documentation.} Diagnosis codes miss most delirium, one in five CAM-ICU assessments cannot be completed, and 7,116 patients stayed in the ICU with no assessment recorded. A model trained on these labels inherits the gaps. This may be what you meant by ``low rate to document''.
 	\item \textbf{Equity and subgroup reliability.} The model underestimates delirium most for patients with dementia, whose AUROC is also the lowest. Patients with a language barrier show no gap in the model, but they are harder to assess in the first place, so the ones without an outcome never reach this check.
 	\item \textbf{Model robustness.} The AUROC holds on the later years while the highest-risk group is underestimated, the same pattern Jauk et al.\ saw during deployment. How completely the data are recorded also changes across years.
+	\item \textbf{Risk and context.} The same input, being on a ventilator, carries a different risk in different ICUs, and the model cannot tell them apart.
 \end{itemize}
 
 %--------------------------------------------------------------------------------------------------
-\step{10}{Next steps}
+\step{11}{Next steps}
 
 \begin{itemize}
-	\item \textbf{Choose eight situations from the model's real results:} correct predictions at high and low risk, a missed delirium, a false alarm, a wide-uncertainty case, and an underestimated patient with dementia shown with a warning.
-	\item \textbf{Write composite cases} from the patterns in each situation, never copied from a single patient. Have the clinician you found review them, and confirm with PhysioNet that such cases can appear on a public page.
+	\item \textbf{Write a composite case for each of the eight groups,} describing what is typical of the group, never a single patient. Have the clinician you found review them, and confirm with PhysioNet that such cases can appear on a public page.
 	\item \textbf{Run the planned checks:} a 12-hour version of the cohort, a longer outcome window, and counting patients who left the ICU without an assessment as not delirious.
 	\item \textbf{Update the website} in English and Chinese: real base rates, and ``the model was wrong'' in place of ``the tool was wrong on purpose''.
 \end{itemize}
@@ -374,6 +406,7 @@ Up to group 8, predicted and observed risks agree within about 3 percentage poin
 	\item \textbf{Fair clues.} When the tool is wrong in a case, what should a careful clinician be able to notice in the patient description? Where is the line between a fair clue and giving the answer away?
 	\item \textbf{The full display.} Which lines matter most to clinicians: the range, the comparison rate, the reliability note, the caution, or the suggested next step? Is any of it confusing or too long?
 	\item \textbf{The warning.} For a patient with dementia, whose risk the model underestimates, how strongly should the display warn: a plain caution, or an explicit suggestion to rely on clinical judgment?
+	\item \textbf{A learnable pattern.} In the eight cases, the tool is wrong whenever it shows a risk above about 18\%, because that is how this model behaves. Is it a problem if participants notice this, or is it a realistic part of using the tool?
 	\item \textbf{Participants.} Which clinicians do we most need, for example ICU nurses, physicians, or people with informatics training? How many could your reviewer help us reach?
 	\item \textbf{Telling participants.} The results screen reveals which cases the tool got wrong. Is that the right way to end the test, and should the consent text say beforehand that the tool may be wrong?
 	\item \textbf{Talking about groups.} The model underestimates risk most for patients with dementia and some other groups. How far should the paper go in discussing this, given that some groups are small?
@@ -400,6 +433,7 @@ Up to group 8, predicted and observed risks agree within about 3 percentage poin
 	\item The model uses nine variables. Laboratory values, sedation depth and severity scores are not yet included.
 	\item Dementia comes from diagnosis codes for the same hospitalization, which are assigned at discharge. It is a chronic condition, so the leak is small, and codes for dementia with delirium are excluded. Coded dementia is only 2--4\%, so it is probably under-recorded too.
 	\item The ``Other'' ICU type merges rare units, so its coefficient rests on few stays.
+	\item The case groups come from the 2017--2019 test years and need at least 30 stays each, so some situations, such as a correctly predicted high-risk patient, have no group to draw on.
 	\item Coding moved from ICD-9 to ICD-10 in October 2015, inside the 2014--2016 group.
 	\item MIMIC-IV shifts dates and caps the age of the oldest patients, so ages and years are approximate.
 	\item All results come from one academic medical center in Boston.
