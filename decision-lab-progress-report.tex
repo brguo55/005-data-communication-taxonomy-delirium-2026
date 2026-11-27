@@ -4,6 +4,7 @@
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage{amsmath}
 \usepackage{newpxtext,newpxmath}
 \usepackage[top=1in, bottom=1in, left=1.1in, right=1.1in]{geometry}
 \usepackage{parskip}
@@ -351,6 +352,8 @@ Up to group 8, predicted and observed risks agree within about 3 percentage poin
 %--------------------------------------------------------------------------------------------------
 \step{9}{Choose the eight cases}
 
+\textbf{Why the cases are composites, not real patients.} The MIMIC-IV data use agreement lets credentialed researchers use the data for research but not pass patient-level records to anyone else. A record placed on the test's public website, or sent to an online service, would break that agreement, even with the identifiers already removed. A single real stay would also be closer to identifying a person than a group is. So each case describes what is typical of a group of at least 30 similar stays, and only group-level numbers leave BigQuery. This also matches what the numbers mean: a risk of 14 in 100 is a statement about patients like this one, and the correct answer is the rate observed in such a group, not whether one person happened to develop delirium.
+
 Each case is written from a group of at least 30 similar test-year stays (2017--2019). The tool shows the model's mean prediction for the group, and the correct answer is the group's observed rate. No case describes a real patient. As in the current test, the model is wrong in cases 4, 7 and 8, and only case 4's full display carries a warning.
 
 \begin{center}
@@ -439,5 +442,50 @@ Each case is written from a group of at least 30 similar test-year stays (2017--
 	\item All results come from one academic medical center in Boston.
 \end{itemize}
 }
+
+\section*{Appendix: methods and formulas}
+
+\textbf{Data.} MIMIC-IV v3.1: de-identified records from Beth Israel Deaconess Medical Center in Boston, 2008--2022, accessed through PhysioNet with credentialed access, CITI training and the signed data use agreement, and analysed in Google BigQuery. All queries are in the repository folder \texttt{mimic-iv-queries}.
+
+\textbf{Cohort and outcome.} For each adult patient's first ICU stay lasting at least 24 hours, the prediction time is
+\begin{equation*}
+	t_0 = \text{ICU admission} + 24 \text{ hours},
+\end{equation*}
+and the outcome is
+\begin{equation*}
+	y_i =
+	\begin{cases}
+		1 & \text{if stay } i \text{ has a positive CAM-ICU between } t_0 \text{ and } t_0 + 48 \text{ hours,} \\
+		0 & \text{if it has only negative results in that window.}
+	\end{cases}
+\end{equation*}
+Stays with a positive result before $t_0$, or with no positive or negative result in the window, are excluded.
+
+\textbf{Model.} Logistic regression gives each stay a score $z_i$, a weighted sum of its characteristics, and turns the score into a risk $p_i$ between 0 and 1:
+\begin{equation*}
+	z_i = \beta_0 + \sum_{j} \beta_j x_{ij}, \qquad p_i = \frac{1}{1 + e^{-z_i}} .
+\end{equation*}
+The $x_{ij}$ are age in years and indicators (1 or 0) for sex, admission type, ICU type, dementia, and ventilation, benzodiazepines, other sedatives and opioids in the first 24 hours. The weights $\beta_j$ are chosen to minimize the log loss on the 2008--2016 stays,
+\begin{equation*}
+	\text{Log loss} = -\frac{1}{n} \sum_{i=1}^{n} \bigl[ y_i \log p_i + (1 - y_i) \log (1 - p_i) \bigr] ,
+\end{equation*}
+which is the same as maximizing the likelihood. An odds ratio, $e^{\beta_j}$, is how much the odds of delirium are multiplied when $x_{ij}$ goes up by one with everything else fixed.
+
+\textbf{Discrimination.} The AUROC is the share of pairs, one stay with delirium ($n_1$ in all) and one without ($n_0$), in which the stay with delirium gets the higher risk, counting ties as half:
+\begin{equation*}
+	\text{AUROC} = \frac{1}{n_1 n_0} \sum_{i : y_i = 1} \; \sum_{k : y_k = 0} \Bigl( \mathbf{1}[p_i > p_k] + \tfrac{1}{2} \, \mathbf{1}[p_i = p_k] \Bigr) .
+\end{equation*}
+0.5 is a coin toss and 1 a perfect ordering. It is computed on the 2017--2019 stays, which the model did not see.
+
+\textbf{Calibration.} The 2017--2019 stays are sorted by predicted risk into ten groups $G_1, \dots, G_{10}$ of equal size, and in each group the mean predicted risk is compared with the observed rate:
+\begin{equation*}
+	\bar{p}_g = \frac{1}{|G_g|} \sum_{i \in G_g} p_i , \qquad \bar{y}_g = \frac{1}{|G_g|} \sum_{i \in G_g} y_i .
+\end{equation*}
+
+\textbf{Case groups.} A case group $g$ is a set of at least 30 test-year stays that share age band, admission type, ICU type, dementia, ventilation and benzodiazepines. The tool's displayed risk is $\bar{p}_g$, the correct answer is $\bar{y}_g$, and the gap and its rough 95\% margin are
+\begin{equation*}
+	\text{gap}_g = \bar{y}_g - \bar{p}_g , \qquad \text{margin}_g = 1.96 \sqrt{\frac{\bar{y}_g (1 - \bar{y}_g)}{n_g}} .
+\end{equation*}
+The model counts as right for the group when $|\text{gap}_g| < \text{margin}_g$, too low when the gap is positive and larger, and too high when it is negative and larger.
 
 \end{document}
