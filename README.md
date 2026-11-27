@@ -17,6 +17,7 @@ Project pages for *A Taxonomy of Issues in Healthcare Data-Driven Communication 
 - REDCap data dictionary for the clinician test: `taxonomy-decision-lab-redcap-dictionary.csv`
 - BigQuery queries that move the clinician test to MIMIC-IV results: `mimic-iv-queries/` (queries only, no data)
 - Notes for continuing the work on another computer: `HANDOFF.md`
+- Progress report for Dr. Fu on the MIMIC-IV work, as LaTeX for Overleaf: `decision-lab-progress-report.tex`
 - `index.html` only forwards the site root to `taxonomy.html`; `.nojekyll` tells GitHub Pages to publish the files as they are
 
 On the Decision lab page, figures attributed to a study come from the delirium cases in the paper. All other values are illustrative, and the what-if index is a teaching device, not a clinical score.
