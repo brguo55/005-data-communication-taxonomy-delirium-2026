@@ -75,6 +75,8 @@ Each row of the data is one ICU stay (queries 09 and 14).
 
 \subsubsection*{Part 2: The model}
 
+\emph{In plain terms.} Logistic regression turns what we know about a patient into a risk between 0\% and 100\%. Each characteristic, such as age or being on a ventilator, adds to or subtracts from a score, and a fixed formula converts the score into a probability. Fitting the model means finding how much each characteristic should count, using patients whose outcomes are already known. It is one of the oldest and most widely used methods for clinical risk scores, and its weights can be read directly, which suits a study about how risk is communicated.
+
 Let $p_i$ be the probability that stay $i$ develops delirium in the 48 hours after $t_0$. Logistic regression models the log odds of $p_i$ as a linear function of the predictors:
 \begin{equation*}
 	\begin{aligned}
@@ -216,7 +218,7 @@ BigQuery chose emergency admission, not observation, as the admission reference,
 
 All checks use the test years, 2017--2019, except the training row of Table 5.
 
-\emph{Discrimination.} The AUROC is the probability that a randomly chosen stay with delirium gets a higher predicted risk than a randomly chosen stay without it, with ties counted as half:
+\emph{Discrimination.} In plain terms, the AUROC (area under the receiver operating characteristic curve) measures how well the model puts patients in the right order of risk. Pick one patient who developed delirium and one who did not: the AUROC is how often the model gives the first patient the higher risk. A value of 0.5 is no better than a coin toss and 1.0 is a perfect ordering; values between 0.7 and 0.8 are usually described as acceptable and above 0.8 as excellent. The AUROC says nothing about whether the risk numbers themselves are right, which is what calibration, below, checks. Formally, the AUROC is the probability that a randomly chosen stay with delirium gets a higher predicted risk than a randomly chosen stay without it, with ties counted as half:
 \begin{equation*}
 	\text{AUROC} = \frac{1}{n_1 n_0} \sum_{i : y_i = 1} \; \sum_{j : y_j = 0} \Bigl( \mathbf{1}[\hat{p}_i > \hat{p}_j] + \tfrac{1}{2} \, \mathbf{1}[\hat{p}_i = \hat{p}_j] \Bigr) ,
 \end{equation*}
