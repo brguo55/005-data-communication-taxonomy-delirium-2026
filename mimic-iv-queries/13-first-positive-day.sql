@@ -1,5 +1,7 @@
 -- 13 On which ICU day the first positive CAM-ICU appears (first ICU stay per patient).
--- Status: not run yet. Use it to decide between predicting 12 or 24 hours after ICU admission.
+-- Status: run on 2026-11-26. 14,390 first ICU stays have a positive result. First positive at 0-12 h 46.7%,
+--   12-24 h 16.2%, day 2 16.9%, day 3 7.7%, days 4-7 9.5%, after day 7 3.1%. The 24-72 h window holds 3,544,
+--   close to the 3,535 outcomes in the cohort (09). Use it to decide between predicting 12 or 24 hours after ICU admission.
 -- It shows when delirium was first detected, which depends on when assessments were done.
 -- Day 1 is split at 12 h: a 12-hour prediction excludes only the 0-12 h group, while a 24-hour one also excludes 12-24 h.
 WITH first_stay AS (

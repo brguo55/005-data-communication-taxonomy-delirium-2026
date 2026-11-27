@@ -287,7 +287,7 @@ where $n_1$ and $n_0$ are the numbers of stays with and without delirium. Query 
 \subsubsection*{Part 6: Decisions still open}
 
 \begin{itemize}
-	\item \emph{Prediction time.} Predict 12 or 24 hours after ICU admission. Table 8 shows when delirium is first detected: a 12-hour prediction loses only the stays first positive in the first 12 hours, while a 24-hour prediction also loses those first positive between 12 and 24 hours.
+	\item \emph{Prediction time.} Predict 12 or 24 hours after ICU admission. Table 8 shows when delirium is first detected. Of 14,390 first ICU stays with a positive result, 46.7\% are first positive within 12 hours of admission and 62.8\% within 24 hours, so most delirium in the ICU is already present, or at least first found, before either prediction time. A 24-hour prediction excludes all of these stays. A 12-hour prediction keeps the 2,325 stays first positive at 12--24 hours as possible outcomes, but has only 12 hours of data to predict from. Detection depends on when assessments are done, so some of those 2,325 may be a first assessment of delirium present on arrival. The 24--72-hour window holds 3,544 first positives, close to the 3,535 outcomes in the cohort, which supports how query 09 built it.
 	\item \emph{What counts as a high risk.} Choosing test cases where the model is right or wrong needs a cut-off. One option is the top 15\% of predicted risk, which matches the red and yellow icons in Jauk et al.\ (85th percentile and above). Another is a fixed predicted risk agreed with clinicians.
 	\item \emph{Outcome window.} The main analysis keeps 48 hours. Sensitivity analyses widen the window and count patients who left the ICU without an assessment as not delirious, which alone lowers the rate from 15.5\% to about 10.2\%.
 \end{itemize}
@@ -298,12 +298,14 @@ where $n_1$ and $n_0$ are the numbers of stays with and without delirium. Query 
 	\toprule
 	Time after ICU admission	& Stays	& \multicolumn{1}{c}{Share (\%)} \\
 	\midrule
-	Day 1, 0--12 hours		& & \\
-	Day 1, 12--24 hours		& & \\
-	Day 2, 24--48 hours		& & \\
-	Day 3, 48--72 hours		& & \\
-	Days 4--7				& & \\
-	After day 7				& & \\
+	Day 1, 0--12 hours		& 6,713		& 46.7 \\
+	Day 1, 12--24 hours		& 2,325		& 16.2 \\
+	Day 2, 24--48 hours		& 2,431		& 16.9 \\
+	Day 3, 48--72 hours		& 1,113		& 7.7 \\
+	Days 4--7				& 1,363		& 9.5 \\
+	After day 7				& 445		& 3.1 \\
+	\midrule
+	All						& 14,390	& 100.0 \\
 	\bottomrule
 	\end{tabular*}
 \end{center}
