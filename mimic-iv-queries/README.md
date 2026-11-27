@@ -12,4 +12,4 @@ BigQuery SQL used to move the Decision lab's clinician test from illustrative nu
 | 01-08 | Check the release, how delirium is recorded, and how hospital and ICU stays relate |
 | 09-13 | Build and check the ICU cohort |
 | 14-19 | Train and evaluate a logistic regression (train 2008-2016, test 2017-2019) |
-| 20 | Find groups of similar test-year stays to write the clinician test's composite cases from |
+| 20-22 | Find groups of similar test-year stays to write the clinician test's composite cases from, and their most common diagnoses |
