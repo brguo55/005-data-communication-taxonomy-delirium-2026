@@ -408,6 +408,23 @@
     </div>
   </section>
 
+  <section class="sec" id="data" aria-labelledby="data-title">
+    <div class="frame">
+      <p class="kicker"><span data-l="en">Data and methods</span><span data-l="zh">数据与方法</span></p>
+      <h2 id="data-title"><span data-l="en">Where the test’s numbers come from</span><span data-l="zh">测试中的数字从哪里来</span></h2>
+      <p class="lede"><span data-l="en">We are replacing the illustrative cases in the test with composite cases built from real ICU data. Until a clinician has reviewed the new set, the test on this page still uses the illustrative cases.</span><span data-l="zh">我们正在把测试里的示例病例，换成用真实 ICU 数据构建的复合病例。在临床人员审核新病例之前，本页的测试仍使用示例病例。</span></p>
+      <ol class="data-steps">
+        <li><b><span data-l="en">Data</span><span data-l="zh">数据</span></b><p><span data-l="en">MIMIC-IV version 3.1: de-identified records of patients seen in the emergency department or ICU at Beth Israel Deaconess Medical Center in Boston, 2008–2022. We use it through PhysioNet, with credentialed access, CITI training and a signed data use agreement, and analyse it in Google BigQuery.</span><span data-l="zh">MIMIC-IV 3.1 版：波士顿 Beth Israel Deaconess 医疗中心 2008–2022 年急诊和 ICU 患者的去标识化记录。我们通过 PhysioNet 获得使用权限（通过资格审核、完成 CITI 培训并签署数据使用协议），在 Google BigQuery 中分析。</span></p></li>
+        <li><b><span data-l="en">Outcome</span><span data-l="zh">结局</span></b><p><span data-l="en">Delirium means a positive CAM-ICU, the bedside screen ICU nurses record. Diagnosis codes record far less delirium than the screen finds: 3 to 9 in 100 hospital stays that include the ICU, against about 32 in 100 assessed ICU stays. So only ICU patients are used.</span><span data-l="zh">谵妄以 CAM-ICU 阳性为准，这是 ICU 护士在床边做的筛查。诊断编码记录的谵妄远少于筛查发现的：含 ICU 的住院中只有 3–9%，而做过评估的 ICU 住院约为 32%。所以只使用 ICU 患者。</span></p></li>
+        <li><b><span data-l="en">Cohort</span><span data-l="zh">队列</span></b><p><span data-l="en">Each adult’s first ICU stay of at least 24 hours. The prediction is made 24 hours after ICU admission, and the outcome is a positive screen in the next 48 hours, the same window the test asks about. Patients already delirious by then are left out. Of the 22,800 stays, 15.5% developed delirium.</span><span data-l="zh">每位成年患者的第一次 ICU 住院，且至少住满 24 小时。预测在进入 ICU 24 小时后做出，结局是接下来 48 小时内筛查阳性，和测试题问的时间相同。此前已经谵妄的患者不计入。22,800 次住院中，15.5% 发生了谵妄。</span></p></li>
+        <li><b><span data-l="en">Model</span><span data-l="zh">模型</span></b><p><span data-l="en">A logistic regression, a standard way to turn a patient’s characteristics into a risk. It uses nine: age, sex, admission type, ICU type, dementia, and ventilation, benzodiazepines, other sedatives and opioids in the first 24 hours. It learns from 2008–2016 and is checked on 2017–2019, years it has not seen.</span><span data-l="zh">逻辑回归，这是把患者特征换算成风险的一种常用方法。模型用九项特征：年龄、性别、入院类型、ICU 类型、痴呆，以及头 24 小时内的机械通气、苯二氮䓬类、其他镇静药和阿片类药物。模型用 2008–2016 年的数据训练，再用它没见过的 2017–2019 年数据检验。</span></p></li>
+        <li><b><span data-l="en">Checks</span><span data-l="zh">检验</span></b><p><span data-l="en">On 2017–2019 the AUROC is 0.76: given one patient who developed delirium and one who did not, the model gives the first a higher risk 76% of the time. Its predicted risks are also compared with the rates actually observed in ten risk groups.</span><span data-l="zh">在 2017–2019 年的数据上，AUROC 为 0.76：任取一位发生谵妄和一位没有发生的患者，模型有 76% 的机会给前者更高的风险。我们还按十个风险组，比较了预测风险和实际发生率。</span></p></li>
+        <li><b><span data-l="en">Cases</span><span data-l="zh">病例</span></b><p><span data-l="en">Each case is a composite of at least 30 similar ICU stays from 2017–2019. The tool shows the model’s average prediction for the group, and the reference is the rate actually observed in the group. No case describes a real patient: the data use agreement does not allow individual records on a public website.</span><span data-l="zh">每个病例由 2017–2019 年至少 30 次相似的 ICU 住院合成。工具显示的是模型对这群人的平均预测，参考答案是这群人实际的发生率。没有任何病例描述真实的某一位患者：数据使用协议不允许把单个患者的记录放在公开网站上。</span></p></li>
+      </ol>
+      <p class="lab-small data-note"><span data-l="en">Only group-level results leave BigQuery. The queries are in the project’s <a href="https://github.com/brguo55/005-data-communication-taxonomy-delirium-2026/tree/main/mimic-iv-queries">mimic-iv-queries</a> folder.</span><span data-l="zh">只有群体层面的汇总结果会离开 BigQuery。所有查询都在项目的 <a href="https://github.com/brguo55/005-data-communication-taxonomy-delirium-2026/tree/main/mimic-iv-queries">mimic-iv-queries</a> 文件夹里。</span></p>
+    </div>
+  </section>
+
   <nav class="sec next" aria-labelledby="next-title">
     <div class="frame">
       <p class="kicker" id="next-title"><span data-l="en">Continue reading</span><span data-l="zh">继续阅读</span></p>
