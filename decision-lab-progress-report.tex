@@ -1,0 +1,409 @@
+% Progress report for Dr. Fu: moving the Decision Lab clinician test to MIMIC-IV data.
+% Compile with pdfLaTeX (for example on Overleaf). All numbers are aggregate results from mimic-iv-queries/.
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newpxtext,newpxmath}
+\usepackage[top=1in, bottom=1in, left=1.1in, right=1.1in]{geometry}
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{accent}{HTML}{0C5A6E}
+\definecolor{accentsoft}{HTML}{E1EEF2}
+\definecolor{warnsoft}{HTML}{FBF1D9}
+
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\setlist{itemsep=0.25em, topsep=0.3em}
+
+% "Why it matters" note at the end of each step.
+\newtcolorbox{whynote}{colback=accentsoft, colframe=accentsoft, boxrule=0pt, arc=2pt, left=8pt, right=8pt, top=6pt, bottom=6pt}
+\newcommand{\why}[1]{\begin{whynote}\textbf{\color{accent}Why it matters.} #1\end{whynote}}
+% Plain box for the summary, questions and plans.
+\newtcolorbox{plainbox}[1]{colback=white, colframe=black!15, boxrule=0.5pt, arc=2pt, left=8pt, right=8pt, top=6pt, bottom=6pt, title={#1}, coltitle=black, colbacktitle=white, fonttitle=\bfseries}
+
+\newcommand{\step}[2]{\section*{\color{accent}#1\quad\color{black}#2}}
+
+\begin{document}
+
+{\small\color{accent}\textsc{Progress report $\cdot$ updated November 27, 2026}}
+
+{\LARGE\bfseries Moving the Decision Lab test to MIMIC-IV data\par}
+
+\vspace{0.3em}
+{\color{black!60}Prepared by Barney Guo for Dr.\ Fu}
+
+The clinician test currently uses patients and risk numbers that were written as illustrations. Over the past two weeks I set up MIMIC-IV, built an ICU cohort, and fitted a first prediction model, so that the test can use numbers from real ICU stays. Each step says what I did, what I found, and why it shapes the next step.
+
+\begin{plainbox}{In short}
+\begin{itemize}
+	\item MIMIC-IV v3.1 is set up in BigQuery, and its counts match the published release.
+	\item Delirium can be measured reliably in the ICU through CAM-ICU. Diagnosis codes miss most cases, so ward numbers are not usable yet.
+	\item From an ICU cohort of \textbf{22,800} stays, a first logistic regression reaches an AUROC of \textbf{0.76} on 2017--2019 patients it has not seen.
+	\item Its risks match the observed rates for most patients, but it underestimates the highest-risk group (41\% predicted, 52\% observed) and patients with dementia (35\% predicted, 42\% observed). These are real errors the test can use.
+\end{itemize}
+\end{plainbox}
+
+%--------------------------------------------------------------------------------------------------
+\step{1}{Why the numbers need replacing}
+
+In the current test, the eight patients, their reference risks, the tool's outputs, and the setting base rates (30, 10 and 1 in 100) are illustrative. Only the figures from Lee et al.\ (sensitivity 0.76, specificity 0.84) and Jauk et al.\ (AUROC 0.854 and 0.855) come from published studies.
+
+\why{A reference risk that we write ourselves cannot serve as the correct answer, and tool errors that we plant are not the errors a real model makes. With a real model, the cases where it is right or wrong are real, and so is the reference. Because the main outcome is how appropriately clinicians rely on the tool, the test needs both kinds of case.}
+
+%--------------------------------------------------------------------------------------------------
+\step{2}{Get access and confirm the data}
+
+My PhysioNet account is credentialed (April 1, 2026), my CITI training is approved, and I signed the MIMIC-IV data use agreement. Access runs through Google BigQuery, using the versioned datasets \texttt{mimiciv\_3\_1\_hosp} and \texttt{mimiciv\_3\_1\_icu}.
+
+\begin{center}
+\begin{tabular}{l r}
+	\toprule
+	Table & Rows \\
+	\midrule
+	Patients & 364,627 \\
+	Hospitalizations & 546,028 \\
+	ICU stays & 94,458 \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\why{These match the counts PhysioNet publishes, so the queries see the complete v3.1 release. All analysis stays in BigQuery under my account. Only aggregate counts like the ones in this report leave it, and no patient-level record is shared or placed on the website.}
+
+%--------------------------------------------------------------------------------------------------
+\step{3}{Find how delirium is recorded}
+
+ICU nurses record delirium with CAM-ICU, a bedside screen. MIMIC-IV stores its overall result in one item, ``Delirium assessment'' (itemid 228332), with about 611,000 recorded assessments.
+
+\begin{center}
+\begin{tabular}{l r r}
+	\toprule
+	Result & Assessments & Share \\
+	\midrule
+	Negative & 361,125 & 59.1\% \\
+	Positive & 119,052 & 19.5\% \\
+	Unable to assess & 130,455 & 21.4\% \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item The four CAM-ICU features are also stored separately, under three generations of item IDs. Only 2.9\% of ICU stays with CAM-ICU data have the features without the overall result, so the overall item is enough.
+	\item Some assessments could not be done because of a language barrier (6,232 entries) or preexisting advanced dementia (2,449 entries).
+\end{itemize}
+
+\why{The outcome definition determines every number that follows, so it had to be settled first.}
+
+%--------------------------------------------------------------------------------------------------
+\step{4}{Decide where the outcome is reliable}
+
+I compared how often delirium appears in CAM-ICU results with how often it appears in diagnosis codes.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{l X X X}
+	\toprule
+	Age & ICU stays, CAM-ICU positive & Hospital stays with ICU, delirium code & Hospital stays without ICU, delirium code \\
+	\midrule
+	18--64 & 28.7\% (8,977 of 31,276) & 3.3\% (1,293 of 38,676) & 0.3\% (725 of 273,958) \\
+	65--79 & 32.8\% (8,091 of 24,704) & 5.7\% (1,646 of 28,841) & 1.5\% (1,706 of 116,323) \\
+	80+ & 38.8\% (5,394 of 13,899) & 9.0\% (1,601 of 17,725) & 4.2\% (2,948 of 70,505) \\
+	\bottomrule
+\end{tabularx}
+\end{center}
+
+{\small\color{black!60}ICU rates count stays with at least one positive result among stays that were assessed, including delirium already present on ICU arrival. Codes include delirium superimposed on dementia and exclude alcohol withdrawal and substance-induced delirium.\par}
+
+\begin{itemize}
+	\item For patients who were in the ICU, CAM-ICU finds delirium in 32.1\% of assessed stays, rising from 28.7\% under 65 to 38.8\% at 80 and over, while diagnosis codes record it in 3 to 9 in 100 hospitalizations. The units differ slightly, but the gap is far too large to come from that.
+	\item 19,354 ICU stays (20.5\%) have no CAM-ICU record at all.
+\end{itemize}
+
+\why{Diagnosis codes miss most delirium, so ward rates from codes would understate the real risk badly. For now, only the ICU gives a trustworthy outcome. Ward cases would need review of discharge summaries through MIMIC-IV-Note.}
+
+%--------------------------------------------------------------------------------------------------
+\step{5}{Understand how hospital stays and ICU stays relate}
+
+\begin{center}
+\begin{tabular}{l r}
+	\toprule
+	Hospitalizations per patient & Patients \\
+	\midrule
+	1 & 55.2\% \\
+	2 & 19.7\% \\
+	3 & 9.0\% \\
+	4 to 9 & 12.9\% \\
+	10 or more & 3.1\% \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{l r}
+	\toprule
+	First ICU stay after admission & Share \\
+	\midrule
+	Within 24 hours & 80.3\% \\
+	1 to 3 days & 9.2\% \\
+	More than 3 days & 10.1\% \\
+	Before the recorded admission time & 0.5\% \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{X r r >{\raggedleft\arraybackslash}p{3.2cm}}
+	\toprule
+	Admission type & Hospitalizations & Reach the ICU & Share of all ICU hospitalizations \\
+	\midrule
+	Emergency or urgent & 254,361 & 23.6\% & 70.5\% \\
+	Observation & 235,639 & 5.7\% & 15.7\% \\
+	Planned surgery or elective & 56,028 & 21.0\% & 13.8\% \\
+	\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{itemize}
+	\item The 3.1\% of patients with 10 or more hospitalizations account for 21.5\% of all hospitalizations.
+	\item 84.4\% of hospitalizations never involve the ICU. In about 19\% of hospitalizations with an ICU stay, the patient was in the hospital for at least a day before reaching the ICU, and delirium during that time could only show up in diagnosis codes.
+\end{itemize}
+
+\why{Frequent admitters would be counted many times, so the cohort uses one ICU stay per patient. Most patients reach the ICU on the day they are admitted, so a prediction made 24 hours after ICU admission fits most of them. Admission type differs enough to be a model variable.}
+
+%--------------------------------------------------------------------------------------------------
+\step{6}{Build the ICU cohort}
+
+\begin{itemize}
+	\item \textbf{Who:} each adult patient's first ICU stay, if it lasted at least 24 hours.
+	\item \textbf{When the prediction is made:} 24 hours after ICU admission, using only data recorded before then.
+	\item \textbf{Outcome:} a positive CAM-ICU in the next 48 hours, the same window the test question asks about.
+	\item \textbf{Variables for a first model:} age, sex, admission type, ICU type, dementia, and invasive ventilation, benzodiazepines, other sedatives and opioids in the first 24 hours. Language, race and insurance are kept for subgroup checks only.
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{l r}
+	\toprule
+	First ICU stays of 24 hours or more & 51,837 \\
+	\quad Excluded: delirium already found in the first 24 hours & $-$8,079 \\
+	\quad Excluded: no valid assessment in the next 48 hours & $-$20,958 \\
+	\midrule
+	\textbf{Final cohort} & \textbf{22,800} \\
+	Delirium in the next 48 hours & 3,535 (15.5\%) \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\why{The cohort mirrors what a bedside tool would know at the moment it makes a prediction, and it matches the question clinicians answer in the test. The 15.5\% is lower than the 32.1\% in step 4 because it covers 48 hours and leaves out patients who were already delirious.}
+
+%--------------------------------------------------------------------------------------------------
+\step{7}{Check the exclusions, the timing, and the data over time}
+
+\begin{center}
+\begin{tabular}{l r r}
+	\toprule
+	Why 20,958 stays had no valid assessment & Stays & Share \\
+	\midrule
+	Left the ICU within a day, never assessed & 11,989 & 57.2\% \\
+	Stayed in the ICU, but no assessment was recorded & 7,116 & 34.0\% \\
+	Only ``unable to assess'' results & 1,853 & 8.8\% \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{l r r}
+	\toprule
+	First positive CAM-ICU, first ICU stays & Stays & Share \\
+	\midrule
+	0--12 hours after ICU admission & 6,713 & 46.7\% \\
+	12--24 hours & 2,325 & 16.2\% \\
+	Day 2 (24--48 hours) & 2,431 & 16.9\% \\
+	Day 3 (48--72 hours) & 1,113 & 7.7\% \\
+	Days 4--7 & 1,363 & 9.5\% \\
+	After day 7 & 445 & 3.1\% \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{l r r r r r r}
+	\toprule
+	Years & Cohort & Delirium & Ventilated & Benzodiazepine & Opioid & Medication records \\
+	\midrule
+	2008--2010 & 2,525 & 14.3\% & 28.4\% & 13.1\% & 38.4\% & 97.4\% \\
+	2011--2013 & 5,036 & 14.4\% & 37.5\% & 18.0\% & 49.3\% & 97.7\% \\
+	2014--2016 & 5,959 & 15.6\% & 39.8\% & 13.6\% & 51.6\% & 97.3\% \\
+	2017--2019 & 5,495 & 15.7\% & 31.0\% & 9.0\% & 40.5\% & 96.5\% \\
+	2020--2022 & 3,785 & 17.3\% & 13.2\% & 3.9\% & 17.7\% & 42.2\% \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+{\small\color{black!60}Ventilation and medications are for the first 24 hours in the ICU. The last column is the share of all 51,837 first ICU stays with any medication or procedure record, not only the final cohort. Years are MIMIC's shifted year groups.\par}
+
+\begin{itemize}
+	\item 63\% of first positive results come within 24 hours of ICU admission, so the model predicts new delirium only among patients who were not yet delirious. The 24--72 hour window holds 3,544 first positives, close to the cohort's 3,535 outcomes, which confirms the cohort.
+	\item Ventilation and medication use drop sharply in 2020--2022 because only 42\% of those stays have any medication or procedure record, against about 97\% in earlier years. The treatments were likely given but not captured in this release.
+\end{itemize}
+
+\why{A missing record would be read as ``no treatment'' and distort the model. So the main analysis uses 2008--2019 (19,015 stays): the model is trained on 2008--2016 (13,520 stays) and tested on 2017--2019 (5,495 stays). 2020--2022 can be a sensitivity analysis limited to stays with complete records.}
+
+%--------------------------------------------------------------------------------------------------
+\step{8}{Fit and check a first prediction model}
+
+\textbf{What the model is.} Logistic regression turns what we know about a patient into a risk between 0\% and 100\%. Each characteristic, such as age or being on a ventilator, adds to or subtracts from a score, and a fixed formula converts the score into a probability. Fitting the model means finding how much each characteristic should count, using patients whose outcomes are already known.
+
+I fitted it in BigQuery ML with the nine variables from step 6, on 2008--2016 (13,520 stays, 14.9\% delirium), and checked it on 2017--2019 (5,495 stays, 15.7\%). ICU types with fewer than 100 training stays are merged into ``Other'', because the rarest ones produced extreme coefficients in a first fit. The fit converged after 52 iterations, and no class weighting was used, so the predicted risks keep their meaning.
+
+\begin{center}
+\begin{tabular}{l r r r}
+	\toprule
+	Years & Stays & AUROC & Log loss \\
+	\midrule
+	Training, 2008--2016 & 13,520 & 0.739 & 0.372 \\
+	Test, 2017--2019 & 5,495 & 0.764 & 0.372 \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{What the AUROC means.} The AUROC measures how well the model puts patients in the right order of risk. Pick one patient who developed delirium and one who did not: the AUROC is how often the model gives the first patient the higher risk. A value of 0.5 is no better than a coin toss and 1.0 is a perfect ordering; values between 0.7 and 0.8 are usually described as acceptable, and above 0.8 as excellent. Our 0.76 holds up on the later years. Jauk et al.\ reported 0.85 with many more variables. The AUROC says nothing about whether the risk numbers themselves are right; calibration, below, checks that.
+
+\subsection*{Calibration in the test years}
+
+\begin{center}
+\begin{tabular}{l r r r}
+	\toprule
+	Risk group & Stays & Predicted & Observed \\
+	\midrule
+	1 (lowest) & 550 & 3.8\% & 3.3\% \\
+	2 & 550 & 5.4\% & 4.7\% \\
+	3 & 550 & 6.8\% & 6.9\% \\
+	4 & 550 & 8.3\% & 8.0\% \\
+	5 & 550 & 9.8\% & 7.5\% \\
+	6 & 549 & 11.4\% & 14.2\% \\
+	7 & 549 & 13.5\% & 14.8\% \\
+	8 & 549 & 17.0\% & 14.9\% \\
+	9 & 549 & \textbf{23.0\%} & \textbf{31.1\%} \\
+	10 (highest) & 549 & \textbf{40.7\%} & \textbf{51.5\%} \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+Up to group 8, predicted and observed risks agree within about 3 percentage points. The two highest groups are underestimated, by 8 and 11 points. With about 550 stays per group, both gaps are larger than chance alone. Across all test stays the model predicts 14.0\% against 15.7\% observed.
+
+\subsection*{Where the model underestimates}
+
+\begin{center}
+\small
+\begin{tabular}{l r r r r r}
+	\toprule
+	Test-year group & Stays & Delirium & Observed & Predicted & AUROC \\
+	\midrule
+	All & 5,495 & 862 & 15.7\% & 14.0\% & 0.764 \\
+	Dementia & 205 & 87 & 42.4\% & 34.9\% & 0.630 \\
+	Emergency admission & 2,929 & 592 & 20.2\% & 15.8\% & 0.768 \\
+	Race recorded as unknown & 938 & 204 & 21.7\% & 17.4\% & 0.798 \\
+	Age 80 and over & 958 & 215 & 22.4\% & 18.8\% & 0.716 \\
+	Medicaid & 857 & 138 & 16.1\% & 12.7\% & 0.798 \\
+	Language other than English & 543 & 91 & 16.8\% & 16.1\% & 0.788 \\
+	Planned admission & 1,000 & 82 & 8.2\% & 8.2\% & 0.734 \\
+	Observation admission & 1,566 & 188 & 12.0\% & 14.3\% & 0.732 \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+{\small\color{black!60}Selected groups. The full table, by age, sex, language, race and insurance, is in the model note in the repository. Groups with fewer than 20 stays are not reported, and AUROCs in groups with fewer than about 30 delirium cases are unstable.\par}
+
+\subsection*{What drives the risk}
+
+\begin{center}
+\begin{tabular}{l r}
+	\toprule
+	Predictor & Odds ratio \\
+	\midrule
+	Invasive ventilation in the first 24 hours & 3.22 \\
+	Dementia & 2.54 \\
+	Benzodiazepine in the first 24 hours & 1.94 \\
+	Age, per 10 years & 1.21 \\
+	Medical ICU, against the cardiac vascular ICU & 3.04 \\
+	Neurosurgical ICU, against the cardiac vascular ICU & 5.54 \\
+	Planned admission, against emergency & 0.55 \\
+	Other sedative (propofol or dexmedetomidine) & 1.22 \\
+	Opioid & 1.11 \\
+	Female & 1.00 \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+{\small\color{black!60}Odds ratios are associations with everything else held fixed, not causal effects. For example, a 75-year-old man admitted as an emergency to the cardiac vascular ICU with none of these factors has a predicted risk of about 5 in 100; the same man in the medical ICU, ventilated and given a benzodiazepine, about 51 in 100.\par}
+
+\why{The model ranks patients reasonably well and gives sensible risks for most of them. Its errors fall where the taxonomy expects them: the highest-risk patients and patients with dementia are underestimated. That gives the test real cases where the tool is wrong, such as a patient with dementia whose displayed risk is too low, with the full display warning about it.}
+
+%--------------------------------------------------------------------------------------------------
+\step{9}{What this adds to the taxonomy}
+
+\begin{itemize}
+	\item \textbf{Under-documentation.} Diagnosis codes miss most delirium, one in five CAM-ICU assessments cannot be completed, and 7,116 patients stayed in the ICU with no assessment recorded. A model trained on these labels inherits the gaps. This may be what you meant by ``low rate to document''.
+	\item \textbf{Equity and subgroup reliability.} The model underestimates delirium most for patients with dementia, whose AUROC is also the lowest. Patients with a language barrier show no gap in the model, but they are harder to assess in the first place, so the ones without an outcome never reach this check.
+	\item \textbf{Model robustness.} The AUROC holds on the later years while the highest-risk group is underestimated, the same pattern Jauk et al.\ saw during deployment. How completely the data are recorded also changes across years.
+\end{itemize}
+
+%--------------------------------------------------------------------------------------------------
+\step{10}{Next steps}
+
+\begin{itemize}
+	\item \textbf{Choose eight situations from the model's real results:} correct predictions at high and low risk, a missed delirium, a false alarm, a wide-uncertainty case, and an underestimated patient with dementia shown with a warning.
+	\item \textbf{Write composite cases} from the patterns in each situation, never copied from a single patient. Have the clinician you found review them, and confirm with PhysioNet that such cases can appear on a public page.
+	\item \textbf{Run the planned checks:} a 12-hour version of the cohort, a longer outcome window, and counting patients who left the ICU without an assessment as not delirious.
+	\item \textbf{Update the website} in English and Chinese: real base rates, and ``the model was wrong'' in place of ``the tool was wrong on purpose''.
+\end{itemize}
+
+%--------------------------------------------------------------------------------------------------
+\begin{plainbox}{Questions for you}
+\begin{enumerate}
+	\item \textbf{The message.} For readers in clinical communication, should the paper's main point be that a fuller display helps clinicians know when to trust a risk tool and when to question it? How should ``decision literacy'' fit into that story?
+	\item \textbf{Decision literacy.} Which part matters most to you: reading the number correctly, judging whether it fits this patient, or deciding what to do about it?
+	\item \textbf{Fair clues.} When the tool is wrong in a case, what should a careful clinician be able to notice in the patient description? Where is the line between a fair clue and giving the answer away?
+	\item \textbf{The full display.} Which lines matter most to clinicians: the range, the comparison rate, the reliability note, the caution, or the suggested next step? Is any of it confusing or too long?
+	\item \textbf{The warning.} For a patient with dementia, whose risk the model underestimates, how strongly should the display warn: a plain caution, or an explicit suggestion to rely on clinical judgment?
+	\item \textbf{Participants.} Which clinicians do we most need, for example ICU nurses, physicians, or people with informatics training? How many could your reviewer help us reach?
+	\item \textbf{Telling participants.} The results screen reveals which cases the tool got wrong. Is that the right way to end the test, and should the consent text say beforehand that the tool may be wrong?
+	\item \textbf{Talking about groups.} The model underestimates risk most for patients with dementia and some other groups. How far should the paper go in discussing this, given that some groups are small?
+	\item \textbf{Scope.} Does an ICU-only test still tell the story you want, or do ward patients matter for the argument?
+	\item \textbf{Your earlier note.} Is this under-documentation what you meant by ``low rate to document'' for outcomes and process?
+\end{enumerate}
+{\small Already agreed: the main outcome is how appropriately clinicians rely on the tool, since relying on it too much and too little both lead to harm. You have found a clinician to review the cases.\par}
+\end{plainbox}
+
+\begin{plainbox}{Statistical choices I plan to make}
+\begin{itemize}
+	\item \textbf{Keep this model for the test.} The test needs real cases where the tool is right and wrong more than it needs the strongest possible model. Adding laboratory values and sedation depth can come later.
+	\item \textbf{Write each case from a group of at least 30 similar test-year stays,} using the group's observed rate as the reference and the model's prediction as the tool's output. No case describes a real patient.
+	\item \textbf{Keep the 48-hour window} for the main analysis, with two sensitivity analyses: a longer window, and counting patients who left the ICU without an assessment as not delirious.
+	\item \textbf{Compare predicting at 12 and 24 hours} after ICU admission before choosing.
+	\item \textbf{Decide with you and the reviewer} whether each case first asks for the clinician's own estimate, since it changes how long the test takes.
+\end{itemize}
+\end{plainbox}
+
+\subsection*{Limitations so far}
+
+{\small
+\begin{itemize}
+	\item The model uses nine variables. Laboratory values, sedation depth and severity scores are not yet included.
+	\item Dementia comes from diagnosis codes for the same hospitalization, which are assigned at discharge. It is a chronic condition, so the leak is small, and codes for dementia with delirium are excluded. Coded dementia is only 2--4\%, so it is probably under-recorded too.
+	\item The ``Other'' ICU type merges rare units, so its coefficient rests on few stays.
+	\item Coding moved from ICD-9 to ICD-10 in October 2015, inside the 2014--2016 group.
+	\item MIMIC-IV shifts dates and caps the age of the oldest patients, so ages and years are approximate.
+	\item All results come from one academic medical center in Boston.
+\end{itemize}
+}
+
+\end{document}
