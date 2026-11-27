@@ -1,6 +1,12 @@
 -- 20 Candidate case profiles for the clinician test: groups of similar test-year stays (2017-2019), each with its
 --   observed delirium rate (the reference for a case) and the model's mean predicted risk (what the tool would show).
--- Status: not run yet.
+-- Status: run on 2026-11-27. 48 groups of at least 30 stays.
+-- Chosen on 2026-11-27 (tool shows / observed, test years). Correct: (1) 65-79, emergency, MICU 13.8/13.5, n 104;
+--   (2) 65-79, emergency, CCU 5.9/6.3, n 127; (3) 80+, observation, Neuro Intermediate 14.0/11.8, n 93;
+--   (5) 65-79, planned, CVICU, ventilated 11.0/10.7, n 206; (6) 80+, emergency, MICU 16.9/16.4, n 55.
+--   Wrong: (7) 18-64, emergency, MICU, ventilated 30.2/62.0, n 50 (too low); (8) 65-79, observation, CVICU,
+--   ventilated 18.7/4.4, n 68 (too high). Case 4 comes from 21. No group predicted above about 17% is right:
+--   every high-risk group is underestimated, so the correct cases run from 6% to 17%.
 -- Why groups, not single patients: the MIMIC-IV data use agreement does not allow patient-level records on a public
 --   website or in an online AI tool. Each test case is written as a composite of a group of at least 30 similar stays,
 --   so no case describes a real person, and only these group-level numbers leave BigQuery.

@@ -1,6 +1,8 @@
 -- 21 Test-year stays with coded dementia, in groups large enough to write a case from (query 20 has none:
 --   dementia is too rare once split by ICU type, ventilation and benzodiazepines).
--- Status: not run yet. Same columns as 20: gap_points = observed minus predicted; compare it with margin_points.
+-- Status: run on 2026-11-27. All dementia: 34.9% predicted vs 42.4% observed (n 205); under 80: 31.6% vs 43.8% (n 73),
+--   the clearest gap, chosen as case 4 (tool too low, with a warning on the full display); 80+: 36.6% vs 41.7%.
+-- Same columns as 20: gap_points = observed minus predicted; compare it with margin_points.
 WITH p AS (
   SELECT *,
          (SELECT prob FROM UNNEST(predicted_delirium_48h_probs) WHERE label = 1) AS risk
