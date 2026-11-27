@@ -128,7 +128,7 @@ OPTIONS (
   input_label_cols = ['delirium_48h'],
   data_split_method = 'NO_SPLIT',
   category_encoding_method = 'DUMMY_ENCODING',
-  max_iterations = 50,
+  max_iterations = 200,
   min_rel_progress = 0.0001
 ) AS
 SELECT delirium_48h, age, gender, admission_group, first_careunit,
@@ -141,7 +141,7 @@ WHERE split = 'train';
 	\item \emph{No class weighting.} With about 15\% delirium, weighting the cases would push every predicted risk up, and the test page shows those risks to clinicians.
 	\item \emph{No penalty.} L1 and L2 regularization stay at BigQuery's default of zero. With about 2,000 delirium cases in the training years and fewer than 20 coefficients, the fit is stable without one.
 	\item \emph{Dummy encoding.} Each text variable loses one category, so each remaining coefficient compares a category with its reference. BigQuery's default one-hot encoding keeps every category, and its coefficients cannot be read that way.
-	\item \emph{Convergence.} BigQuery fits by gradient descent. It runs up to 50 iterations and stops once the loss improves by less than 0.01\% in an iteration. The second statement in query 15 lists the loss at each iteration, which should level off before the last one.
+	\item \emph{Convergence.} BigQuery fits by gradient descent. It runs up to 200 iterations and stops once the loss improves by less than 0.01\% in an iteration. The second statement in query 15 lists the loss at each iteration, which should level off before the last one.
 	\item \emph{Scale.} BigQuery standardizes age while fitting, and query 19 reports the coefficients on the original scale, per year of age.
 \end{itemize}
 
