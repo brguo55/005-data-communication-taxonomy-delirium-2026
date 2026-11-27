@@ -1,5 +1,6 @@
 -- 18 Test-year performance by subgroup: observed and mean predicted delirium, and AUROC (Mann-Whitney, ties averaged).
--- Status: not run yet. The "All" AUROC should be close to the test AUROC in 16.
+-- Status: first run on 2026-11-27 failed ("Partitioning by expressions of type FLOAT64 is not allowed"); fixed with risk_key.
+--   The "All" AUROC should be close to the test AUROC in 16.
 -- A subgroup whose predicted_pct sits well below observed_pct is underestimated: a candidate for the warned case.
 -- Subgroups with few delirium cases (under about 30) give unstable AUROCs; report them with their counts.
 WITH t AS (
@@ -24,10 +25,11 @@ long AS (
   UNION ALL SELECT CONCAT('Sex: ', gender), delirium_48h, risk FROM p
 ),
 ranked AS (
+  -- BigQuery cannot partition by a FLOAT64, so ties are found on the risk scaled to an integer (1e-12 precision).
   SELECT subgroup, delirium_48h, risk,
-         RANK() OVER (PARTITION BY subgroup ORDER BY risk)
-           + (COUNT(*) OVER (PARTITION BY subgroup, risk) - 1) / 2 AS avg_rank
-  FROM long
+         RANK() OVER (PARTITION BY subgroup ORDER BY risk_key)
+           + (COUNT(*) OVER (PARTITION BY subgroup, risk_key) - 1) / 2 AS avg_rank
+  FROM (SELECT *, CAST(ROUND(risk * 1e12) AS INT64) AS risk_key FROM long)
 )
 SELECT subgroup,
        COUNT(*) AS n,
