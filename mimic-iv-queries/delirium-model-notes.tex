@@ -128,7 +128,7 @@ OPTIONS (
   input_label_cols = ['delirium_48h'],
   data_split_method = 'NO_SPLIT',
   category_encoding_method = 'DUMMY_ENCODING',
-  max_iterations = 200,
+  max_iterations = 50,
   min_rel_progress = 0.0001
 ) AS
 SELECT delirium_48h, age, gender, admission_group, first_careunit,
@@ -141,7 +141,7 @@ WHERE split = 'train';
 	\item \emph{No class weighting.} With about 15\% delirium, weighting the cases would push every predicted risk up, and the test page shows those risks to clinicians.
 	\item \emph{No penalty.} L1 and L2 regularization stay at BigQuery's default of zero. With about 2,000 delirium cases in the training years and fewer than 20 coefficients, the fit is stable without one.
 	\item \emph{Dummy encoding.} Each text variable loses one category, so each remaining coefficient compares a category with its reference. BigQuery's default one-hot encoding keeps every category, and its coefficients cannot be read that way.
-	\item \emph{Convergence.} BigQuery fits by gradient descent. It runs up to 200 iterations and stops once the loss improves by less than 0.01\% in an iteration. The second statement in query 15 lists the loss at each iteration, which should level off before the last one.
+	\item \emph{Convergence.} BigQuery fits by gradient descent and stops once the loss improves by less than 0.01\% in an iteration. It allows at most 50 iterations per run, so query 15 continues training from the saved model with a warm start (\texttt{warm\_start = TRUE}) until a run ends before its cap. Its last statement lists the loss at the final iterations.
 	\item \emph{Scale.} BigQuery standardizes age while fitting, and query 19 reports the coefficients on the original scale, per year of age.
 \end{itemize}
 
@@ -149,9 +149,9 @@ WHERE split = 'train';
 \begin{center}
 	\begin{tabular*}{0.6 \textwidth}{@{\hskip\tabcolsep\extracolsep{\fill}} l r}
 	\toprule
-	Iterations run							& \\
-	Training loss at the last iteration		& \\
-	Change in the last iteration			& \\
+	Iterations run							& 52 (50, then 2 in a warm start) \\
+	Training loss at the last iteration		& 0.37224 \\
+	Change in the last iteration			& less than 0.00001 \\
 	\bottomrule
 	\end{tabular*}
 \end{center}
