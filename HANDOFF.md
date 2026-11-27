@@ -36,7 +36,7 @@ https://brguo55.github.io/005-data-communication-taxonomy-delirium-2026/
 - **Google Cloud：** 从 2026 年 11 月 21 日起必须开两步验证才能进控制台，已经开好。
 - **和 Dr. Fu 的沟通：**
   - 11 月 20 日请他推迟会议的邮件已经发出。会议在 **11 月 27 日上午**，要带上模型结果。
-  - 给 Dr. Fu 的英文进展报告在 https://claude.ai/artifact/EdsEnjp48jjEUdrJ5jLi3q （11 月 27 日已更新，加入了模型结果和新的问题）。这个链接是私有的，要在报告页面的 Share 菜单里分享，他才能打开。
+  - 给 Dr. Fu 的英文进展报告在 https://claude.ai/artifact/EdsEnjp48jjEUdrJ5jLi3q （11 月 27 日已更新，加入了模型结果和新的问题）。同样的内容另有 LaTeX 版 `decision-lab-progress-report.tex`，在 Overleaf 上用 pdfLaTeX 编译；两边要一起改。这个链接是私有的，要在报告页面的 Share 菜单里分享，他才能打开。
 
 ### MIMIC-IV 目前的关键数字（都是汇总结果）
 
