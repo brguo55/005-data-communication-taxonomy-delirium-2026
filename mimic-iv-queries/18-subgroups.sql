@@ -1,5 +1,8 @@
 -- 18 Test-year performance by subgroup: observed and mean predicted delirium, and AUROC (Mann-Whitney, ties averaged).
--- Status: first run on 2026-11-27 failed ("Partitioning by expressions of type FLOAT64 is not allowed"); fixed with risk_key.
+-- Status: run on 2026-11-27 after fixing a FLOAT64 partition error. All: 5,495 stays, 15.7% observed, 13.9% predicted,
+--   AUROC 0.764 (matches 16). Largest underestimate: dementia, 42.4% observed vs 34.9% predicted, AUROC 0.63. Also
+--   underestimated: emergency admissions, age 80+, race unknown, Medicaid. Observation admissions are overestimated.
+-- Groups with fewer than 20 stays are left out (HAVING below), so no small cell reaches a public file.
 --   The "All" AUROC should be close to the test AUROC in 16.
 -- A subgroup whose predicted_pct sits well below observed_pct is underestimated: a candidate for the warned case.
 -- Subgroups with few delirium cases (under about 30) give unstable AUROCs; report them with their counts.
@@ -41,4 +44,5 @@ SELECT subgroup,
          COUNTIF(delirium_48h = 1) * COUNTIF(delirium_48h = 0)), 3) AS auroc
 FROM ranked
 GROUP BY subgroup
+HAVING COUNT(*) >= 20
 ORDER BY subgroup;
