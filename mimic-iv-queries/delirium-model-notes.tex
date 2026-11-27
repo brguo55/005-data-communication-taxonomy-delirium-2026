@@ -99,7 +99,7 @@ Every predictor except age is an indicator equal to 1 or 0. Each text variable (
 	age					& Age in years at ICU admission. MIMIC-IV shifts dates and caps the oldest ages, so ages are approximate. \\
 	female				& Sex recorded as female. \\
 	emergency, planned	& Admission type grouped as emergency (EW EMER., URGENT, DIRECT EMER.), planned (SURGICAL SAME DAY ADMISSION, ELECTIVE), or observation (all other types). \\
-	unit				& First care unit of the ICU stay, one indicator per type other than the reference. \\
+	unit				& First care unit of the ICU stay, one indicator per type other than the reference. Types with fewer than 100 training stays are merged into ``Other'': in a first fit, two single-stay types pushed their odds ratios into the hundreds and thousands, a sign of separation. \\
 	dementia			& ICD-10 F01--F03 or G30, or ICD-9 290, 294.1 or 331.0 (excluding 290.3, 290.11 and 290.41), coded in the same hospitalization. \\
 	vent				& Invasive ventilation started before $t_0$. \\
 	benzo				& Midazolam, lorazepam or diazepam started before $t_0$. \\
