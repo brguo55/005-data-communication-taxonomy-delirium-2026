@@ -1,6 +1,10 @@
 -- 22 The most common principal diagnoses in each of the eight case groups (test years, 2017-2019), to replace the
 --   [admitting problem] placeholders in the case drafts with something typical of the group.
--- Status: not run yet. Statement 1 checks the group sizes against 20 and 21: 104, 127, 93, 73, 206, 55, 50, 68.
+-- Status: run on 2026-11-27. Group sizes match 20 and 21: 104, 127, 93, 73, 206, 55, 50, 68. Most common diagnoses,
+--   names only: (1) sepsis, pulmonary embolism; (2) heart failure with hypertension and kidney disease, NSTEMI or STEMI;
+--   (3) traumatic subdural hemorrhage, stroke; (4) sepsis; (5) coronary artery disease, aortic stenosis; (6) sepsis;
+--   (7) none reaches 5 stays; (8) NSTEMI, coronary artery disease. Used in the case drafts.
+-- Statement 1 checks the group sizes against 20 and 21.
 -- Statement 2 lists up to five diagnoses per group, counts only, and leaves out any diagnosis with fewer than 5 stays.
 --   Keep the counts out of the public repository; the case text needs only the diagnosis names.
 -- The principal diagnosis (seq_num = 1) is coded at discharge, so it describes the hospitalization, not only the
