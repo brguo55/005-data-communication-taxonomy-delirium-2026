@@ -1,9 +1,8 @@
 -- 14 Modeling table: train on 2008-2016, test on 2017-2019; 2020-2022 left out (incomplete records, see 12).
 -- Status: run on 2026-11-26. Result: train 13,520 stays (14.9% delirium), test 5,495 stays (15.7%), as expected.
 -- language_group, race_group and insurance are kept for subgroup checks only and are not model inputs.
--- ICU types with fewer than 100 training stays are merged into 'Other'. In the first fit (2026-11-27) two of them, each
---   a single stay, drove their coefficients to odds ratios in the hundreds and thousands (separation), and two others
---   appear only in the test years.
+-- ICU types with fewer than 100 training stays are merged into 'Other'. In the first fit (2026-11-27) the rarest types
+--   produced extreme coefficients (separation), and two types appear only in the test years.
 CREATE OR REPLACE TABLE `physionet-data-513915.delirium.model_data` AS
 SELECT
   stay_id,

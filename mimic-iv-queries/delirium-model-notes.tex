@@ -99,7 +99,7 @@ Every predictor except age is an indicator equal to 1 or 0. Each text variable (
 	age					& Age in years at ICU admission. MIMIC-IV shifts dates and caps the oldest ages, so ages are approximate. \\
 	female				& Sex recorded as female. \\
 	emergency, planned	& Admission type grouped as emergency (EW EMER., URGENT, DIRECT EMER.), planned (SURGICAL SAME DAY ADMISSION, ELECTIVE), or observation (all other types). \\
-	unit				& First care unit of the ICU stay, one indicator per type other than the reference. Types with fewer than 100 training stays are merged into ``Other'': in a first fit, two single-stay types pushed their odds ratios into the hundreds and thousands, a sign of separation. \\
+	unit				& First care unit of the ICU stay, one indicator per type other than the reference. Types with fewer than 100 training stays are merged into ``Other'': in a first fit, the rarest types produced extreme coefficients, a sign of separation. \\
 	dementia			& ICD-10 F01--F03 or G30, or ICD-9 290, 294.1 or 331.0 (excluding 290.3, 290.11 and 290.41), coded in the same hospitalization. \\
 	vent				& Invasive ventilation started before $t_0$. \\
 	benzo				& Midazolam, lorazepam or diazepam started before $t_0$. \\
@@ -173,28 +173,42 @@ WHERE split = 'train';
 \end{equation*}
 The full display on the test page would show this as ``33 in 100 similar patients develop delirium in the next 48 hours.'' The real coefficients come from query 19.
 
-\textbf{Table 4.} Coefficients, from query 19.
+\textbf{Table 4.} Coefficients, from query 19, after merging rare ICU types.
 \begin{center}
 	\begin{tabular*}{0.8 \textwidth}{@{\hskip\tabcolsep\extracolsep{\fill}} l . .}
 	\toprule
 	Predictor							& \multicolumn{1}{c}{Log odds, $\hat{\beta}$}	& \multicolumn{1}{c}{Odds ratio, $e^{\hat{\beta}}$} \\
 	\midrule
-	Intercept							& & \\
-	Age, per year						& & \\
-	Sex:								& & \\
-	Admission:							& & \\
-	Admission:							& & \\
-	ICU type, one row per category		& & \\
-	Dementia							& & \\
-	Invasive ventilation				& & \\
-	Benzodiazepine						& & \\
-	Other sedative						& & \\
-	Opioid								& & \\
+	Intercept	& -4.308 & 0.013 \\
+	Age, per year	& 0.019 & 1.02 \\
+	Sex: female	& -0.005 & 1.00 \\
+	Admission: observation	& 0.040 & 1.04 \\
+	Admission: planned	& -0.589 & 0.55 \\
 	\midrule
-	\multicolumn{3}{@{}l}{Reference categories:} \\
+	ICU type: Coronary Care Unit (CCU)	& 0.184 & 1.20 \\
+	ICU type: Medical ICU (MICU)	& 1.111 & 3.04 \\
+	ICU type: Medical/Surgical ICU (MICU/SICU)	& 0.469 & 1.60 \\
+	ICU type: Neuro Intermediate	& 0.852 & 2.34 \\
+	ICU type: Neuro Stepdown	& 1.123 & 3.07 \\
+	ICU type: Neuro Surgical ICU (Neuro SICU)	& 1.712 & 5.54 \\
+	ICU type: Surgical ICU (SICU)	& 0.690 & 1.99 \\
+	ICU type: Trauma SICU (TSICU)	& 0.696 & 2.01 \\
+	ICU type: Other	& 2.214 & 9.15 \\
+	\midrule
+	Dementia	& 0.931 & 2.54 \\
+	Invasive ventilation	& 1.170 & 3.22 \\
+	Benzodiazepine	& 0.660 & 1.94 \\
+	Other sedative	& 0.202 & 1.22 \\
+	Opioid	& 0.104 & 1.11 \\
+	\midrule
+	\multicolumn{3}{@{}l}{Reference categories: male, emergency admission, Cardiac Vascular ICU (CVICU).} \\
 	\bottomrule
 	\end{tabular*}
 \end{center}
+
+BigQuery chose emergency admission, not observation, as the admission reference, so the admission rows compare with emergency admissions. The ``Other ICU type merges the types with fewer than 100 training stays, so its coefficient rests on few stays and is imprecise. Odds ratios here are associations with everything else held fixed, not causal effects.
+
+\emph{Worked example, with the fitted coefficients.} For a 75-year-old man admitted as an emergency to the CVICU, with none of the other risk factors, $z = -4.308 + 0.019 \cdot 75 = -2.883$ and $p = 1 / (1 + e^{2.883}) = 0.053$, about 5 in 100. The same man in the MICU on a ventilator who received a benzodiazepine has $z = -2.883 + 1.111 + 1.170 + 0.660 = 0.058$ and $p = 0.514$, about 51 in 100.
 
 
 

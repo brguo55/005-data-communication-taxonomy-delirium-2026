@@ -1,7 +1,8 @@
 -- 15 Train a logistic regression in BigQuery ML on the 2008-2016 stays.
 -- Status: run on 2026-11-26 and 2026-11-27. Statement 1 stopped at BigQuery's 50-iteration cap with a loss of 0.37225.
 --   Statement 2 (warm start) then ran 2 iterations and stopped early: loss 0.37224, changing by less than 0.00001.
---   The fit is converged: 52 iterations in all.
+--   The fit is converged: 52 iterations in all. Refit on 2026-11-27 after merging rare ICU types in 14: again 50 + 2
+--   iterations, loss 0.37224.
 -- BigQuery allows at most 50 iterations per run ("max_iterations must be less than 50 in one training run"), so
 --   statement 2 continues from the saved model. Run statement 2 again while the model's "Actual iterations" is 50;
 --   a smaller number means early stopping ended the run.
